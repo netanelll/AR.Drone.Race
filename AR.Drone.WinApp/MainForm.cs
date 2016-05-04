@@ -51,7 +51,7 @@ namespace AR.Drone.WinApp
 
         bool isVertical = true;
 
-        .
+        
 
         System.Timers.Timer recoredTimer = new System.Timers.Timer();
         System.Timers.Timer XboxTimer = new System.Timers.Timer();
