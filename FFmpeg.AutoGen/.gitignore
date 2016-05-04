@@ -16,7 +16,6 @@ TestResults
 # Build results
 [Dd]ebug/
 [Rr]elease/
-x64/
 *_i.c
 *_p.c
 *.ilk
@@ -54,7 +53,6 @@ ipch/
 
 # ReSharper is a .NET coding add-in
 _ReSharper*
-*.DotSettings
 
 # NCrunch
 *.ncrunch*
@@ -90,8 +88,6 @@ csx
 AppPackages/
 
 # Others
-[Bb]in
-[Oo]bj
 sql
 TestResults
 [Tt]est[Rr]esult*
@@ -110,7 +106,13 @@ UpgradeLog*.XML
 
 # Monodevelop
 *.userprefs
-*.resources
 
 # OS X
 .DS_Store
+
+# Python
+
+*.py[cod]
+
+# PyCharm
+.idea/
