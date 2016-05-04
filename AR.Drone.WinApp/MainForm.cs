@@ -71,7 +71,9 @@ namespace AR.Drone.WinApp
             _droneClient.NavigationPacketAcquired += OnNavigationPacketAcquired;
             _droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
             _droneClient.NavigationDataAcquired += data => _navigationData = data;
-            
+            _droneClient.NavigationDataAcquired += OnNavigationDataAcquired;
+
+
             tmrStateUpdate.Enabled = true;
             tmrVideoUpdate.Enabled = true;
 
@@ -111,6 +113,12 @@ namespace AR.Drone.WinApp
             base.OnClosed(e);
         }
 
+        
+
+        private void OnNavigationDataAcquired(NavigationData data)
+        {
+
+        }
         private void OnNavigationPacketAcquired(NavigationPacket packet)
         {
             if (_packetRecorderWorker != null && _packetRecorderWorker.IsAlive)
