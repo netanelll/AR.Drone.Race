@@ -117,7 +117,8 @@ namespace AR.Drone.WinApp
 
         private void OnNavigationDataAcquired(NavigationData data)
         {
-
+            navDataOverTime.Add(data);
+            timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
         }
         private void OnNavigationPacketAcquired(NavigationPacket packet)
         {
@@ -520,15 +521,6 @@ namespace AR.Drone.WinApp
             StartRecording();
         }
 
-        // Saves the current navigation data every x ms
-        private void SaverNavData(object sender, ElapsedEventArgs e)
-        {
-            navDataOverTime.Add(_navigationData);
-            timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
-            //TakeFramesFromVerticalCamera();
-
-        }
-
         private void TakeFramesFromVerticalCamera()
         {
             counter++;
@@ -559,7 +551,7 @@ namespace AR.Drone.WinApp
 
         private void stopRecoreAndSave()
         {
-            recoredTimer.Stop();
+            isFlying = false;
             end_ticks = DateTime.Now.Ticks;
             string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
                  + DateTime.Now.Minute.ToString() + ".csv";
@@ -683,9 +675,7 @@ namespace AR.Drone.WinApp
         {
             navDataOverTime = new List<NavigationData>();
             timeOverTime = new List<long>();
-            recoredTimer.Elapsed += new System.Timers.ElapsedEventHandler(SaverNavData);
-            recoredTimer.Interval = 10;
-            recoredTimer.Start();
+            isFlying = true;
             start_ticks = DateTime.Now.Ticks;
         }
 
