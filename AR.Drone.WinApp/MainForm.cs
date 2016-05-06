@@ -43,11 +43,6 @@ namespace AR.Drone.WinApp
         private RaceController _raceController;
 
         int counter = 2;
-        // netanel temp
-        long start_ticks = 0;
-        long end_ticks = 0;
-        //List<long> timeOverTime = new List<long>();
-        // end netanel temp
         int ledAnimation = 0;
 
         bool isVertical = true;
@@ -512,7 +507,7 @@ namespace AR.Drone.WinApp
         // Starts recording the navigation data
         private void RecordData_Click(object sender, EventArgs e)
         {
-            _raceController.StartRecording();
+            _raceController.startRace();
         }
 
         private void TakeFramesFromVerticalCamera()
@@ -539,7 +534,7 @@ namespace AR.Drone.WinApp
         // stops recording the navigation data, and saves it to csv file
         private void StopRecordData_Click(object sender, EventArgs e)
         {
-            _raceController.stopRecoreAndSave();
+            _raceController.endRace();
 
         }
 
@@ -619,14 +614,14 @@ namespace AR.Drone.WinApp
             {
                 case 32:
                     //           _droneClient.Takeoff();
-                    _raceController.StartRecording();
+                    _raceController.startRace();
                     break;
                 case 67:
                     _droneClient.Hover();
                     break;
                 case 86:
      //               _droneClient.Land();
-                    _raceController.stopRecoreAndSave();
+                    _raceController.endRace();
                     break;
                     // go up
                 case 87:
@@ -701,13 +696,13 @@ namespace AR.Drone.WinApp
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             if (state.Buttons.A == XInputDotNetPure.ButtonState.Pressed)
             {
-                _raceController.StartRecording();
+                _raceController.startRace();
                 _droneClient.Takeoff();
             }
             else if (state.Buttons.B == XInputDotNetPure.ButtonState.Pressed)
             {
                 _droneClient.Land();
-                _raceController.stopRecoreAndSave();
+                _raceController.endRace();
             }
             else
             {

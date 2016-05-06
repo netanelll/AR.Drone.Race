@@ -1,33 +1,26 @@
-﻿using AR.Drone.Data.Navigation;
+﻿
+//#define RECORD
+
+
+using AR.Drone.Data.Navigation;
 using DCMAPI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace AR.Drone.WinApp
 {
+
     class RaceController
     {
+#if RECORD
         private List<NavigationData> navDataOverTime;
         private List<long> timeOverTime;
+#endif
         private long start_ticks, end_ticks, prev_tick;
-        private bool isFlying;
-        float x_cord, y_cord, z_cord;
+        private bool isRacing;
+        float x_cord, y_cord, z_cord, roll, pitch, yaw;
 
-        #region properties
-        public List<NavigationData> NavDataOverTime
-        {
-            get
-            {
-                return navDataOverTime;
-            }
-
-            set
-            {
-                navDataOverTime = value;
-            }
-        }
+#region properties
 
         public float X_cord
         {
@@ -67,57 +60,40 @@ namespace AR.Drone.WinApp
                 z_cord = value;
             }
         }
-
-        public List<long> TimeOverTime
-        {
-            get
-            {
-                return timeOverTime;
-            }
-
-            set
-            {
-                timeOverTime = value;
-            }
-        }
-        #endregion
+#endregion
 
         public RaceController()
         {
             x_cord = 0;
             y_cord = 0;
             z_cord = 0;
+            roll = 0;
+            pitch = 0;
+            yaw = 0;
             start_ticks = 0;
             end_ticks = 0;
-            isFlying = false;
+            isRacing = false;
         }
 
-        public void OnNavigationDataAcquired(NavigationData data)
+        public void startRace()
         {
-            if (isFlying)
-            {
-                navDataOverTime.Add(data);
-                timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
-            }
-
-        }
-
-        public void StartRecording()
-        {
+            isRacing = true;
+            start_ticks = DateTime.Now.Ticks;
+#if RECORD
             navDataOverTime = new List<NavigationData>();
             timeOverTime = new List<long>();
-            isFlying = true;
-            start_ticks = DateTime.Now.Ticks;
+#endif
         }
 
-        public void stopRecoreAndSave()
+        public void endRace()
         {
-            if (!isFlying)
+            if (!isRacing)
             {
                 return;
             }
-            isFlying = false;
+            isRacing = false;
             end_ticks = DateTime.Now.Ticks;
+#if RECORD
             string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
                  + DateTime.Now.Minute.ToString() + ".csv";
             try
@@ -148,13 +124,15 @@ namespace AR.Drone.WinApp
 
                     // MessageBox.Show("data saved");
                 }
+#region save orders that were sent to the drone
 
 
-                // Saves all the orders that were sent to the drone doring the flight
+                /*
+                // Saves all the  doring the flight
                 string fileNameOrders = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
                  + DateTime.Now.Minute.ToString() + "orders" + ".csv";
 
-               /* if (xBoxHelper.allNavOrders != null && xBoxHelper.allNavOrders.Count > 0)
+                if (xBoxHelper.allNavOrders != null && xBoxHelper.allNavOrders.Count > 0)
                 {
                     using (CsvFileWriter writer = new CsvFileWriter(fileNameOrders))
                     {
@@ -175,34 +153,41 @@ namespace AR.Drone.WinApp
                         // MessageBox.Show("data saved");
                     }
                 }*/
+#endregion
             }
             catch (Exception e)
             {
 
             }
+#endif
         }
-        //public void OnNavigationDataAcquired(NavigationData data)
-        //{
-        //    long time_diff;
-        //    if (isFlying)
-        //    {
-        //        navDataOverTime.Add(data);
-        //        time_diff = DateTime.Now.Ticks - start_ticks;
-        //        timeOverTime.Add(time_diff);
-        //        // x-> roll ; y -> Pitch ; z -> yaw
-        //        DCM E = new DCM(new Vector(0.0F, 0.0F, 0.0F));
+        public void OnNavigationDataAcquired(NavigationData data)
+        {
+            long time_diff = 0;
+            if (isRacing)
+            {
+                time_diff = DateTime.Now.Ticks - start_ticks;
+#if RECORD
+                navDataOverTime.Add(data);
+                timeOverTime.Add(time_diff);
+#endif
+                roll = data.Roll;
+                pitch = data.Pitch;
+                yaw = data.Yaw;
 
-        //        x_cord = x_cord + data.Velocity.X * time_diff;
-        //        y_cord = y_cord + data.Velocity.X * time_diff;
-        //        z_cord = data.Altitude;
+                DCM dcm = new DCM(roll, pitch, yaw);
+                DCMAPI.Vector3 velociy = new DCMAPI.Vector3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
+                DCMAPI.Vector3 velociy_in_earth = dcm.ToEarth(velociy);
+                x_cord = x_cord + (float)velociy_in_earth.x *  time_diff;
+                y_cord = y_cord + (float)velociy_in_earth.y * time_diff;
+                z_cord = data.Altitude;
 
-        //    }
-        //    else
-        //    {
-        //        prev_tick = DateTime.Now.Ticks;
-        //    }
+            }
+            else
+            {
+                prev_tick = DateTime.Now.Ticks;
+            }
 
-        //}
-
+        }
     }
 }
