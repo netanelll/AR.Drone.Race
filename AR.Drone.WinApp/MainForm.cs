@@ -117,8 +117,12 @@ namespace AR.Drone.WinApp
 
         private void OnNavigationDataAcquired(NavigationData data)
         {
-            navDataOverTime.Add(data);
-            timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
+            if (isFlying)
+            {
+                navDataOverTime.Add(data);
+                timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
+            }
+
         }
         private void OnNavigationPacketAcquired(NavigationPacket packet)
         {
@@ -554,7 +558,7 @@ namespace AR.Drone.WinApp
             isFlying = false;
             end_ticks = DateTime.Now.Ticks;
             string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
-                 + DateTime.Now.Minute.ToString() + ".csv";
+                 + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + ".csv";
             try
             {
                 using (CsvFileWriter writer = new CsvFileWriter(fileName))
@@ -580,11 +584,11 @@ namespace AR.Drone.WinApp
                             }
                         }
                     }
-
+                    writer.Close();
                     // MessageBox.Show("data saved");
                 }
 
-
+/*
                 // Saves all the orders that were sent to the drone doring the flight
                 string fileNameOrders = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
                  + DateTime.Now.Minute.ToString() + "orders" + ".csv";
@@ -609,7 +613,7 @@ namespace AR.Drone.WinApp
 
                         // MessageBox.Show("data saved");
                     }
-                }
+                }*/
             }
             catch (Exception e)
             {

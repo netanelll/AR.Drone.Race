@@ -76,6 +76,7 @@
     <Compile Include="PlayerForm.Designer.cs">
       <DependentUpon>PlayerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RaceController.cs" />
     <Compile Include="VideoHelper.cs" />
     <Compile Include="TreeViewHelper.cs" />
     <Compile Include="MainForm.cs">
@@ -119,6 +120,10 @@
     <ProjectReference Include="..\AR.Drone.Video\AR.Drone.Video.csproj">
       <Project>{36c63293-4c2d-41ec-b231-faf55845c014}</Project>
       <Name>AR.Drone.Video</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DCMAPI\DCMAPI.csproj">
+      <Project>{853A790E-525A-4304-82DD-3B71875DFCFC}</Project>
+      <Name>DCMAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\FFmpeg.AutoGen\FFmpeg.AutoGen\FFmpeg.AutoGen.csproj">
       <Project>{a536b02a-b0b1-4753-8328-17369ef09976}</Project>
