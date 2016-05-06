@@ -92,6 +92,16 @@ namespace AR.Drone.WinApp
             isFlying = false;
         }
 
+        public void OnNavigationDataAcquired(NavigationData data)
+        {
+            if (isFlying)
+            {
+                navDataOverTime.Add(data);
+                timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
+            }
+
+        }
+
         public void StartRecording()
         {
             navDataOverTime = new List<NavigationData>();
@@ -99,6 +109,7 @@ namespace AR.Drone.WinApp
             isFlying = true;
             start_ticks = DateTime.Now.Ticks;
         }
+
         public void stopRecoreAndSave()
         {
             if (!isFlying)
@@ -170,28 +181,28 @@ namespace AR.Drone.WinApp
 
             }
         }
-        public void OnNavigationDataAcquired(NavigationData data)
-        {
-            long time_diff;
-            if (isFlying)
-            {
-                navDataOverTime.Add(data);
-                time_diff = DateTime.Now.Ticks - start_ticks;
-                timeOverTime.Add(time_diff);
-                // x-> roll ; y -> Pitch ; z -> yaw
-                DCM E = new DCM(new Vector(0.0F, 0.0F, 0.0F));
+        //public void OnNavigationDataAcquired(NavigationData data)
+        //{
+        //    long time_diff;
+        //    if (isFlying)
+        //    {
+        //        navDataOverTime.Add(data);
+        //        time_diff = DateTime.Now.Ticks - start_ticks;
+        //        timeOverTime.Add(time_diff);
+        //        // x-> roll ; y -> Pitch ; z -> yaw
+        //        DCM E = new DCM(new Vector(0.0F, 0.0F, 0.0F));
 
-                x_cord = x_cord + data.Velocity.X * time_diff;
-                y_cord = y_cord + data.Velocity.X * time_diff;
-                z_cord = data.Altitude;
+        //        x_cord = x_cord + data.Velocity.X * time_diff;
+        //        y_cord = y_cord + data.Velocity.X * time_diff;
+        //        z_cord = data.Altitude;
 
-            }
-            else
-            {
-                prev_tick = DateTime.Now.Ticks;
-            }
+        //    }
+        //    else
+        //    {
+        //        prev_tick = DateTime.Now.Ticks;
+        //    }
 
-        }
+        //}
 
     }
 }

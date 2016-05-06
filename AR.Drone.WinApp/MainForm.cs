@@ -57,7 +57,6 @@ namespace AR.Drone.WinApp
         System.Timers.Timer recoredTimer = new System.Timers.Timer();
         System.Timers.Timer XboxTimer = new System.Timers.Timer();
         //List<NavigationData> navDataOverTime = new List<NavigationData>();
-        private bool isFlying = false;
         XboxHelper xBoxHelper;
         List<float> oldOrders;
 
@@ -68,11 +67,13 @@ namespace AR.Drone.WinApp
             _videoPacketDecoderWorker = new VideoPacketDecoderWorker(PixelFormat.BGR24, true, OnVideoPacketDecoded);
             _videoPacketDecoderWorker.Start();
 
+            _raceController = new RaceController();
+
             _droneClient = new DroneClient("192.168.1.1");
             _droneClient.NavigationPacketAcquired += OnNavigationPacketAcquired;
             _droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
             _droneClient.NavigationDataAcquired += data => _navigationData = data;
-            _droneClient.NavigationDataAcquired += OnNavigationDataAcquired;
+            _droneClient.NavigationDataAcquired += _raceController.OnNavigationDataAcquired;
             
             tmrStateUpdate.Enabled = true;
             tmrVideoUpdate.Enabled = true;
@@ -80,8 +81,6 @@ namespace AR.Drone.WinApp
             _playerForms = new List<PlayerForm>();
 
             _videoPacketDecoderWorker.UnhandledException += UnhandledException;
-
-            _raceController = new RaceController();
 
             this.KeyDown += MainForm_KeyDown;
 
@@ -115,15 +114,6 @@ namespace AR.Drone.WinApp
             base.OnClosed(e);
         }
 
-        private void OnNavigationDataAcquired(NavigationData data)
-        {
-            if (isFlying)
-            {
-                _raceController.NavDataOverTime.Add(data);
-                _raceController.TimeOverTime.Add(DateTime.Now.Ticks - start_ticks);
-            }
-
-        }
         private void OnNavigationPacketAcquired(NavigationPacket packet)
         {
             if (_packetRecorderWorker != null && _packetRecorderWorker.IsAlive)
