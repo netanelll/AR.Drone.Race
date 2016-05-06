@@ -77,6 +77,14 @@ namespace AR.Drone.WinApp
 
         public void startRace()
         {
+            x_cord = 0;
+            y_cord = 0;
+            z_cord = 0;
+            roll = 0;
+            pitch = 0;
+            yaw = 0;
+            start_ticks = 0;
+            end_ticks = 0;
             isRacing = true;
             start_ticks = DateTime.Now.Ticks;
 #if RECORD
@@ -114,6 +122,9 @@ namespace AR.Drone.WinApp
                             row.Add(navData.Velocity.Y.ToString());
                             row.Add(navData.Velocity.Z.ToString());
                             row.Add((timeOverTime[i] * (0.0000001)).ToString()); // cov from 100 nano sec to sec
+                            row.Add(x_cord.ToString());
+                            row.Add(Y_cord.ToString());
+                            row.Add(z_cord.ToString());
                             writer.WriteRow(row);
                             if (i < timeOverTime.Count)
                             {
@@ -176,10 +187,10 @@ namespace AR.Drone.WinApp
                 yaw = data.Yaw;
 
                 DCM dcm = new DCM(roll, pitch, yaw);
-                DCMAPI.Vector3 velociy = new DCMAPI.Vector3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
-                DCMAPI.Vector3 velociy_in_earth = dcm.ToEarth(velociy);
-                x_cord = x_cord + (float)velociy_in_earth.x *  time_diff;
-                y_cord = y_cord + (float)velociy_in_earth.y * time_diff;
+                Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
+                Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
+                x_cord = x_cord + (float)velociy_reltiveTo_earth.x *  time_diff;
+                y_cord = y_cord + (float)velociy_reltiveTo_earth.y * time_diff;
                 z_cord = data.Altitude;
 
             }

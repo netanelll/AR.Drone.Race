@@ -30,7 +30,7 @@ namespace DCMAPI
         #endregion
 
         #region DCM: Rotate vector to Earth frame
-        public Vector3 ToEarth(Vector3 vec)
+        public Vector_3 ToEarth(Vector_3 vec)
         {
             return dcm * vec;
         }

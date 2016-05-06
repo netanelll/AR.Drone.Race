@@ -5,99 +5,99 @@ using System.Text;
 
 namespace DCMAPI
 	{
-   public class Vector3
+   public class Vector_3
     {
-        public static Vector3 Zero = NewZero();
-        public static Vector3 One = NewOne();
+        public static Vector_3 Zero = NewZero();
+        public static Vector_3 One = NewOne();
 
         public double x;
         public double y;
         public double z;
 
-        public Vector3()
+        public Vector_3()
         {
             x = 0.0f;
             y = 0.0f;
             z = 0.0f;
         }
 
-        public Vector3(double x, double y, double z)
+        public Vector_3(double x, double y, double z)
         {
             this.x = x;
             this.y = y;
             this.z = z;
         }
 
-        public Vector3(double xyz)
+        public Vector_3(double xyz)
         {
             this.x = xyz;
             this.y = xyz;
             this.z = xyz;
         }
 
-        public Vector3(Vector3 v)
+        public Vector_3(Vector_3 v)
         {
             this.x = v.x;
             this.y = v.y;
             this.z = v.z;
         }
 
-        public static Vector3 NewZero()
+        public static Vector_3 NewZero()
         {
-            return new Vector3(0.0f);
+            return new Vector_3(0.0f);
         }
 
-        public static Vector3 NewOne()
+        public static Vector_3 NewOne()
         {
-            return new Vector3(1.0f);
+            return new Vector_3(1.0f);
         }
 
-        public double DotProduct(Vector3 other)
+        public double DotProduct(Vector_3 other)
         {
             return x * other.x + y * other.y + z * other.z;
         }
 
-        public static Vector3 operator +(Vector3 v1, Vector3 v2)
+        public static Vector_3 operator +(Vector_3 v1, Vector_3 v2)
         {
-            return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+            return new Vector_3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
         }
 
-        public static Vector3 operator -(Vector3 v1, Vector3 v2)
+        public static Vector_3 operator -(Vector_3 v1, Vector_3 v2)
         {
-            return new Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+            return new Vector_3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
         }
 
-        public static Vector3 operator -(Vector3 v)
+        public static Vector_3 operator -(Vector_3 v)
         {
-            return new Vector3(-v.x, -v.y, -v.z);
+            return new Vector_3(-v.x, -v.y, -v.z);
         }
 
-        public static Vector3 operator *(Vector3 v, double scalar)
+        public static Vector_3 operator *(Vector_3 v, double scalar)
         {
-            return new Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
+            return new Vector_3(v.x * scalar, v.y * scalar, v.z * scalar);
         }
 
-        public static Vector3 operator /(Vector3 v, double scalar)
+        public static Vector_3 operator /(Vector_3 v, double scalar)
         {
-            return new Vector3(v.x / scalar, v.y / scalar, v.z / scalar);
+            return new Vector_3(v.x / scalar, v.y / scalar, v.z / scalar);
         }
 
-        public static bool operator ==(Vector3 v1, Vector3 v2)
+        public static bool operator ==(Vector_3 v1, Vector_3 v2)
         {
             return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
         }
 
-        public static bool operator !=(Vector3 v1, Vector3 v2)
+        public static bool operator !=(Vector_3 v1, Vector_3 v2)
         {
             return v1.x != v2.x || v1.y != v2.y || v1.z != v2.z;
         }
 
-        public static Vector3 CrossProduct(Vector3 a, Vector3 b)
+        public static Vector_3 CrossProduct(Vector_3 a, Vector_3 b)
         {
-            return new Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+            return new Vector_3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
         }
 
-        public Vector3 Add(Vector3 v)
+        public Vector_3 Add(Vector_3 v)
         {
             x += v.x;
             y += v.y;
@@ -105,7 +105,7 @@ namespace DCMAPI
             return this;
         }
 
-        public double DistanceTo(Vector3 v)
+        public double DistanceTo(Vector_3 v)
         {
             double dx = this.x - v.x;
             double dy = this.y - v.y;
@@ -115,10 +115,10 @@ namespace DCMAPI
 
         public double Size()
         {
-            return DistanceTo(Vector3.Zero);
+            return DistanceTo(Vector_3.Zero);
         }
 
-        public Vector3 Normalize()
+        public Vector_3 Normalize()
         {
             double size = Size();
             this.x /= size;
@@ -127,9 +127,9 @@ namespace DCMAPI
             return this;
         }
 
-        public Vector3 Clone()
+        public Vector_3 Clone()
         {
-            return new Vector3(this);
+            return new Vector_3(this);
         }
 
         public override string ToString()
@@ -259,10 +259,10 @@ namespace DCMAPI
         { 0.0f, 0.0f, 1.0f } });
         }
 
-        public static Vector3 operator *(Matrix3 matrix3, Vector3 v)
+        public static Vector_3 operator *(Matrix3 matrix3, Vector_3 v)
         {
             double[,] m = matrix3.matrix;
-            return new Vector3(
+            return new Vector_3(
                 m[0, 0] * v.x + m[0, 1] * v.y + m[0, 2] * v.z,
                 m[1, 0] * v.x + m[1, 1] * v.y + m[1, 2] * v.z,
                 m[2, 0] * v.x + m[2, 1] * v.y + m[2, 2] * v.z);
