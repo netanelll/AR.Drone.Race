@@ -15,6 +15,73 @@ namespace AR.Drone.WinApp
         private bool isFlying;
         float x_cord, y_cord, z_cord;
 
+        #region properties
+        public List<NavigationData> NavDataOverTime
+        {
+            get
+            {
+                return navDataOverTime;
+            }
+
+            set
+            {
+                navDataOverTime = value;
+            }
+        }
+
+        public float X_cord
+        {
+            get
+            {
+                return x_cord;
+            }
+
+            set
+            {
+                x_cord = value;
+            }
+        }
+
+        public float Y_cord
+        {
+            get
+            {
+                return y_cord;
+            }
+
+            set
+            {
+                y_cord = value;
+            }
+        }
+
+        public float Z_cord
+        {
+            get
+            {
+                return z_cord;
+            }
+
+            set
+            {
+                z_cord = value;
+            }
+        }
+
+        public List<long> TimeOverTime
+        {
+            get
+            {
+                return timeOverTime;
+            }
+
+            set
+            {
+                timeOverTime = value;
+            }
+        }
+        #endregion
+
         public RaceController()
         {
             x_cord = 0;

@@ -40,12 +40,13 @@ namespace AR.Drone.WinApp
         private PacketRecorder _packetRecorderWorker;
         private FileStream _recorderStream;
         private Autopilot _autopilot;
+        private RaceController _raceController;
 
         int counter = 2;
         // netanel temp
         long start_ticks = 0;
         long end_ticks = 0;
-        List<long> timeOverTime = new List<long>();
+        //List<long> timeOverTime = new List<long>();
         // end netanel temp
         int ledAnimation = 0;
 
@@ -55,7 +56,7 @@ namespace AR.Drone.WinApp
 
         System.Timers.Timer recoredTimer = new System.Timers.Timer();
         System.Timers.Timer XboxTimer = new System.Timers.Timer();
-        List<NavigationData> navDataOverTime = new List<NavigationData>();
+        //List<NavigationData> navDataOverTime = new List<NavigationData>();
         private bool isFlying = false;
         XboxHelper xBoxHelper;
         List<float> oldOrders;
@@ -72,14 +73,15 @@ namespace AR.Drone.WinApp
             _droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
             _droneClient.NavigationDataAcquired += data => _navigationData = data;
             _droneClient.NavigationDataAcquired += OnNavigationDataAcquired;
-
-
+            
             tmrStateUpdate.Enabled = true;
             tmrVideoUpdate.Enabled = true;
 
             _playerForms = new List<PlayerForm>();
 
             _videoPacketDecoderWorker.UnhandledException += UnhandledException;
+
+            _raceController = new RaceController();
 
             this.KeyDown += MainForm_KeyDown;
 
@@ -113,14 +115,12 @@ namespace AR.Drone.WinApp
             base.OnClosed(e);
         }
 
-        
-
         private void OnNavigationDataAcquired(NavigationData data)
         {
             if (isFlying)
             {
-                navDataOverTime.Add(data);
-                timeOverTime.Add(DateTime.Now.Ticks - start_ticks);
+                _raceController.NavDataOverTime.Add(data);
+                _raceController.TimeOverTime.Add(DateTime.Now.Ticks - start_ticks);
             }
 
         }
@@ -522,7 +522,7 @@ namespace AR.Drone.WinApp
         // Starts recording the navigation data
         private void RecordData_Click(object sender, EventArgs e)
         {
-            StartRecording();
+            _raceController.StartRecording();
         }
 
         private void TakeFramesFromVerticalCamera()
@@ -549,77 +549,77 @@ namespace AR.Drone.WinApp
         // stops recording the navigation data, and saves it to csv file
         private void StopRecordData_Click(object sender, EventArgs e)
         {
-            stopRecoreAndSave();
+            _raceController.stopRecoreAndSave();
 
         }
 
-        private void stopRecoreAndSave()
-        {
-            isFlying = false;
-            end_ticks = DateTime.Now.Ticks;
-            string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
-                 + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + ".csv";
-            try
-            {
-                using (CsvFileWriter writer = new CsvFileWriter(fileName))
-                {
-                    int i = 0;
-                    foreach (NavigationData navData in navDataOverTime)
-                    {
-                        if (navData != null)
-                        {
-                            CsvRow row = new CsvRow();
-                            row.Add(navData.Roll.ToString());
-                            row.Add(navData.Pitch.ToString());
-                            row.Add(navData.Yaw.ToString());
-                            row.Add(navData.Altitude.ToString());
-                            row.Add(navData.Velocity.X.ToString());
-                            row.Add(navData.Velocity.Y.ToString());
-                            row.Add(navData.Velocity.Z.ToString());
-                            row.Add((timeOverTime[i]*(0.0000001)).ToString()); // cov from 100 nano sec to sec
-                            writer.WriteRow(row);
-                            if (i < timeOverTime.Count)
-                            {
-                                i++;
-                            }
-                        }
-                    }
-                    writer.Close();
-                    // MessageBox.Show("data saved");
-                }
+//        private void stopRecoreAndSave()
+//        {
+//            isFlying = false;
+//            end_ticks = DateTime.Now.Ticks;
+//            string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
+//                 + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + ".csv";
+//            try
+//            {
+//                using (CsvFileWriter writer = new CsvFileWriter(fileName))
+//                {
+//                    int i = 0;
+//                    foreach (NavigationData navData in navDataOverTime)
+//                    {
+//                        if (navData != null)
+//                        {
+//                            CsvRow row = new CsvRow();
+//                            row.Add(navData.Roll.ToString());
+//                            row.Add(navData.Pitch.ToString());
+//                            row.Add(navData.Yaw.ToString());
+//                            row.Add(navData.Altitude.ToString());
+//                            row.Add(navData.Velocity.X.ToString());
+//                            row.Add(navData.Velocity.Y.ToString());
+//                            row.Add(navData.Velocity.Z.ToString());
+//                            row.Add((timeOverTime[i]*(0.0000001)).ToString()); // cov from 100 nano sec to sec
+//                            writer.WriteRow(row);
+//                            if (i < timeOverTime.Count)
+//                            {
+//                                i++;
+//                            }
+//                        }
+//                    }
+//                    writer.Close();
+//                    // MessageBox.Show("data saved");
+//                }
 
-/*
-                // Saves all the orders that were sent to the drone doring the flight
-                string fileNameOrders = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
-                 + DateTime.Now.Minute.ToString() + "orders" + ".csv";
+///*
+//                // Saves all the orders that were sent to the drone doring the flight
+//                string fileNameOrders = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
+//                 + DateTime.Now.Minute.ToString() + "orders" + ".csv";
 
-                if (xBoxHelper.allNavOrders != null && xBoxHelper.allNavOrders.Count > 0)
-                {
-                    using (CsvFileWriter writer = new CsvFileWriter(fileNameOrders))
-                    {
-                        foreach (navOrder navData in xBoxHelper.allNavOrders)
-                        {
-                            if (navData != null)
-                            {
-                                CsvRow row = new CsvRow();
-                                row.Add(navData.time);
-                                row.Add(navData.orders[0].ToString());
-                                row.Add(navData.orders[1].ToString());
-                                row.Add(navData.orders[2].ToString());
-                                row.Add(navData.orders[3].ToString());
-                                writer.WriteRow(row);
-                            }
-                        }
+//                if (xBoxHelper.allNavOrders != null && xBoxHelper.allNavOrders.Count > 0)
+//                {
+//                    using (CsvFileWriter writer = new CsvFileWriter(fileNameOrders))
+//                    {
+//                        foreach (navOrder navData in xBoxHelper.allNavOrders)
+//                        {
+//                            if (navData != null)
+//                            {
+//                                CsvRow row = new CsvRow();
+//                                row.Add(navData.time);
+//                                row.Add(navData.orders[0].ToString());
+//                                row.Add(navData.orders[1].ToString());
+//                                row.Add(navData.orders[2].ToString());
+//                                row.Add(navData.orders[3].ToString());
+//                                writer.WriteRow(row);
+//                            }
+//                        }
 
-                        // MessageBox.Show("data saved");
-                    }
-                }*/
-            }
-            catch (Exception e)
-            {
+//                        // MessageBox.Show("data saved");
+//                    }
+//                }*/
+//            }
+//            catch (Exception e)
+//            {
                 
-            }
-        }
+//            }
+//        }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -628,15 +628,15 @@ namespace AR.Drone.WinApp
             switch (e.KeyValue)
             {
                 case 32:
-         //           _droneClient.Takeoff();
-                    StartRecording();
+                    //           _droneClient.Takeoff();
+                    _raceController.StartRecording();
                     break;
                 case 67:
                     _droneClient.Hover();
                     break;
                 case 86:
      //               _droneClient.Land();
-                    stopRecoreAndSave();
+                    _raceController.stopRecoreAndSave();
                     break;
                     // go up
                 case 87:
@@ -675,13 +675,13 @@ namespace AR.Drone.WinApp
             }
         }
 
-        private void StartRecording()
-        {
-            navDataOverTime = new List<NavigationData>();
-            timeOverTime = new List<long>();
-            isFlying = true;
-            start_ticks = DateTime.Now.Ticks;
-        }
+        //private void StartRecording()
+        //{
+        //    navDataOverTime = new List<NavigationData>();
+        //    timeOverTime = new List<long>();
+        //    isFlying = true;
+        //    start_ticks = DateTime.Now.Ticks;
+        //}
 
         private void LedsShow_Click(object sender, EventArgs e)
         {
@@ -711,13 +711,13 @@ namespace AR.Drone.WinApp
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             if (state.Buttons.A == XInputDotNetPure.ButtonState.Pressed)
             {
-                StartRecording();
+                _raceController.StartRecording();
                 _droneClient.Takeoff();
             }
             else if (state.Buttons.B == XInputDotNetPure.ButtonState.Pressed)
             {
                 _droneClient.Land();
-                stopRecoreAndSave();
+                _raceController.stopRecoreAndSave();
             }
             else
             {

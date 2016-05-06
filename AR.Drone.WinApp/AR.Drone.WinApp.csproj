@@ -122,7 +122,7 @@
       <Name>AR.Drone.Video</Name>
     </ProjectReference>
     <ProjectReference Include="..\DCMAPI\DCMAPI.csproj">
-      <Project>{853A790E-525A-4304-82DD-3B71875DFCFC}</Project>
+      <Project>{853a790e-525a-4304-82dd-3b71875dfcfc}</Project>
       <Name>DCMAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\FFmpeg.AutoGen\FFmpeg.AutoGen\FFmpeg.AutoGen.csproj">
