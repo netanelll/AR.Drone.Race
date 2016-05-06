@@ -14,7 +14,7 @@ namespace AR.Drone.WinApp
     {
 #if RECORD
         private List<NavigationData> navDataOverTime;
-        private List<long> timeOverTime;
+        private List<float> timeOverTime;
         private List<Vector_3> cordOverTime;
 #endif
         private long start_ticks, end_ticks, prev_tick;
@@ -177,11 +177,11 @@ namespace AR.Drone.WinApp
         }
         public void OnNavigationDataAcquired(NavigationData data)
         {
-            long time_diff = 0;
+            float time_diff = 0;
             if (isRacing)
             {
-                time_diff = DateTime.Now.Ticks - start_ticks;
-
+                time_diff = (DateTime.Now.Ticks - prev_tick)* 0.0000001f;
+                prev_tick = DateTime.Now.Ticks;
                 roll = data.Roll;
                 pitch = data.Pitch;
                 yaw = data.Yaw;
@@ -189,8 +189,8 @@ namespace AR.Drone.WinApp
                 DCM dcm = new DCM(roll, pitch, yaw);
                 Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                 Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
-                x_cord = x_cord + ((float)velociy_reltiveTo_earth.x * (time_diff*0.0000001f));
-                y_cord = y_cord + ((float)velociy_reltiveTo_earth.y * (time_diff * 0.0000001f));
+                x_cord = x_cord + ((float)velociy_reltiveTo_earth.x * time_diff);
+                y_cord = y_cord + ((float)velociy_reltiveTo_earth.y * time_diff);
                 z_cord = data.Altitude;
 #if RECORD
                 navDataOverTime.Add(data);
