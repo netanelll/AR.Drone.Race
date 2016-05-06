@@ -95,12 +95,12 @@ namespace AR.Drone.WinApp
 
         public void endRace()
         {
-            if (!isRacing)
+            if (isRacing)
             {
-                return;
-            }
-            isRacing = false;
-            end_ticks = DateTime.Now.Ticks;
+
+
+                isRacing = false;
+                end_ticks = DateTime.Now.Ticks;
 #if RECORD
             string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
                  + DateTime.Now.Minute.ToString() + ".csv";
@@ -135,7 +135,7 @@ namespace AR.Drone.WinApp
 
                     // MessageBox.Show("data saved");
                 }
-#region save orders that were sent to the drone
+                #region save orders that were sent to the drone
 
 
                 /*
@@ -164,13 +164,14 @@ namespace AR.Drone.WinApp
                         // MessageBox.Show("data saved");
                     }
                 }*/
-#endregion
+                #endregion
             }
             catch (Exception e)
             {
 
             }
 #endif
+            }
         }
         public void OnNavigationDataAcquired(NavigationData data)
         {
