@@ -63,13 +63,15 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="XInputDotNetPure">
-      <HintPath>..\..\XInputDotNet-x64-v2015.03-1\XInputDotNet-x64-v2015.03-1\XInputDotNetPure.dll</HintPath>
+    <Reference Include="XInputDotNetPure, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\XInputDotNet-x64-v2015.03-1\XInputDotNet-x64-v2015.03-1\XInputDotNetPure.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSVWriterReader.cs" />
     <Compile Include="FilePlayer.cs" />
+    <Compile Include="PaintingHelper.cs" />
     <Compile Include="PlayerForm.cs">
       <SubType>Form</SubType>
     </Compile>
