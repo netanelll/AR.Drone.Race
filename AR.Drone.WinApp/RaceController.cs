@@ -3,6 +3,7 @@
 
 
 using AR.Drone.Data.Navigation;
+using AR.Drone.Video;
 using DCMAPI;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,9 @@ namespace AR.Drone.WinApp
         private long start_ticks, end_ticks, prev_tick;
         private bool isRacing;
         float x_cord, y_cord, z_cord, roll, pitch, yaw;
+        const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
 
-#region properties
+        #region properties
 
         public float X_cord
         {
@@ -90,7 +92,7 @@ namespace AR.Drone.WinApp
             start_ticks = DateTime.Now.Ticks;
 #if RECORD
             navDataOverTime = new List<NavigationData>();
-            timeOverTime = new List<long>();
+            timeOverTime = new List<float>();
             cordOverTime = new List<Vector_3>();
 #endif
         }
@@ -123,7 +125,7 @@ namespace AR.Drone.WinApp
                             row.Add(navData.Velocity.X.ToString());
                             row.Add(navData.Velocity.Y.ToString());
                             row.Add(navData.Velocity.Z.ToString());
-                            row.Add((timeOverTime[i] * (0.0000001)).ToString()); // cov from 100 nano sec to sec
+                            row.Add((timeOverTime[i] * TICKS_TO_SEC).ToString()); 
                             row.Add(cordOverTime[i].x.ToString());
                             row.Add(cordOverTime[i].y.ToString());
                             row.Add(cordOverTime[i].z.ToString());
@@ -180,7 +182,7 @@ namespace AR.Drone.WinApp
             float time_diff = 0;
             if (isRacing)
             {
-                time_diff = (DateTime.Now.Ticks - prev_tick)* 0.0000001f;
+                time_diff = (DateTime.Now.Ticks - prev_tick)* TICKS_TO_SEC;
                 prev_tick = DateTime.Now.Ticks;
                 roll = data.Roll;
                 pitch = data.Pitch;
@@ -203,6 +205,11 @@ namespace AR.Drone.WinApp
             {
                 prev_tick = DateTime.Now.Ticks;
             }
+
+        }
+
+        public void OnVideoPacketDecoded(VideoFrame frame)
+        {
 
         }
     }
