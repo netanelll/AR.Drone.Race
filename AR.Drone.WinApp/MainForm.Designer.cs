@@ -59,6 +59,7 @@
             this.RecordData = new System.Windows.Forms.Button();
             this.StopRecordData = new System.Windows.Forms.Button();
             this.LedsShow = new System.Windows.Forms.Button();
+            this.tmrChangeQuadLocation = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,13 +88,14 @@
             this.pbVideo.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pbVideo.Location = new System.Drawing.Point(12, 41);
             this.pbVideo.Name = "pbVideo";
-            this.pbVideo.Size = new System.Drawing.Size(640, 360);
+            this.pbVideo.Size = new System.Drawing.Size(803, 497);
             this.pbVideo.TabIndex = 2;
             this.pbVideo.TabStop = false;
             // 
             // btnFlatTrim
             // 
-            this.btnFlatTrim.Location = new System.Drawing.Point(12, 407);
+            this.btnFlatTrim.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnFlatTrim.Location = new System.Drawing.Point(12, 550);
             this.btnFlatTrim.Name = "btnFlatTrim";
             this.btnFlatTrim.Size = new System.Drawing.Size(75, 23);
             this.btnFlatTrim.TabIndex = 3;
@@ -103,7 +105,8 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(174, 407);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button2.Location = new System.Drawing.Point(174, 550);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
@@ -113,7 +116,8 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(256, 407);
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button3.Location = new System.Drawing.Point(256, 550);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 5;
@@ -138,7 +142,8 @@
             // 
             // btnSwitchCam
             // 
-            this.btnSwitchCam.Location = new System.Drawing.Point(563, 407);
+            this.btnSwitchCam.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSwitchCam.Location = new System.Drawing.Point(563, 550);
             this.btnSwitchCam.Name = "btnSwitchCam";
             this.btnSwitchCam.Size = new System.Drawing.Size(89, 23);
             this.btnSwitchCam.TabIndex = 8;
@@ -148,7 +153,8 @@
             // 
             // btnUp
             // 
-            this.btnUp.Location = new System.Drawing.Point(174, 441);
+            this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnUp.Location = new System.Drawing.Point(174, 584);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(75, 23);
             this.btnUp.TabIndex = 9;
@@ -158,7 +164,8 @@
             // 
             // btnDown
             // 
-            this.btnDown.Location = new System.Drawing.Point(174, 471);
+            this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDown.Location = new System.Drawing.Point(174, 614);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(75, 23);
             this.btnDown.TabIndex = 10;
@@ -168,7 +175,8 @@
             // 
             // btnLeft
             // 
-            this.btnLeft.Location = new System.Drawing.Point(256, 471);
+            this.btnLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnLeft.Location = new System.Drawing.Point(256, 614);
             this.btnLeft.Name = "btnLeft";
             this.btnLeft.Size = new System.Drawing.Size(75, 23);
             this.btnLeft.TabIndex = 11;
@@ -178,7 +186,8 @@
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(338, 470);
+            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnBack.Location = new System.Drawing.Point(338, 613);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(75, 23);
             this.btnBack.TabIndex = 12;
@@ -188,7 +197,8 @@
             // 
             // btnRight
             // 
-            this.btnRight.Location = new System.Drawing.Point(420, 470);
+            this.btnRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRight.Location = new System.Drawing.Point(420, 613);
             this.btnRight.Name = "btnRight";
             this.btnRight.Size = new System.Drawing.Size(75, 23);
             this.btnRight.TabIndex = 13;
@@ -198,7 +208,8 @@
             // 
             // btnForward
             // 
-            this.btnForward.Location = new System.Drawing.Point(338, 441);
+            this.btnForward.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnForward.Location = new System.Drawing.Point(338, 584);
             this.btnForward.Name = "btnForward";
             this.btnForward.Size = new System.Drawing.Size(75, 23);
             this.btnForward.TabIndex = 14;
@@ -208,7 +219,8 @@
             // 
             // btnTurnLeft
             // 
-            this.btnTurnLeft.Location = new System.Drawing.Point(257, 442);
+            this.btnTurnLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnTurnLeft.Location = new System.Drawing.Point(257, 585);
             this.btnTurnLeft.Name = "btnTurnLeft";
             this.btnTurnLeft.Size = new System.Drawing.Size(75, 23);
             this.btnTurnLeft.TabIndex = 15;
@@ -218,7 +230,8 @@
             // 
             // btnTurnRight
             // 
-            this.btnTurnRight.Location = new System.Drawing.Point(419, 442);
+            this.btnTurnRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnTurnRight.Location = new System.Drawing.Point(419, 585);
             this.btnTurnRight.Name = "btnTurnRight";
             this.btnTurnRight.Size = new System.Drawing.Size(75, 23);
             this.btnTurnRight.TabIndex = 16;
@@ -228,7 +241,8 @@
             // 
             // btnHover
             // 
-            this.btnHover.Location = new System.Drawing.Point(338, 407);
+            this.btnHover.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnHover.Location = new System.Drawing.Point(338, 550);
             this.btnHover.Name = "btnHover";
             this.btnHover.Size = new System.Drawing.Size(75, 23);
             this.btnHover.TabIndex = 17;
@@ -238,12 +252,9 @@
             // 
             // tvInfo
             // 
-            this.tvInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvInfo.Location = new System.Drawing.Point(661, 41);
+            this.tvInfo.Location = new System.Drawing.Point(829, 41);
             this.tvInfo.Name = "tvInfo";
-            this.tvInfo.Size = new System.Drawing.Size(291, 480);
+            this.tvInfo.Size = new System.Drawing.Size(227, 192);
             this.tvInfo.TabIndex = 18;
             // 
             // tmrVideoUpdate
@@ -263,7 +274,8 @@
             // 
             // btnReadConfig
             // 
-            this.btnReadConfig.Location = new System.Drawing.Point(563, 442);
+            this.btnReadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnReadConfig.Location = new System.Drawing.Point(563, 585);
             this.btnReadConfig.Name = "btnReadConfig";
             this.btnReadConfig.Size = new System.Drawing.Size(89, 23);
             this.btnReadConfig.TabIndex = 20;
@@ -273,7 +285,8 @@
             // 
             // btnSendConfig
             // 
-            this.btnSendConfig.Location = new System.Drawing.Point(563, 471);
+            this.btnSendConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSendConfig.Location = new System.Drawing.Point(563, 614);
             this.btnSendConfig.Name = "btnSendConfig";
             this.btnSendConfig.Size = new System.Drawing.Size(89, 23);
             this.btnSendConfig.TabIndex = 21;
@@ -313,7 +326,8 @@
             // 
             // btnAutopilot
             // 
-            this.btnAutopilot.Location = new System.Drawing.Point(12, 471);
+            this.btnAutopilot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAutopilot.Location = new System.Drawing.Point(12, 614);
             this.btnAutopilot.Name = "btnAutopilot";
             this.btnAutopilot.Size = new System.Drawing.Size(75, 23);
             this.btnAutopilot.TabIndex = 25;
@@ -323,7 +337,8 @@
             // 
             // RecordData
             // 
-            this.RecordData.Location = new System.Drawing.Point(13, 501);
+            this.RecordData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.RecordData.Location = new System.Drawing.Point(13, 644);
             this.RecordData.Name = "RecordData";
             this.RecordData.Size = new System.Drawing.Size(75, 23);
             this.RecordData.TabIndex = 26;
@@ -333,7 +348,8 @@
             // 
             // StopRecordData
             // 
-            this.StopRecordData.Location = new System.Drawing.Point(94, 501);
+            this.StopRecordData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.StopRecordData.Location = new System.Drawing.Point(94, 644);
             this.StopRecordData.Name = "StopRecordData";
             this.StopRecordData.Size = new System.Drawing.Size(75, 23);
             this.StopRecordData.TabIndex = 27;
@@ -343,7 +359,8 @@
             // 
             // LedsShow
             // 
-            this.LedsShow.Location = new System.Drawing.Point(176, 500);
+            this.LedsShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LedsShow.Location = new System.Drawing.Point(176, 643);
             this.LedsShow.Name = "LedsShow";
             this.LedsShow.Size = new System.Drawing.Size(75, 23);
             this.LedsShow.TabIndex = 28;
@@ -351,11 +368,15 @@
             this.LedsShow.UseVisualStyleBackColor = true;
             this.LedsShow.Click += new System.EventHandler(this.LedsShow_Click);
             // 
+            // tmrChangeQuadLocation
+            // 
+            this.tmrChangeQuadLocation.Tick += new System.EventHandler(this.ChangeQuadLocation_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 533);
+            this.ClientSize = new System.Drawing.Size(1241, 676);
             this.Controls.Add(this.LedsShow);
             this.Controls.Add(this.StopRecordData);
             this.Controls.Add(this.RecordData);
@@ -387,6 +408,7 @@
             this.KeyPreview = true;
             this.Name = "MainForm";
             this.Text = "AR.Drone Control";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).EndInit();
             this.ResumeLayout(false);
 
@@ -424,6 +446,7 @@
         private System.Windows.Forms.Button RecordData;
         private System.Windows.Forms.Button StopRecordData;
         private System.Windows.Forms.Button LedsShow;
+        private System.Windows.Forms.Timer tmrChangeQuadLocation;
     }
 }
 

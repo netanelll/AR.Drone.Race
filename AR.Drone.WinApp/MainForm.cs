@@ -41,19 +41,21 @@ namespace AR.Drone.WinApp
         private FileStream _recorderStream;
         private Autopilot _autopilot;
         private RaceController _raceController;
+        private PaintingHelper _paintingHelper;
 
         int counter = 2;
         int ledAnimation = 0;
 
         bool isVertical = true;
 
-        
-
         System.Timers.Timer recoredTimer = new System.Timers.Timer();
         System.Timers.Timer XboxTimer = new System.Timers.Timer();
         //List<NavigationData> navDataOverTime = new List<NavigationData>();
         XboxHelper xBoxHelper;
         List<float> oldOrders;
+
+        List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
+        int count = 0; // stub to load fake nav data to be deleted TODO
 
         public MainForm()
         {
@@ -69,7 +71,7 @@ namespace AR.Drone.WinApp
             _droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
             _droneClient.NavigationDataAcquired += data => _navigationData = data;
             _droneClient.NavigationDataAcquired += _raceController.OnNavigationDataAcquired;
-            
+
             tmrStateUpdate.Enabled = true;
             tmrVideoUpdate.Enabled = true;
 
@@ -80,6 +82,10 @@ namespace AR.Drone.WinApp
             this.KeyDown += MainForm_KeyDown;
 
             RemoteListener(); // Activates the Xbox Remote controller
+
+            _paintingHelper = new PaintingHelper(1, 850, 250, this.CreateGraphics()); // Generates class to control all the painting
+
+            loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
         }
 
         private void UnhandledException(object sender, Exception exception)
@@ -133,6 +139,8 @@ namespace AR.Drone.WinApp
         private void btnStart_Click(object sender, EventArgs e)
         {
             _droneClient.Start();
+
+            _paintingHelper.DrawTrack();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -507,7 +515,7 @@ namespace AR.Drone.WinApp
         // Starts recording the navigation data
         private void RecordData_Click(object sender, EventArgs e)
         {
-            _raceController.startRace();
+            StartRace();
         }
 
         private void TakeFramesFromVerticalCamera()
@@ -534,77 +542,9 @@ namespace AR.Drone.WinApp
         // stops recording the navigation data, and saves it to csv file
         private void StopRecordData_Click(object sender, EventArgs e)
         {
-            _raceController.endRace();
+            EndRace();
 
         }
-
-//        private void stopRecoreAndSave()
-//        {
-//            isFlying = false;
-//            end_ticks = DateTime.Now.Ticks;
-//            string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
-//                 + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + ".csv";
-//            try
-//            {
-//                using (CsvFileWriter writer = new CsvFileWriter(fileName))
-//                {
-//                    int i = 0;
-//                    foreach (NavigationData navData in navDataOverTime)
-//                    {
-//                        if (navData != null)
-//                        {
-//                            CsvRow row = new CsvRow();
-//                            row.Add(navData.Roll.ToString());
-//                            row.Add(navData.Pitch.ToString());
-//                            row.Add(navData.Yaw.ToString());
-//                            row.Add(navData.Altitude.ToString());
-//                            row.Add(navData.Velocity.X.ToString());
-//                            row.Add(navData.Velocity.Y.ToString());
-//                            row.Add(navData.Velocity.Z.ToString());
-//                            row.Add((timeOverTime[i]*(0.0000001)).ToString()); // cov from 100 nano sec to sec
-//                            writer.WriteRow(row);
-//                            if (i < timeOverTime.Count)
-//                            {
-//                                i++;
-//                            }
-//                        }
-//                    }
-//                    writer.Close();
-//                    // MessageBox.Show("data saved");
-//                }
-
-///*
-//                // Saves all the orders that were sent to the drone doring the flight
-//                string fileNameOrders = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
-//                 + DateTime.Now.Minute.ToString() + "orders" + ".csv";
-
-//                if (xBoxHelper.allNavOrders != null && xBoxHelper.allNavOrders.Count > 0)
-//                {
-//                    using (CsvFileWriter writer = new CsvFileWriter(fileNameOrders))
-//                    {
-//                        foreach (navOrder navData in xBoxHelper.allNavOrders)
-//                        {
-//                            if (navData != null)
-//                            {
-//                                CsvRow row = new CsvRow();
-//                                row.Add(navData.time);
-//                                row.Add(navData.orders[0].ToString());
-//                                row.Add(navData.orders[1].ToString());
-//                                row.Add(navData.orders[2].ToString());
-//                                row.Add(navData.orders[3].ToString());
-//                                writer.WriteRow(row);
-//                            }
-//                        }
-
-//                        // MessageBox.Show("data saved");
-//                    }
-//                }*/
-//            }
-//            catch (Exception e)
-//            {
-                
-//            }
-//        }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -614,16 +554,16 @@ namespace AR.Drone.WinApp
             {
                 case 32:
                     //           _droneClient.Takeoff();
-                    _raceController.startRace();
+                    StartRace();
                     break;
                 case 67:
                     _droneClient.Hover();
                     break;
                 case 86:
-     //               _droneClient.Land();
-                    _raceController.endRace();
+                    //               _droneClient.Land();
+                    EndRace();
                     break;
-                    // go up
+                // go up
                 case 87:
                     _droneClient.Progress(FlightMode.Progressive, gaz: 0.25f);
                     break;
@@ -660,13 +600,17 @@ namespace AR.Drone.WinApp
             }
         }
 
-        //private void StartRecording()
-        //{
-        //    navDataOverTime = new List<NavigationData>();
-        //    timeOverTime = new List<long>();
-        //    isFlying = true;
-        //    start_ticks = DateTime.Now.Ticks;
-        //}
+        private void EndRace()
+        {
+            _raceController.endRace();
+            tmrChangeQuadLocation.Enabled = false;
+        }
+
+        private void StartRace()
+        {
+            _raceController.startRace();
+            tmrChangeQuadLocation.Enabled = true;
+        }
 
         private void LedsShow_Click(object sender, EventArgs e)
         {
@@ -696,13 +640,13 @@ namespace AR.Drone.WinApp
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             if (state.Buttons.A == XInputDotNetPure.ButtonState.Pressed)
             {
-                _raceController.startRace();
+                StartRace();
                 _droneClient.Takeoff();
             }
             else if (state.Buttons.B == XInputDotNetPure.ButtonState.Pressed)
             {
                 _droneClient.Land();
-                _raceController.endRace();
+                EndRace();
             }
             else
             {
@@ -725,6 +669,60 @@ namespace AR.Drone.WinApp
             }
         }
 
+        /// <summary>
+        /// Runs every x milliseconds to paint to current location of the quad
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeQuadLocation_Tick(object sender, EventArgs e)
+        {
+            //_paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
+
+            /////////////////////////////////// stub to load fake nav data to be deleted TODO
+            if (allRaws.Count > count)
+            {
+                float x = float.Parse(allRaws[count][0]);
+                float y = float.Parse(allRaws[count][1]);
+
+                _paintingHelper.DrawPoint(x, y);
+            }
+            else
+            {
+                tmrChangeQuadLocation.Enabled = false;
+            }
+
+            count += 100;
+            /////////////////////////////////// stub to load fake nav data to be deleted TODO
+        }
+
+        /// <summary>
+        /// When the screen is done Painting itself, draw a ractangle for the quad corse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_Paint(object sender, PaintEventArgs e)
+        {
+            _paintingHelper.DrawRectangle();
+        }
+
+        /// <summary>
+        /// Stub to be deleted TODO
+        /// </summary>
+        private void loadFakeDataFromFile()
+        {
+            CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out3.csv");
+            CsvRow csvRaw = new CsvRow();
+            while (csvReader.ReadRow(csvRaw))
+            {
+                CsvRow csvRaw1 = new CsvRow();
+                foreach (string item in csvRaw)
+                {
+                    csvRaw1.Add(item);
+                }
+
+                allRaws.Add(csvRaw1);
+            }
+        }
     }
 }
