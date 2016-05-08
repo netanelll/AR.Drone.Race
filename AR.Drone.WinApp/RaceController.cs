@@ -125,7 +125,7 @@ namespace AR.Drone.WinApp
                             row.Add(navData.Velocity.X.ToString());
                             row.Add(navData.Velocity.Y.ToString());
                             row.Add(navData.Velocity.Z.ToString());
-                            row.Add((timeOverTime[i] * TICKS_TO_SEC).ToString()); 
+                            row.Add(timeOverTime[i].ToString()); 
                             row.Add(cordOverTime[i].x.ToString());
                             row.Add(cordOverTime[i].y.ToString());
                             row.Add(cordOverTime[i].z.ToString());
