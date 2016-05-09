@@ -42,6 +42,7 @@ namespace AR.Drone.WinApp
         private Autopilot _autopilot;
         private RaceController _raceController;
         private PaintingHelper _paintingHelper;
+        bool drowMiniMap = false;
 
         int counter = 2;
         int ledAnimation = 0;
@@ -145,6 +146,8 @@ namespace AR.Drone.WinApp
 
         private void tmrVideoUpdate_Tick(object sender, EventArgs e)
         {
+
+            tmrChangeQuadLocation.Enabled = drowMiniMap;
             if (_frame == null || _frameNumber == _frame.Number)
                 return;
             _frameNumber = _frame.Number;
@@ -598,13 +601,15 @@ namespace AR.Drone.WinApp
         private void EndRace()
         {
             _raceController.endRace();
-            tmrChangeQuadLocation.Enabled = false;
+            //   tmrChangeQuadLocation.Enabled = false;
+            drowMiniMap = false;
         }
 
         private void StartRace()
         {
             _raceController.startRace();
-            tmrChangeQuadLocation.Enabled = true;
+            //   tmrChangeQuadLocation.Enabled = true;
+            drowMiniMap = true;
         }
 
         private void LedsShow_Click(object sender, EventArgs e)
