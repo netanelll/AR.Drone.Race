@@ -79,8 +79,8 @@ namespace AR.Drone.WinApp
 
         public void DrawPoint(float x, float y)
         {
-            _graphics.DrawEllipse(_snakePen, _startingPointX + _snakeShifting + x * 2,
-                _startingPointY + _snakeShifting + y * 2,
+            _graphics.DrawEllipse(_snakePen, _startingPointX + _snakeShifting + x * 10,
+                _startingPointY + _snakeShifting + y * 10,
                 _snakeSize, _snakeSize);
         }
     }
