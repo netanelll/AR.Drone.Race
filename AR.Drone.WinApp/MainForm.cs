@@ -147,7 +147,7 @@ namespace AR.Drone.WinApp
         private void tmrVideoUpdate_Tick(object sender, EventArgs e)
         {
 
-            tmrChangeQuadLocation.Enabled = drowMiniMap;
+            tmrChangeQuadLocation.Enabled = drowMiniMap; // fix to mini map drow using xbox remute. should not here. TODO 
             if (_frame == null || _frameNumber == _frame.Number)
                 return;
             _frameNumber = _frame.Number;
