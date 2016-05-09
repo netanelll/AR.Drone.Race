@@ -6,7 +6,7 @@ namespace DCMAPI
     {
      //   static float RadianToDegree = (float)(180.0 / Math.PI);
 
-        private Matrix3 rM, pM, yM, dcm;
+        private Matrix3 rM, pM, yM, dcm, inv_dcm;
 
         #region Constructor(s)
         //---------------------------------------------------------
@@ -24,6 +24,7 @@ namespace DCMAPI
             pM = new Matrix3((new double[,] { { Math.Cos(pitch), 0, Math.Sin(pitch) }, { 0, 1, 0 }, { (-1 * Math.Sin(pitch)), 0, Math.Cos(pitch) } }));
             yM = new Matrix3((new double[,] { { Math.Cos(yaw), (-1 * Math.Sin(yaw)), 0 }, { Math.Sin(yaw), Math.Cos(yaw), 0 }, { 0, 0, 1 } }));
             dcm = (yM * pM) * rM;
+            inv_dcm = Matrix3.INV(dcm);
         }
         //---------------------------------------------------------
 
@@ -32,7 +33,7 @@ namespace DCMAPI
         #region DCM: Rotate vector to Earth frame
         public Vector_3 ToEarth(Vector_3 vec)
         {
-            return dcm * vec;
+            return inv_dcm * vec;
         }
         #endregion
 

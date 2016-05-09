@@ -289,5 +289,25 @@ namespace DCMAPI
         {
             return new Matrix3(Multiply(m, scalar));
         }
+        public static Matrix3 INV(Matrix3 mat)
+        {
+            double[,] m = mat.matrix;
+            double[,] result = new double[3, 3];
+            double determinant = +m[0, 0] * (m[1, 1] * m[2, 2] - m[2, 1] * m[1, 2])
+                        - m[0, 1] * (m[1, 0] * m[2, 2] - m[1, 2] * m[2, 0])
+                        + m[0, 2] * (m[1, 0] * m[2, 1] - m[1, 1] * m[2, 0]);
+            double invdet = 1 / determinant;
+            result[0, 0] = (m[1, 1] * m[2, 2] - m[2, 1] * m[1, 2]) * invdet;
+            result[0, 1] = -(m[0, 1] * m[2, 2] - m[0, 2] * m[2, 1]) * invdet;
+            result[0, 2] = (m[0, 1] * m[1, 2] - m[0, 2] * m[1, 1]) * invdet;
+            result[1, 0] = -(m[1, 0] * m[2, 2] - m[1, 2] * m[2, 0]) * invdet;
+            result[1, 1] = (m[0, 0] * m[2, 2] - m[0, 2] * m[2, 0]) * invdet;
+            result[1, 2] = -(m[0, 0] * m[1, 2] - m[1, 0] * m[0, 2]) * invdet;
+            result[2, 0] = (m[1, 0] * m[2, 1] - m[2, 0] * m[1, 1]) * invdet;
+            result[2, 1] = -(m[0, 0] * m[2, 1] - m[2, 0] * m[0, 1]) * invdet;
+            result[2, 2] = (m[0, 0] * m[1, 1] - m[1, 0] * m[0, 1]) * invdet;
+
+            return new Matrix3(result);
+        }
     }
 }
