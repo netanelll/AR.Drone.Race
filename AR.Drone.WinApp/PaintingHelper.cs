@@ -29,38 +29,16 @@ namespace AR.Drone.WinApp
         /// <param name="startingPointX">X coordinate for the location of the painting</param>
         /// <param name="startingPointY">Y coordinate for the location of the painting</param>
         /// <param name="graphics">The screen grahics</param>
-        public PaintingHelper(int paintType, int startingPointX, int startingPointY, Graphics graphics)
+        public PaintingHelper(MapConfiguration mapConf, Graphics graphics)
         {
             _graphics = graphics;
-            _startingPointX = startingPointX;
-            _startingPointY = startingPointY;
+            _startingPointX = mapConf.StartingPointX;
+            _startingPointY = mapConf.StartingPointY;
 
-            switch (paintType)
-            {
-                case 1:
-                    pointsLeft = new List<Point>
-                    {
-                     new Point(_startingPointX + 20, _startingPointY + 280),
-                     new Point(_startingPointX + 20, _startingPointY + 20),
-                     new Point(_startingPointX + 280, _startingPointY + 20),
-                     new Point(_startingPointX + 280, _startingPointY + 280),
-                     new Point(_startingPointX + 20, _startingPointY + 280)
-                    };
+            pointsLeft = mapConf.PointsLeft;
 
-                    pointsRight = new List<Point>
-                    {
-                     new Point(_startingPointX + 40, _startingPointY + 260),
-                     new Point(_startingPointX + 40, _startingPointY + 40),
-                     new Point(_startingPointX + 260, _startingPointY + 40),
-                     new Point(_startingPointX + 260, _startingPointY + 260),
-                     new Point(_startingPointX + 40, _startingPointY + 260)
-                    };
-                    break;
-                default:
-                    pointsLeft = new List<Point>();
-                    pointsRight = new List<Point>();
-                    break;
-            }
+            pointsRight = mapConf.PointsRight;
+            
         }
 
         public void DrawRectangle()

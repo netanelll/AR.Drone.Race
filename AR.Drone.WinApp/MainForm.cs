@@ -42,6 +42,7 @@ namespace AR.Drone.WinApp
         private Autopilot _autopilot;
         private RaceController _raceController;
         private PaintingHelper _paintingHelper;
+        private MapConfiguration _mapConf;
         bool drowMiniMap = false;
 
         int counter = 2;
@@ -80,7 +81,8 @@ namespace AR.Drone.WinApp
 
             RemoteListener(); // Activates the Xbox Remote controller
 
-            _paintingHelper = new PaintingHelper(1, 850, 250, this.CreateGraphics()); // Generates class to control all the painting
+            _mapConf = new MapConfiguration(1, 850, 250);
+            _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
 
         }
 

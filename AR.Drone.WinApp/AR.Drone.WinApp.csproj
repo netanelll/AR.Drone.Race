@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CSVWriterReader.cs" />
     <Compile Include="FilePlayer.cs" />
+    <Compile Include="MapConfiguration.cs" />
     <Compile Include="PaintingHelper.cs" />
     <Compile Include="PlayerForm.cs">
       <SubType>Form</SubType>

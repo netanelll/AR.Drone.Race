@@ -1,5 +1,5 @@
 ﻿
-#define RECORD
+//#define RECORD
 
 
 using AR.Drone.Data.Navigation;
@@ -22,6 +22,8 @@ namespace AR.Drone.WinApp
         private bool isRacing;
         float x_cord, y_cord, z_cord, roll, pitch, yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
+
+        private float _startingYaw; // saving the first yaw response to get the quad direction
 
         #region properties
 
@@ -186,8 +188,11 @@ namespace AR.Drone.WinApp
                 prev_tick = DateTime.Now.Ticks;
                 roll = data.Roll;
                 pitch = data.Pitch;
-                yaw = data.Yaw;
-
+                yaw = data.Yaw - _startingYaw;
+             //   Console.WriteLine(data.Yaw);
+                Console.WriteLine(_startingYaw.ToString());
+              //  Console.WriteLine(yaw.ToString());
+                
                 DCM dcm = new DCM(roll, pitch, yaw);
                 Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                 Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
@@ -204,6 +209,7 @@ namespace AR.Drone.WinApp
             else
             {
                 prev_tick = DateTime.Now.Ticks;
+                _startingYaw = data.Yaw;
             }
 
         }
