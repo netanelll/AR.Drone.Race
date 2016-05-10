@@ -57,10 +57,22 @@ namespace AR.Drone.WinApp
                     //dx = p2.X - p1.X;
                     //dy = p2.Y - p1.Y;
 
+                    //mapSquares = new List<Square>
+                    //{
+                    // new Square(new Point(_startingPointX + 20, _startingPointY + 20),
+                    // new Point(_startingPointX + 280, _startingPointY + 280))
+                    //};
+
                     mapSquares = new List<Square>
                     {
                      new Square(new Point(_startingPointX + 20, _startingPointY + 20),
-                     new Point(_startingPointX + 280, _startingPointY + 280))
+                                new Point(_startingPointX + 280, _startingPointY + 40)),
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 260),
+                                new Point(_startingPointX + 280, _startingPointY + 280)),
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 40),
+                                new Point(_startingPointX + 40, _startingPointY + 260)),
+                     new Square(new Point(_startingPointX + 260, _startingPointY + 40),
+                                new Point(_startingPointX + 280, _startingPointY + 260))
                     };
 
                     break;
