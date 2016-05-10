@@ -22,6 +22,19 @@ namespace AR.Drone.WinApp
 
         int _startingPointX, _startingPointY;
 
+        public Pen SnakePen
+        {
+            get
+            {
+                return _snakePen;
+            }
+
+            set
+            {
+                _snakePen = value;
+            }
+        }
+
         /// <summary>
         /// C'tor
         /// </summary>
