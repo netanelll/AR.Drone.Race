@@ -18,9 +18,9 @@ namespace AR.Drone.WinApp
         private List<float> timeOverTime;
         private List<Vector_3> cordOverTime;
 #endif
-        private long start_ticks, end_ticks, prev_tick;
-        private bool isRacing;
-        float x_cord, y_cord, z_cord, roll, pitch, yaw;
+        private long _start_ticks, _end_ticks, _prev_tick;
+        private bool _isRacing;
+        float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
 
         private float _startingYaw; // saving the first yaw response to get the quad direction
@@ -31,12 +31,12 @@ namespace AR.Drone.WinApp
         {
             get
             {
-                return x_cord;
+                return _x_cord;
             }
 
             set
             {
-                x_cord = value;
+                _x_cord = value;
             }
         }
 
@@ -44,12 +44,12 @@ namespace AR.Drone.WinApp
         {
             get
             {
-                return y_cord;
+                return _y_cord;
             }
 
             set
             {
-                y_cord = value;
+                _y_cord = value;
             }
         }
 
@@ -57,41 +57,41 @@ namespace AR.Drone.WinApp
         {
             get
             {
-                return z_cord;
+                return _z_cord;
             }
 
             set
             {
-                z_cord = value;
+                _z_cord = value;
             }
         }
 #endregion
 
         public RaceController()
         {
-            x_cord = 0;
-            y_cord = 0;
-            z_cord = 0;
-            roll = 0;
-            pitch = 0;
-            yaw = 0;
-            start_ticks = 0;
-            end_ticks = 0;
-            isRacing = false;
+            _x_cord = 0;
+            _y_cord = 0;
+            _z_cord = 0;
+            _roll = 0;
+            _pitch = 0;
+            _yaw = 0;
+            _start_ticks = 0;
+            _end_ticks = 0;
+            _isRacing = false;
         }
 
         public void startRace()
         {
-            x_cord = 0;
-            y_cord = 0;
-            z_cord = 0;
-            roll = 0;
-            pitch = 0;
-            yaw = 0;
-            start_ticks = 0;
-            end_ticks = 0;
-            isRacing = true;
-            start_ticks = DateTime.Now.Ticks;
+            _x_cord = 0;
+            _y_cord = 0;
+            _z_cord = 0;
+            _roll = 0;
+            _pitch = 0;
+            _yaw = 0;
+            _start_ticks = 0;
+            _end_ticks = 0;
+            _isRacing = true;
+            _start_ticks = DateTime.Now.Ticks;
 #if RECORD
             navDataOverTime = new List<NavigationData>();
             timeOverTime = new List<float>();
@@ -101,12 +101,12 @@ namespace AR.Drone.WinApp
 
         public void endRace()
         {
-            if (isRacing)
+            if (_isRacing)
             {
 
 
-                isRacing = false;
-                end_ticks = DateTime.Now.Ticks;
+                _isRacing = false;
+                _end_ticks = DateTime.Now.Ticks;
 #if RECORD
             string fileName = "navData" + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString()
                  + DateTime.Now.Minute.ToString() + ".csv";
@@ -182,23 +182,23 @@ namespace AR.Drone.WinApp
         public void OnNavigationDataAcquired(NavigationData data)
         {
             float time_diff = 0;
-            if (isRacing)
+            if (_isRacing)
             {
-                time_diff = (DateTime.Now.Ticks - prev_tick)* TICKS_TO_SEC;
-                prev_tick = DateTime.Now.Ticks;
-                roll = data.Roll;
-                pitch = data.Pitch;
-                yaw = data.Yaw - _startingYaw;
+                time_diff = (DateTime.Now.Ticks - _prev_tick)* TICKS_TO_SEC;
+                _prev_tick = DateTime.Now.Ticks;
+                _roll = data.Roll;
+                _pitch = data.Pitch;
+                _yaw = data.Yaw - _startingYaw;
              //   Console.WriteLine(data.Yaw);
                 Console.WriteLine(_startingYaw.ToString());
               //  Console.WriteLine(yaw.ToString());
                 
-                DCM dcm = new DCM(roll, pitch, yaw);
+                DCM dcm = new DCM(_roll, _pitch, _yaw);
                 Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                 Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
-                x_cord = x_cord + ((float)velociy_reltiveTo_earth.x * time_diff);
-                y_cord = y_cord + ((float)velociy_reltiveTo_earth.y * time_diff);
-                z_cord = data.Altitude;
+                _x_cord = _x_cord + ((float)velociy_reltiveTo_earth.x * time_diff);
+                _y_cord = _y_cord + ((float)velociy_reltiveTo_earth.y * time_diff);
+                _z_cord = data.Altitude;
 #if RECORD
                 navDataOverTime.Add(data);
                 timeOverTime.Add(time_diff);
@@ -208,7 +208,7 @@ namespace AR.Drone.WinApp
             }
             else
             {
-                prev_tick = DateTime.Now.Ticks;
+                _prev_tick = DateTime.Now.Ticks;
                 _startingYaw = data.Yaw;
             }
 
