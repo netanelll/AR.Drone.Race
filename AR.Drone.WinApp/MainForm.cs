@@ -55,9 +55,6 @@ namespace AR.Drone.WinApp
         XboxHelper xBoxHelper;
         List<float> oldOrders;
 
-        //List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
-        //int count = 0; // stub to load fake nav data to be deleted TODO
-
         public MainForm()
         {
             InitializeComponent();
@@ -86,8 +83,6 @@ namespace AR.Drone.WinApp
 
             _mapConf = new MapConfiguration(1, 850, 250);
             _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
-
-            //loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
 
         }
 
@@ -697,22 +692,6 @@ namespace AR.Drone.WinApp
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
-
-            /////////////////////////////////// stub to load fake nav data to be deleted TODO
-            //if (allRaws.Count > count)
-            //{
-            //    float x = float.Parse(allRaws[count][0]);
-            //    float y = float.Parse(allRaws[count][1]);
-
-            //    _paintingHelper.DrawPoint(x, y);
-            //}
-            //else
-            //{
-            //    tmrChangeQuadLocation.Enabled = false;
-            //}
-
-            //count += 100;
-            /////////////////////////////////// stub to load fake nav data to be deleted TODO
         }
 
         /// <summary>
@@ -734,24 +713,5 @@ namespace AR.Drone.WinApp
         {
             _paintingHelper.DrawTrack();
         }
-
-        /// <summary>
-        /// Stub to be deleted TODO
-        /// </summary>
-        //private void loadFakeDataFromFile()
-        //{
-        //    CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out3.csv");
-        //    CsvRow csvRaw = new CsvRow();
-        //    while (csvReader.ReadRow(csvRaw))
-        //    {
-        //        CsvRow csvRaw1 = new CsvRow();
-        //        foreach (string item in csvRaw)
-        //        {
-        //            csvRaw1.Add(item);
-        //        }
-
-        //        allRaws.Add(csvRaw1);
-        //    }
-        //}
     }
 }
