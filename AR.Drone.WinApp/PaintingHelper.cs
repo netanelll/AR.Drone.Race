@@ -83,5 +83,10 @@ namespace AR.Drone.WinApp
                 _startingPointY + _snakeShifting + y * 10,
                 _snakeSize, _snakeSize);
         }
+
+        internal void CleanMap(MainForm mainForm)
+        {
+            mainForm.Invalidate(new Rectangle(_startingPointX, _startingPointY, 400, 400));
+        }
     }
 }

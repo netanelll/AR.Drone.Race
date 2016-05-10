@@ -148,6 +148,19 @@ namespace AR.Drone.WinApp
         {
 
             tmrChangeQuadLocation.Enabled = drowMiniMap; // fix to mini map drow using xbox remute. should not here. TODO 
+
+            if (_navigationData != null)
+            {
+                // Updates the battery field
+                tbBattery.Text = _navigationData.Battery.Percentage.ToString();
+
+                if (_navigationData.Battery.Low == true)
+                {
+                    tbBattery.ForeColor = Color.Red;
+
+                } 
+            }
+
             if (_frame == null || _frameNumber == _frame.Number)
                 return;
             _frameNumber = _frame.Number;
@@ -689,6 +702,14 @@ namespace AR.Drone.WinApp
             _paintingHelper.DrawRectangle();
         }
 
+        private void btnCleanMap_Click(object sender, EventArgs e)
+        {
+            _paintingHelper.CleanMap(this);
+        }
 
+        private void btnDrawTrack_Click(object sender, EventArgs e)
+        {
+            _paintingHelper.DrawTrack();
+        }
     }
 }
