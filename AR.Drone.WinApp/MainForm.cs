@@ -44,6 +44,7 @@ namespace AR.Drone.WinApp
         private PaintingHelper _paintingHelper;
         private MapConfiguration _mapConf;
         bool drowMiniMap = false;
+        bool _isOutOfBoundry = false;
 
         int counter = 2;
         int ledAnimation = 0;
@@ -695,13 +696,37 @@ namespace AR.Drone.WinApp
         /// <param name="e"></param>
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
-            if (_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
+            if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
             {
                 _paintingHelper.SnakePen = Pens.Red;
+                _isOutOfBoundry = true;
             }
+            else
+            {
+                if (_isOutOfBoundry)
+                {
+                    _paintingHelper.SnakePen = Pens.Green;
+                    _isOutOfBoundry = false;
+                }
+            }
+
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
+            //if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
+            //{
+            //    _paintingHelper.SnakePen = Pens.Red;
+            //    _isOutOfBoundry = true;
+            //}
+            //else
+            //{
+            //    if (_isOutOfBoundry)
+            //    {
+            //        _paintingHelper.SnakePen = Pens.Green;
+            //        _isOutOfBoundry = false;
+            //    }
+            //}
+
             //if (allRaws.Count > count)
             //{
             //    float x = float.Parse(allRaws[count][0]);

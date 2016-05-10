@@ -14,11 +14,12 @@ namespace AR.Drone.WinApp
         List<Point> pointsRight;
 
         const int _snakeSize = 2;
-        const int _snakeShifting = 200;
 
         Pen _coursePen = new Pen(Color.Black, 4);
         Pen _squarePen = new Pen(Color.Red, 8);
         Pen _snakePen = new Pen(Color.Green, _snakeSize);
+
+        MapConfiguration _mapConf;
 
         int _startingPointX, _startingPointY;
 
@@ -51,7 +52,8 @@ namespace AR.Drone.WinApp
             pointsLeft = mapConf.PointsLeft;
 
             pointsRight = mapConf.PointsRight;
-            
+
+            _mapConf = mapConf;
         }
 
         public void DrawRectangle()
@@ -70,8 +72,8 @@ namespace AR.Drone.WinApp
 
         public void DrawPoint(float x, float y)
         {
-            _graphics.DrawEllipse(_snakePen, _startingPointX + _snakeShifting + x * 20,
-                _startingPointY + _snakeShifting + y * 20,
+            _graphics.DrawEllipse(_snakePen, _startingPointX + _mapConf.SnakeShiftingX + x * _mapConf.SnakeMuliplier,
+                _startingPointY + _mapConf.SnakeShiftingY + y * _mapConf.SnakeMuliplier,
                 _snakeSize, _snakeSize);
         }
 

@@ -11,8 +11,12 @@ namespace AR.Drone.WinApp
         List<Point> pointsLeft;
         List<Point> pointsRight;
 
-        List<Square> mapSquares; 
+        List<Square> mapSquares;
         //List<Point> middleLine;
+
+        int _snakeShiftingX = 30;
+        int _snakeShiftingY = 270;
+        int _snakeMuliplier = 2;
 
         //float dx;
         //float dy;
@@ -85,6 +89,9 @@ namespace AR.Drone.WinApp
 
         public bool CheckQuadInSquares(float x, float y)
         {
+            x = _startingPointX + SnakeShiftingX + x * SnakeMuliplier;
+            y = _startingPointY + SnakeShiftingY + y * SnakeMuliplier;
+
             foreach (Square square in mapSquares)
             {
                 if (x > square.FirstCorner.X && x < square.SecondCorner.X &&
@@ -145,6 +152,45 @@ namespace AR.Drone.WinApp
             set
             {
                 _startingPointY = value;
+            }
+        }
+
+        public int SnakeShiftingX
+        {
+            get
+            {
+                return _snakeShiftingX;
+            }
+
+            set
+            {
+                _snakeShiftingX = value;
+            }
+        }
+
+        public int SnakeShiftingY
+        {
+            get
+            {
+                return _snakeShiftingY;
+            }
+
+            set
+            {
+                _snakeShiftingY = value;
+            }
+        }
+
+        public int SnakeMuliplier
+        {
+            get
+            {
+                return _snakeMuliplier;
+            }
+
+            set
+            {
+                _snakeMuliplier = value;
             }
         }
     }
