@@ -696,6 +696,10 @@ namespace AR.Drone.WinApp
         /// <param name="e"></param>
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
+            if (_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
+            {
+                _paintingHelper.SnakePen = Pens.Red;
+            }
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
