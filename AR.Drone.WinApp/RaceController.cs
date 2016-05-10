@@ -103,8 +103,6 @@ namespace AR.Drone.WinApp
         {
             if (_isRacing)
             {
-
-
                 _isRacing = false;
                 _end_ticks = DateTime.Now.Ticks;
 #if RECORD
@@ -190,7 +188,7 @@ namespace AR.Drone.WinApp
                 _pitch = data.Pitch;
                 _yaw = data.Yaw - _startingYaw;
              //   Console.WriteLine(data.Yaw);
-                Console.WriteLine(_startingYaw.ToString());
+              //  Console.WriteLine(_startingYaw.ToString());
               //  Console.WriteLine(yaw.ToString());
                 
                 DCM dcm = new DCM(_roll, _pitch, _yaw);
