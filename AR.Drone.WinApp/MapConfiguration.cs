@@ -14,9 +14,9 @@ namespace AR.Drone.WinApp
         List<Square> mapSquares;
         //List<Point> middleLine;
 
-        int _snakeShiftingX = 30;
-        int _snakeShiftingY = 270;
-        int _snakeMuliplier = 20;
+        int _snakeShiftingX = 50;
+        int _snakeShiftingY = 250;
+        int _snakeMuliplier = 50;
 
         //float dx;
         //float dy;
@@ -42,11 +42,11 @@ namespace AR.Drone.WinApp
 
                     pointsRight = new List<Point>
                     {
-                     new Point(_startingPointX + 40, _startingPointY + 260),
-                     new Point(_startingPointX + 40, _startingPointY + 40),
-                     new Point(_startingPointX + 260, _startingPointY + 40),
-                     new Point(_startingPointX + 260, _startingPointY + 260),
-                     new Point(_startingPointX + 40, _startingPointY + 260)
+                     new Point(_startingPointX + 80, _startingPointY + 220),
+                     new Point(_startingPointX + 80, _startingPointY + 80),
+                     new Point(_startingPointX + 220, _startingPointY + 80),
+                     new Point(_startingPointX + 220, _startingPointY + 220),
+                     new Point(_startingPointX + 80, _startingPointY + 220)
                     };
 
                     //middleLine = new List<Point>
@@ -70,13 +70,13 @@ namespace AR.Drone.WinApp
                     mapSquares = new List<Square>
                     {
                      new Square(new Point(_startingPointX + 20, _startingPointY + 20),
-                                new Point(_startingPointX + 280, _startingPointY + 40)),
-                     new Square(new Point(_startingPointX + 20, _startingPointY + 260),
+                                new Point(_startingPointX + 280, _startingPointY + 80)),
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 220),
                                 new Point(_startingPointX + 280, _startingPointY + 280)),
-                     new Square(new Point(_startingPointX + 20, _startingPointY + 40),
-                                new Point(_startingPointX + 40, _startingPointY + 260)),
-                     new Square(new Point(_startingPointX + 260, _startingPointY + 40),
-                                new Point(_startingPointX + 280, _startingPointY + 260))
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 80),
+                                new Point(_startingPointX + 80, _startingPointY + 220)),
+                     new Square(new Point(_startingPointX + 220, _startingPointY + 80),
+                                new Point(_startingPointX + 280, _startingPointY + 220))
                     };
 
                     break;
