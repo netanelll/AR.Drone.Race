@@ -16,7 +16,7 @@ namespace AR.Drone.WinApp
 
         int _snakeShiftingX = 30;
         int _snakeShiftingY = 270;
-        int _snakeMuliplier = 2;
+        int _snakeMuliplier = 20;
 
         //float dx;
         //float dy;

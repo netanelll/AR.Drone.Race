@@ -1,5 +1,5 @@
 ﻿
-//#define RECORD
+#define RECORD
 
 
 using AR.Drone.Data.Navigation;
@@ -200,7 +200,7 @@ namespace AR.Drone.WinApp
 #if RECORD
                 navDataOverTime.Add(data);
                 timeOverTime.Add(time_diff);
-                cordOverTime.Add(new Vector_3(x_cord, y_cord, z_cord));
+                cordOverTime.Add(new Vector_3(_x_cord, _y_cord, _z_cord));
 #endif
 
             }
