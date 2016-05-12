@@ -68,10 +68,9 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(18, 18);
-            this.btnStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnStart.Location = new System.Drawing.Point(12, 12);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(112, 35);
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "Activate";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -79,10 +78,9 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(140, 18);
-            this.btnStop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnStop.Location = new System.Drawing.Point(93, 12);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(112, 35);
+            this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 1;
             this.btnStop.Text = "Deactivate";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -91,20 +89,18 @@
             // pbVideo
             // 
             this.pbVideo.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pbVideo.Location = new System.Drawing.Point(18, 63);
-            this.pbVideo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pbVideo.Location = new System.Drawing.Point(12, 41);
             this.pbVideo.Name = "pbVideo";
-            this.pbVideo.Size = new System.Drawing.Size(1204, 765);
+            this.pbVideo.Size = new System.Drawing.Size(803, 497);
             this.pbVideo.TabIndex = 2;
             this.pbVideo.TabStop = false;
             // 
             // btnFlatTrim
             // 
             this.btnFlatTrim.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnFlatTrim.Location = new System.Drawing.Point(18, 846);
-            this.btnFlatTrim.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnFlatTrim.Location = new System.Drawing.Point(12, 550);
             this.btnFlatTrim.Name = "btnFlatTrim";
-            this.btnFlatTrim.Size = new System.Drawing.Size(112, 35);
+            this.btnFlatTrim.Size = new System.Drawing.Size(75, 23);
             this.btnFlatTrim.TabIndex = 3;
             this.btnFlatTrim.Text = "Flat Trim";
             this.btnFlatTrim.UseVisualStyleBackColor = true;
@@ -113,10 +109,9 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.Location = new System.Drawing.Point(261, 846);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button2.Location = new System.Drawing.Point(174, 550);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 35);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
             this.button2.Text = "Takeoff";
             this.button2.UseVisualStyleBackColor = true;
@@ -125,10 +120,9 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(384, 846);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button3.Location = new System.Drawing.Point(256, 550);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(112, 35);
+            this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 5;
             this.button3.Text = "Land";
             this.button3.UseVisualStyleBackColor = true;
@@ -136,10 +130,9 @@
             // 
             // btnEmergency
             // 
-            this.btnEmergency.Location = new System.Drawing.Point(854, 18);
-            this.btnEmergency.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnEmergency.Location = new System.Drawing.Point(569, 12);
             this.btnEmergency.Name = "btnEmergency";
-            this.btnEmergency.Size = new System.Drawing.Size(124, 35);
+            this.btnEmergency.Size = new System.Drawing.Size(83, 23);
             this.btnEmergency.TabIndex = 6;
             this.btnEmergency.Text = "Emergency";
             this.btnEmergency.UseVisualStyleBackColor = true;
@@ -153,10 +146,9 @@
             // btnSwitchCam
             // 
             this.btnSwitchCam.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSwitchCam.Location = new System.Drawing.Point(844, 846);
-            this.btnSwitchCam.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSwitchCam.Location = new System.Drawing.Point(563, 550);
             this.btnSwitchCam.Name = "btnSwitchCam";
-            this.btnSwitchCam.Size = new System.Drawing.Size(134, 35);
+            this.btnSwitchCam.Size = new System.Drawing.Size(89, 23);
             this.btnSwitchCam.TabIndex = 8;
             this.btnSwitchCam.Text = "Video Channel";
             this.btnSwitchCam.UseVisualStyleBackColor = true;
@@ -165,10 +157,9 @@
             // btnUp
             // 
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnUp.Location = new System.Drawing.Point(261, 898);
-            this.btnUp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnUp.Location = new System.Drawing.Point(174, 584);
             this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(112, 35);
+            this.btnUp.Size = new System.Drawing.Size(75, 23);
             this.btnUp.TabIndex = 9;
             this.btnUp.Text = "Up";
             this.btnUp.UseVisualStyleBackColor = true;
@@ -177,10 +168,9 @@
             // btnDown
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDown.Location = new System.Drawing.Point(261, 945);
-            this.btnDown.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnDown.Location = new System.Drawing.Point(174, 614);
             this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(112, 35);
+            this.btnDown.Size = new System.Drawing.Size(75, 23);
             this.btnDown.TabIndex = 10;
             this.btnDown.Text = "Down";
             this.btnDown.UseVisualStyleBackColor = true;
@@ -189,10 +179,9 @@
             // btnLeft
             // 
             this.btnLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLeft.Location = new System.Drawing.Point(384, 945);
-            this.btnLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnLeft.Location = new System.Drawing.Point(256, 614);
             this.btnLeft.Name = "btnLeft";
-            this.btnLeft.Size = new System.Drawing.Size(112, 35);
+            this.btnLeft.Size = new System.Drawing.Size(75, 23);
             this.btnLeft.TabIndex = 11;
             this.btnLeft.Text = "Left";
             this.btnLeft.UseVisualStyleBackColor = true;
@@ -201,10 +190,9 @@
             // btnBack
             // 
             this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnBack.Location = new System.Drawing.Point(507, 943);
-            this.btnBack.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnBack.Location = new System.Drawing.Point(338, 613);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(112, 35);
+            this.btnBack.Size = new System.Drawing.Size(75, 23);
             this.btnBack.TabIndex = 12;
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = true;
@@ -213,10 +201,9 @@
             // btnRight
             // 
             this.btnRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRight.Location = new System.Drawing.Point(630, 943);
-            this.btnRight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRight.Location = new System.Drawing.Point(420, 613);
             this.btnRight.Name = "btnRight";
-            this.btnRight.Size = new System.Drawing.Size(112, 35);
+            this.btnRight.Size = new System.Drawing.Size(75, 23);
             this.btnRight.TabIndex = 13;
             this.btnRight.Text = "Right";
             this.btnRight.UseVisualStyleBackColor = true;
@@ -225,10 +212,9 @@
             // btnForward
             // 
             this.btnForward.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnForward.Location = new System.Drawing.Point(507, 898);
-            this.btnForward.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnForward.Location = new System.Drawing.Point(338, 584);
             this.btnForward.Name = "btnForward";
-            this.btnForward.Size = new System.Drawing.Size(112, 35);
+            this.btnForward.Size = new System.Drawing.Size(75, 23);
             this.btnForward.TabIndex = 14;
             this.btnForward.Text = "Forward";
             this.btnForward.UseVisualStyleBackColor = true;
@@ -237,10 +223,9 @@
             // btnTurnLeft
             // 
             this.btnTurnLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTurnLeft.Location = new System.Drawing.Point(386, 900);
-            this.btnTurnLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnTurnLeft.Location = new System.Drawing.Point(257, 585);
             this.btnTurnLeft.Name = "btnTurnLeft";
-            this.btnTurnLeft.Size = new System.Drawing.Size(112, 35);
+            this.btnTurnLeft.Size = new System.Drawing.Size(75, 23);
             this.btnTurnLeft.TabIndex = 15;
             this.btnTurnLeft.Text = "Turn Left";
             this.btnTurnLeft.UseVisualStyleBackColor = true;
@@ -249,10 +234,9 @@
             // btnTurnRight
             // 
             this.btnTurnRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTurnRight.Location = new System.Drawing.Point(628, 900);
-            this.btnTurnRight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnTurnRight.Location = new System.Drawing.Point(419, 585);
             this.btnTurnRight.Name = "btnTurnRight";
-            this.btnTurnRight.Size = new System.Drawing.Size(112, 35);
+            this.btnTurnRight.Size = new System.Drawing.Size(75, 23);
             this.btnTurnRight.TabIndex = 16;
             this.btnTurnRight.Text = "Turn Right";
             this.btnTurnRight.UseVisualStyleBackColor = true;
@@ -261,10 +245,9 @@
             // btnHover
             // 
             this.btnHover.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnHover.Location = new System.Drawing.Point(507, 846);
-            this.btnHover.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnHover.Location = new System.Drawing.Point(338, 550);
             this.btnHover.Name = "btnHover";
-            this.btnHover.Size = new System.Drawing.Size(112, 35);
+            this.btnHover.Size = new System.Drawing.Size(75, 23);
             this.btnHover.TabIndex = 17;
             this.btnHover.Text = "Hover";
             this.btnHover.UseVisualStyleBackColor = true;
@@ -272,10 +255,9 @@
             // 
             // tvInfo
             // 
-            this.tvInfo.Location = new System.Drawing.Point(1244, 63);
-            this.tvInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tvInfo.Location = new System.Drawing.Point(829, 41);
             this.tvInfo.Name = "tvInfo";
-            this.tvInfo.Size = new System.Drawing.Size(338, 293);
+            this.tvInfo.Size = new System.Drawing.Size(227, 192);
             this.tvInfo.TabIndex = 18;
             // 
             // tmrVideoUpdate
@@ -285,10 +267,9 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(720, 18);
-            this.btnReset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnReset.Location = new System.Drawing.Point(480, 12);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(124, 35);
+            this.btnReset.Size = new System.Drawing.Size(83, 23);
             this.btnReset.TabIndex = 19;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -297,10 +278,9 @@
             // btnReadConfig
             // 
             this.btnReadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReadConfig.Location = new System.Drawing.Point(844, 900);
-            this.btnReadConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnReadConfig.Location = new System.Drawing.Point(563, 585);
             this.btnReadConfig.Name = "btnReadConfig";
-            this.btnReadConfig.Size = new System.Drawing.Size(134, 35);
+            this.btnReadConfig.Size = new System.Drawing.Size(89, 23);
             this.btnReadConfig.TabIndex = 20;
             this.btnReadConfig.Text = "Read Config";
             this.btnReadConfig.UseVisualStyleBackColor = true;
@@ -309,10 +289,9 @@
             // btnSendConfig
             // 
             this.btnSendConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSendConfig.Location = new System.Drawing.Point(844, 945);
-            this.btnSendConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSendConfig.Location = new System.Drawing.Point(563, 614);
             this.btnSendConfig.Name = "btnSendConfig";
-            this.btnSendConfig.Size = new System.Drawing.Size(134, 35);
+            this.btnSendConfig.Size = new System.Drawing.Size(89, 23);
             this.btnSendConfig.TabIndex = 21;
             this.btnSendConfig.Text = "Send Config";
             this.btnSendConfig.UseVisualStyleBackColor = true;
@@ -320,10 +299,9 @@
             // 
             // btnStartRecording
             // 
-            this.btnStartRecording.Location = new System.Drawing.Point(261, 18);
-            this.btnStartRecording.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnStartRecording.Location = new System.Drawing.Point(174, 12);
             this.btnStartRecording.Name = "btnStartRecording";
-            this.btnStartRecording.Size = new System.Drawing.Size(112, 35);
+            this.btnStartRecording.Size = new System.Drawing.Size(75, 23);
             this.btnStartRecording.TabIndex = 22;
             this.btnStartRecording.Text = "Start Rec.";
             this.btnStartRecording.UseVisualStyleBackColor = true;
@@ -331,10 +309,9 @@
             // 
             // btnStopRecording
             // 
-            this.btnStopRecording.Location = new System.Drawing.Point(382, 18);
-            this.btnStopRecording.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnStopRecording.Location = new System.Drawing.Point(255, 12);
             this.btnStopRecording.Name = "btnStopRecording";
-            this.btnStopRecording.Size = new System.Drawing.Size(112, 35);
+            this.btnStopRecording.Size = new System.Drawing.Size(75, 23);
             this.btnStopRecording.TabIndex = 23;
             this.btnStopRecording.Text = "Stop Rec.";
             this.btnStopRecording.UseVisualStyleBackColor = true;
@@ -342,10 +319,9 @@
             // 
             // btnReplay
             // 
-            this.btnReplay.Location = new System.Drawing.Point(504, 18);
-            this.btnReplay.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnReplay.Location = new System.Drawing.Point(336, 12);
             this.btnReplay.Name = "btnReplay";
-            this.btnReplay.Size = new System.Drawing.Size(112, 35);
+            this.btnReplay.Size = new System.Drawing.Size(75, 23);
             this.btnReplay.TabIndex = 24;
             this.btnReplay.Text = "Replay";
             this.btnReplay.UseVisualStyleBackColor = true;
@@ -354,10 +330,9 @@
             // btnAutopilot
             // 
             this.btnAutopilot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAutopilot.Location = new System.Drawing.Point(18, 945);
-            this.btnAutopilot.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnAutopilot.Location = new System.Drawing.Point(12, 614);
             this.btnAutopilot.Name = "btnAutopilot";
-            this.btnAutopilot.Size = new System.Drawing.Size(112, 35);
+            this.btnAutopilot.Size = new System.Drawing.Size(75, 23);
             this.btnAutopilot.TabIndex = 25;
             this.btnAutopilot.Text = "Auto&pilot";
             this.btnAutopilot.UseVisualStyleBackColor = true;
@@ -366,10 +341,9 @@
             // RecordData
             // 
             this.RecordData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.RecordData.Location = new System.Drawing.Point(20, 991);
-            this.RecordData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.RecordData.Location = new System.Drawing.Point(13, 644);
             this.RecordData.Name = "RecordData";
-            this.RecordData.Size = new System.Drawing.Size(112, 35);
+            this.RecordData.Size = new System.Drawing.Size(75, 23);
             this.RecordData.TabIndex = 26;
             this.RecordData.Text = "Record data";
             this.RecordData.UseVisualStyleBackColor = true;
@@ -378,10 +352,9 @@
             // StopRecordData
             // 
             this.StopRecordData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.StopRecordData.Location = new System.Drawing.Point(141, 991);
-            this.StopRecordData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.StopRecordData.Location = new System.Drawing.Point(94, 644);
             this.StopRecordData.Name = "StopRecordData";
-            this.StopRecordData.Size = new System.Drawing.Size(112, 35);
+            this.StopRecordData.Size = new System.Drawing.Size(75, 23);
             this.StopRecordData.TabIndex = 27;
             this.StopRecordData.Text = "StopRecord";
             this.StopRecordData.UseVisualStyleBackColor = true;
@@ -390,10 +363,9 @@
             // LedsShow
             // 
             this.LedsShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LedsShow.Location = new System.Drawing.Point(264, 989);
-            this.LedsShow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.LedsShow.Location = new System.Drawing.Point(176, 643);
             this.LedsShow.Name = "LedsShow";
-            this.LedsShow.Size = new System.Drawing.Size(112, 35);
+            this.LedsShow.Size = new System.Drawing.Size(75, 23);
             this.LedsShow.TabIndex = 28;
             this.LedsShow.Text = "Leds show";
             this.LedsShow.UseVisualStyleBackColor = true;
@@ -406,10 +378,9 @@
             // btnCleanMap
             // 
             this.btnCleanMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCleanMap.Location = new System.Drawing.Point(1244, 858);
-            this.btnCleanMap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCleanMap.Location = new System.Drawing.Point(829, 558);
             this.btnCleanMap.Name = "btnCleanMap";
-            this.btnCleanMap.Size = new System.Drawing.Size(134, 35);
+            this.btnCleanMap.Size = new System.Drawing.Size(89, 23);
             this.btnCleanMap.TabIndex = 29;
             this.btnCleanMap.Text = "Clean Map";
             this.btnCleanMap.UseVisualStyleBackColor = true;
@@ -418,10 +389,9 @@
             // btnDrawTrack
             // 
             this.btnDrawTrack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDrawTrack.Location = new System.Drawing.Point(1386, 858);
-            this.btnDrawTrack.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnDrawTrack.Location = new System.Drawing.Point(924, 558);
             this.btnDrawTrack.Name = "btnDrawTrack";
-            this.btnDrawTrack.Size = new System.Drawing.Size(134, 35);
+            this.btnDrawTrack.Size = new System.Drawing.Size(89, 23);
             this.btnDrawTrack.TabIndex = 30;
             this.btnDrawTrack.Text = "Draw Track";
             this.btnDrawTrack.UseVisualStyleBackColor = true;
@@ -429,17 +399,18 @@
             // 
             // tbBattery
             // 
-            this.tbBattery.Location = new System.Drawing.Point(998, 26);
+            this.tbBattery.Location = new System.Drawing.Point(665, 17);
+            this.tbBattery.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbBattery.Name = "tbBattery";
             this.tbBattery.ReadOnly = true;
-            this.tbBattery.Size = new System.Drawing.Size(100, 26);
+            this.tbBattery.Size = new System.Drawing.Size(68, 20);
             this.tbBattery.TabIndex = 31;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1862, 1038);
+            this.ClientSize = new System.Drawing.Size(908, 482);
             this.Controls.Add(this.tbBattery);
             this.Controls.Add(this.btnDrawTrack);
             this.Controls.Add(this.btnCleanMap);
@@ -472,7 +443,6 @@
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.Text = "AR.Drone Control";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

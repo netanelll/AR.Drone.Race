@@ -11,6 +11,8 @@ namespace AR.Drone.WinApp
         List<Point> pointsLeft;
         List<Point> pointsRight;
 
+        List<Square> gates;
+
         List<Square> mapSquares;
         //List<Point> middleLine;
 
@@ -67,6 +69,7 @@ namespace AR.Drone.WinApp
                     // new Point(_startingPointX + 280, _startingPointY + 280))
                     //};
 
+                    // the areas in which the quad is allowed to be
                     mapSquares = new List<Square>
                     {
                      new Square(new Point(_startingPointX + 20, _startingPointY + 20),
@@ -77,6 +80,15 @@ namespace AR.Drone.WinApp
                                 new Point(_startingPointX + 80, _startingPointY + 220)),
                      new Square(new Point(_startingPointX + 220, _startingPointY + 80),
                                 new Point(_startingPointX + 280, _startingPointY + 220))
+                    };
+
+                    // the gates for the quad to pass throw
+                    gates = new List<Square>
+                    {
+                        new Square(new Point(_startingPointX + 150, _startingPointY + 230),
+                                new Point(_startingPointX + 150, _startingPointY + 270)),
+                     new Square(new Point(_startingPointX + 230, _startingPointY + 150),
+                                new Point(_startingPointX + 270, _startingPointY + 150))
                     };
 
                     break;
@@ -191,6 +203,19 @@ namespace AR.Drone.WinApp
             set
             {
                 _snakeMuliplier = value;
+            }
+        }
+
+        public List<Square> Gates
+        {
+            get
+            {
+                return gates;
+            }
+
+            set
+            {
+                gates = value;
             }
         }
     }

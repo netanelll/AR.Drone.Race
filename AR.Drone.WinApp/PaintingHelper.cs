@@ -8,7 +8,13 @@ namespace AR.Drone.WinApp
 {
     public class PaintingHelper
     {
+        bool _isGateSeeable;
         Graphics _graphics;
+
+        float gateFullSize = 500;
+
+        int sumGates = 0;
+        int currentGate = 0;
 
         List<Point> pointsLeft;
         List<Point> pointsRight;
@@ -18,8 +24,11 @@ namespace AR.Drone.WinApp
         Pen _coursePen = new Pen(Color.Black, 4);
         Pen _squarePen = new Pen(Color.Red, 8);
         Pen _snakePen = new Pen(Color.Green, _snakeSize);
+        Pen _gatePen = new Pen(Color.Gold, 2);
 
         MapConfiguration _mapConf;
+
+        Rectangle _rect;
 
         int _startingPointX, _startingPointY;
 
@@ -33,6 +42,19 @@ namespace AR.Drone.WinApp
             set
             {
                 _snakePen = value;
+            }
+        }
+
+        public bool IsGateSeeable
+        {
+            get
+            {
+                return _isGateSeeable;
+            }
+
+            set
+            {
+                _isGateSeeable = value;
             }
         }
 
@@ -54,6 +76,11 @@ namespace AR.Drone.WinApp
             pointsRight = mapConf.PointsRight;
 
             _mapConf = mapConf;
+
+            _rect = new Rectangle();
+            _isGateSeeable = false;
+
+            sumGates = _mapConf.Gates.Count;
         }
 
         public void DrawRectangle()
@@ -77,9 +104,96 @@ namespace AR.Drone.WinApp
                 _snakeSize, _snakeSize);
         }
 
-        internal void CleanMap(MainForm mainForm)
+        public void CleanMap(MainForm mainForm)
         {
             mainForm.Invalidate(new Rectangle(_startingPointX, _startingPointY, 400, 400));
+        }
+
+        public void DrawRectangleOnVideo(Bitmap _frameBitmap)
+        {
+            Graphics gr = Graphics.FromImage(_frameBitmap);
+            gr.DrawRectangle(_gatePen, _rect);
+        }
+
+        /// <summary>
+        /// Checks if there is relevant rectangle to paint, and if so decides the size and location of the recatangle
+        /// </summary>
+        /// <param name="x_cord"></param>
+        /// <param name="y_cord"></param>
+        public void ChangeVideoRectangleSize(float x_cord, float y_cord)
+        {
+            if (sumGates > currentGate)
+            {
+                float distance;
+                int size = 0;
+                float squareXLocation = 0;
+                Square gate = _mapConf.Gates[currentGate];
+
+                _isGateSeeable = true;
+
+                // checks if the gate is vertical or horizontal
+                if (gate.FirstCorner.X - gate.SecondCorner.X == 0)
+                {
+                    distance = Math.Abs(gate.FirstCorner.X - x_cord - _startingPointX);
+
+                    // distance too far to show rectangle
+                    if (distance > 200)
+                    {
+                        _isGateSeeable = false;
+                    }
+                    // the quad passed the gate, moving to next gate
+                    else if (distance < 0)
+                    {
+                        currentGate++;
+                    }
+                    // need to paint the gate, calculating the size and location
+                    else
+                    {
+                        size = (int)(gateFullSize / (200 / (200 - distance)));
+                        squareXLocation = gate.FirstCorner.Y + (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - y_cord - _startingPointY - _mapConf.SnakeShiftingY;
+                        ChangeRectSizeAndLoc(size, squareXLocation);
+                    }
+                }
+                else
+                {
+                    distance = Math.Abs(gate.FirstCorner.Y - y_cord - _startingPointY);
+
+                    // distance too far to show rectangle
+                    if (distance > 99)
+                    {
+                        _isGateSeeable = false;
+                    }
+                    // the quad passed the gate, moving to next gate
+                    else if (distance < 0)
+                    {
+                        currentGate++;
+                    }
+                    // need to paint the gate, calculating the size and location
+                    else
+                    {
+                        size = (int)(gateFullSize / (100 / (100 - distance)));
+                        squareXLocation = gate.FirstCorner.X + (gate.FirstCorner.X - gate.SecondCorner.Y) / 2 - x_cord - _startingPointX - _mapConf.SnakeShiftingX;
+                        ChangeRectSizeAndLoc(size, squareXLocation);
+                    }
+                } 
+            }
+            // no gates left to see
+            else
+            {
+                _isGateSeeable = false;
+            }
+        }
+
+        private void ChangeRectSizeAndLoc(int size, float squareXLocation)
+        {
+            if (squareXLocation > 0)
+            {
+                _rect = new Rectangle(10 + (int)squareXLocation, 10, size, size);
+            }
+            else
+            {
+                _rect = new Rectangle(10 - (int)Math.Abs(squareXLocation), 10, size, size);
+            }
         }
     }
 }
