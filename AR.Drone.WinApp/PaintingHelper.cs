@@ -134,10 +134,10 @@ namespace AR.Drone.WinApp
                 // checks if the gate is vertical or horizontal
                 if (gate.FirstCorner.X - gate.SecondCorner.X == 0)
                 {
-                    distance = Math.Abs(gate.FirstCorner.X - x_cord - _startingPointX);
+                    distance = Math.Abs(gate.FirstCorner.X - x_cord - _startingPointX - _mapConf.SnakeShiftingX);
 
                     // distance too far to show rectangle
-                    if (distance > 100)
+                    if (distance > 99)
                     {
                         _isGateSeeable = false;
                     }
@@ -156,7 +156,7 @@ namespace AR.Drone.WinApp
                 }
                 else
                 {
-                    distance = Math.Abs(gate.FirstCorner.Y - y_cord - _startingPointY);
+                    distance = Math.Abs(gate.FirstCorner.Y - y_cord - _startingPointY - _mapConf.SnakeShiftingY);
 
                     // distance too far to show rectangle
                     if (distance > 99)
