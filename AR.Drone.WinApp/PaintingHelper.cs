@@ -16,6 +16,8 @@ namespace AR.Drone.WinApp
         int sumGates = 0;
         int currentGate = 0;
 
+        int gateDistanceToShow = 400;
+
         List<Point> pointsLeft;
         List<Point> pointsRight;
 
@@ -137,7 +139,7 @@ namespace AR.Drone.WinApp
                     distance = Math.Abs(gate.FirstCorner.X - x_cord - _startingPointX - _mapConf.SnakeShiftingX);
 
                     // distance too far to show rectangle
-                    if (distance > 99)
+                    if (distance > gateDistanceToShow - 1)
                     {
                         _isGateSeeable = false;
                     }
@@ -149,7 +151,7 @@ namespace AR.Drone.WinApp
                     // need to paint the gate, calculating the size and location
                     else
                     {
-                        size = (int)(gateFullSize / (100 / (100 - distance)));
+                        size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - distance)));
                         squareXLocation = gate.FirstCorner.Y + (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - y_cord - _startingPointY - _mapConf.SnakeShiftingY;
                         ChangeRectSizeAndLoc(size, squareXLocation);
                     }
