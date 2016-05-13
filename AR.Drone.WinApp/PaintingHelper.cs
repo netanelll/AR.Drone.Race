@@ -115,6 +115,8 @@ namespace AR.Drone.WinApp
         {
             Graphics gr = Graphics.FromImage(_frameBitmap);
             gr.DrawRectangle(_gatePen, _rect);
+            // stub to get middle of image
+            gr.DrawRectangle(_gatePen, new Rectangle(300,300,5,5));
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace AR.Drone.WinApp
                 // checks if the gate is vertical or horizontal
                 if (gate.FirstCorner.X - gate.SecondCorner.X == 0)
                 {
-                    distance = Math.Abs(gate.FirstCorner.X - x_cord - _startingPointX - _mapConf.SnakeShiftingX);
+                    distance = Math.Abs(gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - _startingPointX - _mapConf.SnakeShiftingX);
 
                     // distance too far to show rectangle
                     if (distance > gateDistanceToShow - 1)
@@ -158,10 +160,10 @@ namespace AR.Drone.WinApp
                 }
                 else
                 {
-                    distance = Math.Abs(gate.FirstCorner.Y - y_cord - _startingPointY - _mapConf.SnakeShiftingY);
+                    distance = Math.Abs(gate.FirstCorner.Y - (y_cord * _mapConf.SnakeMuliplier) - _startingPointY - _mapConf.SnakeShiftingY);
 
                     // distance too far to show rectangle
-                    if (distance > 99)
+                    if (distance > gateDistanceToShow - 1)
                     {
                         _isGateSeeable = false;
                     }
@@ -173,7 +175,7 @@ namespace AR.Drone.WinApp
                     // need to paint the gate, calculating the size and location
                     else
                     {
-                        size = (int)(gateFullSize / (100 / (100 - distance)));
+                        size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - distance)));
                         squareXLocation = gate.FirstCorner.X + (gate.FirstCorner.X - gate.SecondCorner.Y) / 2 - x_cord - _startingPointX - _mapConf.SnakeShiftingX;
                         ChangeRectSizeAndLoc(size, squareXLocation);
                     }
@@ -190,11 +192,11 @@ namespace AR.Drone.WinApp
         {
             if (squareXLocation > 0)
             {
-                _rect = new Rectangle(10 + (int)squareXLocation, 10, size, size);
+                _rect = new Rectangle(30 + (int)squareXLocation, 30, size, size);
             }
             else
             {
-                _rect = new Rectangle(10 - (int)Math.Abs(squareXLocation), 10, size, size);
+                _rect = new Rectangle(30 - (int)Math.Abs(squareXLocation), 30, size, size);
             }
         }
     }

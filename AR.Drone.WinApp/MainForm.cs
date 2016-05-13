@@ -177,6 +177,11 @@ namespace AR.Drone.WinApp
             else
                 VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
 
+            /// stub to get image instead of real bitmap
+            //_frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
+            /// stub to get image instead of real bitmap
+
+
             //test to paint square on the video image
             if (_paintingHelper.IsGateSeeable)
             {
@@ -751,6 +756,10 @@ namespace AR.Drone.WinApp
             //}
 
             //count += 100;
+
+            //// Changes the rectangle size acording to the quad location
+            //_paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]));
+
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
         }
 
