@@ -102,7 +102,7 @@ namespace AR.Drone.WinApp
             _graphics.DrawEllipse(_snakePen, _startingPointX + _mapConf.SnakeShiftingX + x * _mapConf.SnakeMuliplier,
                 _startingPointY + _mapConf.SnakeShiftingY + y * _mapConf.SnakeMuliplier,
                 _snakeSize, _snakeSize);
-        }
+        }//
 
         public void CleanMap(MainForm mainForm)
         {
