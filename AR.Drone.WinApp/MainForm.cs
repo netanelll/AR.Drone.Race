@@ -23,7 +23,6 @@ using XInputDotNetPure;
 
 namespace AR.Drone.WinApp
 {
-    //
     public partial class MainForm : Form
     {
         private const string ARDroneTrackFileExt = ".ardrone";
@@ -45,7 +44,6 @@ namespace AR.Drone.WinApp
         private PaintingHelper _paintingHelper;
         private MapConfiguration _mapConf;
         bool drowMiniMap = false;
-        bool _isOutOfBoundry = false;
 
         int counter = 2;
         int ledAnimation = 0;
@@ -177,12 +175,6 @@ namespace AR.Drone.WinApp
                 _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
             else
                 VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
-
-            //test to paint square on the video image
-            if (_paintingHelper.IsGateSeeable)
-            {
-                _paintingHelper.DrawRectangleOnVideo(_frameBitmap);
-            }
 
             pbVideo.Image = _frameBitmap;
         }
@@ -703,41 +695,13 @@ namespace AR.Drone.WinApp
         /// <param name="e"></param>
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
-            // Checks if the quad is inside the allowed area
-            if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
+            if (_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
             {
                 _paintingHelper.SnakePen = Pens.Red;
-                _isOutOfBoundry = true;
             }
-            else
-            {
-                if (_isOutOfBoundry)
-                {
-                    _paintingHelper.SnakePen = Pens.Green;
-                    _isOutOfBoundry = false;
-                }
-            }
-
-            // Changes the rectangle size acording to the quad location
-            _paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord);
-
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
-            //if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
-            //{
-            //    _paintingHelper.SnakePen = Pens.Red;
-            //    _isOutOfBoundry = true;
-            //}
-            //else
-            //{
-            //    if (_isOutOfBoundry)
-            //    {
-            //        _paintingHelper.SnakePen = Pens.Green;
-            //        _isOutOfBoundry = false;
-            //    }
-            //}
-
             //if (allRaws.Count > count)
             //{
             //    float x = float.Parse(allRaws[count][0]);
