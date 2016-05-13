@@ -44,6 +44,7 @@ namespace AR.Drone.WinApp
         private PaintingHelper _paintingHelper;
         private MapConfiguration _mapConf;
         bool drowMiniMap = false;
+        bool _isOutOfBoundry = false;
 
         int counter = 2;
         int ledAnimation = 0;
@@ -164,7 +165,7 @@ namespace AR.Drone.WinApp
                 {
                     tbBattery.ForeColor = Color.Red;
 
-                } 
+                }
             }
 
             if (_frame == null || _frameNumber == _frame.Number)
@@ -175,6 +176,12 @@ namespace AR.Drone.WinApp
                 _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
             else
                 VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+
+            //test to paint square on the video image
+            if (_paintingHelper.IsGateSeeable)
+            {
+                _paintingHelper.DrawRectangleOnVideo(_frameBitmap);
+            }
 
             pbVideo.Image = _frameBitmap;
         }
@@ -197,11 +204,11 @@ namespace AR.Drone.WinApp
             NavdataBag navdataBag;
             if (_navigationPacket.Data != null && NavdataBagParser.TryParse(ref _navigationPacket, out navdataBag))
             {
-                var ctrl_state = (CTRL_STATES) (navdataBag.demo.ctrl_state >> 0x10);
+                var ctrl_state = (CTRL_STATES)(navdataBag.demo.ctrl_state >> 0x10);
                 node = vativeNode.Nodes.GetOrCreate("ctrl_state");
                 node.Text = string.Format("Ctrl State: {0}", ctrl_state);
 
-                var flying_state = (FLYING_STATES) (navdataBag.demo.ctrl_state & 0xffff);
+                var flying_state = (FLYING_STATES)(navdataBag.demo.ctrl_state & 0xffff);
                 node = vativeNode.Nodes.GetOrCreate("flying_state");
                 node.Text = string.Format("Ctrl State: {0}", flying_state);
 
@@ -216,7 +223,7 @@ namespace AR.Drone.WinApp
         private void DumpBranch(TreeNodeCollection nodes, object o)
         {
             Type type = o.GetType();
-         
+
             foreach (FieldInfo fieldInfo in type.GetFields())
             {
                 TreeNode node = nodes.GetOrCreate(fieldInfo.Name);
@@ -343,71 +350,71 @@ namespace AR.Drone.WinApp
         private void btnReadConfig_Click(object sender, EventArgs e)
         {
             Task<Settings> configurationTask = _droneClient.GetConfigurationTask();
-            configurationTask.ContinueWith(delegate(Task<Settings> task)
+            configurationTask.ContinueWith(delegate (Task<Settings> task)
+            {
+                if (task.Exception != null)
                 {
-                    if (task.Exception != null)
-                    {
-                        Trace.TraceWarning("Get configuration task is faulted with exception: {0}", task.Exception.InnerException.Message);
-                        return;
-                    }
+                    Trace.TraceWarning("Get configuration task is faulted with exception: {0}", task.Exception.InnerException.Message);
+                    return;
+                }
 
-                    _settings = task.Result;
-                });
+                _settings = task.Result;
+            });
             configurationTask.Start();
         }
 
         private void btnSendConfig_Click(object sender, EventArgs e)
         {
             var sendConfigTask = new Task(() =>
+            {
+                if (_settings == null) _settings = new Settings();
+                Settings settings = _settings;
+
+                if (string.IsNullOrEmpty(settings.Custom.SessionId) ||
+                    settings.Custom.SessionId == "00000000")
                 {
-                    if (_settings == null) _settings = new Settings();
-                    Settings settings = _settings;
+                    // set new session, application and profile
+                    _droneClient.AckControlAndWaitForConfirmation(); // wait for the control confirmation
 
-                    if (string.IsNullOrEmpty(settings.Custom.SessionId) ||
-                        settings.Custom.SessionId == "00000000")
-                    {
-                        // set new session, application and profile
-                        _droneClient.AckControlAndWaitForConfirmation(); // wait for the control confirmation
-
-                        settings.Custom.SessionId = Settings.NewId();
-                        _droneClient.Send(settings);
-                        
-                        _droneClient.AckControlAndWaitForConfirmation();
-
-                        settings.Custom.ProfileId = Settings.NewId();
-                        _droneClient.Send(settings);
-                        
-                        _droneClient.AckControlAndWaitForConfirmation();
-
-                        settings.Custom.ApplicationId = Settings.NewId();
-                        _droneClient.Send(settings);
-                        
-                        _droneClient.AckControlAndWaitForConfirmation();
-                    }
-
-                    settings.General.NavdataDemo = false;
-                    settings.General.NavdataOptions = NavdataOptions.All;
-
-                    settings.Video.BitrateCtrlMode = VideoBitrateControlMode.Dynamic;
-                    settings.Video.Bitrate = 1000;
-                    settings.Video.MaxBitrate = 2000;
-
-                    //settings.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 2);
-                    //settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
-
-                    // record video to usb
-                    //settings.Video.OnUsb = true;
-                    // usage of MP4_360P_H264_720P codec is a requirement for video recording to usb
-                    //settings.Video.Codec = VideoCodecType.MP4_360P_H264_720P;
-                    // start
-                    //settings.Userbox.Command = new UserboxCommand(UserboxCommandType.Start);
-                    // stop
-                    //settings.Userbox.Command = new UserboxCommand(UserboxCommandType.Stop);
-
-
-                    //send all changes in one pice
+                    settings.Custom.SessionId = Settings.NewId();
                     _droneClient.Send(settings);
-                });
+
+                    _droneClient.AckControlAndWaitForConfirmation();
+
+                    settings.Custom.ProfileId = Settings.NewId();
+                    _droneClient.Send(settings);
+
+                    _droneClient.AckControlAndWaitForConfirmation();
+
+                    settings.Custom.ApplicationId = Settings.NewId();
+                    _droneClient.Send(settings);
+
+                    _droneClient.AckControlAndWaitForConfirmation();
+                }
+
+                settings.General.NavdataDemo = false;
+                settings.General.NavdataOptions = NavdataOptions.All;
+
+                settings.Video.BitrateCtrlMode = VideoBitrateControlMode.Dynamic;
+                settings.Video.Bitrate = 1000;
+                settings.Video.MaxBitrate = 2000;
+
+                //settings.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 2);
+                //settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
+
+                // record video to usb
+                //settings.Video.OnUsb = true;
+                // usage of MP4_360P_H264_720P codec is a requirement for video recording to usb
+                //settings.Video.Codec = VideoCodecType.MP4_360P_H264_720P;
+                // start
+                //settings.Userbox.Command = new UserboxCommand(UserboxCommandType.Start);
+                // stop
+                //settings.Userbox.Command = new UserboxCommand(UserboxCommandType.Stop);
+
+
+                //send all changes in one pice
+                _droneClient.Send(settings);
+            });
             sendConfigTask.Start();
         }
 
@@ -430,7 +437,7 @@ namespace AR.Drone.WinApp
         {
             string path = string.Format("flight_{0:yyyy_MM_dd_HH_mm}" + ARDroneTrackFileExt, DateTime.Now);
 
-            using (var dialog = new SaveFileDialog {DefaultExt = ARDroneTrackFileExt, Filter = ARDroneTrackFilesFilter, FileName = path})
+            using (var dialog = new SaveFileDialog { DefaultExt = ARDroneTrackFileExt, Filter = ARDroneTrackFilesFilter, FileName = path })
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
@@ -450,13 +457,13 @@ namespace AR.Drone.WinApp
 
         private void btnReplay_Click(object sender, EventArgs e)
         {
-            using (var dialog = new OpenFileDialog {DefaultExt = ARDroneTrackFileExt, Filter = ARDroneTrackFilesFilter})
+            using (var dialog = new OpenFileDialog { DefaultExt = ARDroneTrackFileExt, Filter = ARDroneTrackFilesFilter })
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     StopRecording();
 
-                    var playerForm = new PlayerForm {FileName = dialog.FileName};
+                    var playerForm = new PlayerForm { FileName = dialog.FileName };
                     playerForm.Closed += (o, args) => _playerForms.Remove(o as PlayerForm);
                     _playerForms.Add(playerForm);
                     playerForm.Show(this);
@@ -584,31 +591,31 @@ namespace AR.Drone.WinApp
                 case 87:
                     _droneClient.Progress(FlightMode.Progressive, gaz: 0.25f);
                     break;
-                    //go down
+                //go down
                 case 83:
                     _droneClient.Progress(FlightMode.Progressive, gaz: -0.25f);
                     break;
-                    // turn right
+                // turn right
                 case 68:
                     _droneClient.Progress(FlightMode.Progressive, yaw: 0.25f);
                     break;
-                    //turn left
+                //turn left
                 case 65:
                     _droneClient.Progress(FlightMode.Progressive, yaw: -0.25f);
                     break;
-                    //go right
+                //go right
                 case 74:
                     _droneClient.Progress(FlightMode.Progressive, roll: -0.05f);
                     break;
-                    //go left
+                //go left
                 case 76:
                     _droneClient.Progress(FlightMode.Progressive, roll: 0.05f);
                     break;
-                    // go forward
+                // go forward
                 case 73:
                     _droneClient.Progress(FlightMode.Progressive, pitch: -0.05f);
                     break;
-                    //go backward
+                //go backward
                 case 75:
                     _droneClient.Progress(FlightMode.Progressive, pitch: 0.05f);
                     break;
@@ -648,7 +655,7 @@ namespace AR.Drone.WinApp
         private void RemoteListener()
         {
             xBoxHelper = new XboxHelper();
-            oldOrders = new List<float>{ 0f, 0f, 0f, 0f };
+            oldOrders = new List<float> { 0f, 0f, 0f, 0f };
             XboxTimer.Elapsed += new System.Timers.ElapsedEventHandler(CheckAndOperateXbox);
             XboxTimer.Interval = 16;
             XboxTimer.Start();
@@ -695,13 +702,42 @@ namespace AR.Drone.WinApp
         /// <param name="e"></param>
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
-            if (_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
+            // Checks if the quad is inside the allowed area
+            if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
             {
                 _paintingHelper.SnakePen = Pens.Red;
+                _isOutOfBoundry = true;
             }
+            else
+            {
+                if (_isOutOfBoundry)
+                {
+                    _paintingHelper.SnakePen = Pens.Green;
+                    _isOutOfBoundry = false;
+                }
+            }
+
+            // Changes the rectangle size acording to the quad location
+            _paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord);
+
+            // Draws the quad location on the minimap
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
+            //if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
+            //{
+            //    _paintingHelper.SnakePen = Pens.Red;
+            //    _isOutOfBoundry = true;
+            //}
+            //else
+            //{
+            //    if (_isOutOfBoundry)
+            //    {
+            //        _paintingHelper.SnakePen = Pens.Green;
+            //        _isOutOfBoundry = false;
+            //    }
+            //}
+
             //if (allRaws.Count > count)
             //{
             //    float x = float.Parse(allRaws[count][0]);

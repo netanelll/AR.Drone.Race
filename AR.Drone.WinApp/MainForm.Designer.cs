@@ -60,6 +60,9 @@
             this.StopRecordData = new System.Windows.Forms.Button();
             this.LedsShow = new System.Windows.Forms.Button();
             this.tmrChangeQuadLocation = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.tbBattery = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -372,11 +375,42 @@
             // 
             this.tmrChangeQuadLocation.Tick += new System.EventHandler(this.ChangeQuadLocation_Tick);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(838, 565);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 29;
+            this.button1.Text = "Clean map";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnCleanMap_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(919, 565);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 30;
+            this.button4.Text = "Draw Track";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.btnDrawTrack_Click);
+            // 
+            // tbBattery
+            // 
+            this.tbBattery.Location = new System.Drawing.Point(659, 14);
+            this.tbBattery.Name = "tbBattery";
+            this.tbBattery.ReadOnly = true;
+            this.tbBattery.Size = new System.Drawing.Size(100, 20);
+            this.tbBattery.TabIndex = 31;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1241, 676);
+            this.Controls.Add(this.tbBattery);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.LedsShow);
             this.Controls.Add(this.StopRecordData);
             this.Controls.Add(this.RecordData);
@@ -411,6 +445,7 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -447,6 +482,9 @@
         private System.Windows.Forms.Button StopRecordData;
         private System.Windows.Forms.Button LedsShow;
         private System.Windows.Forms.Timer tmrChangeQuadLocation;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox tbBattery;
     }
 }
 
