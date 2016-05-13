@@ -85,7 +85,7 @@ namespace AR.Drone.WinApp
 
             RemoteListener(); // Activates the Xbox Remote controller
 
-            _mapConf = new MapConfiguration(1, 850, 250);
+            _mapConf = new MapConfiguration(1, 680, 50);
             _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
 
             //loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
@@ -168,17 +168,20 @@ namespace AR.Drone.WinApp
                 }
             }
 
-            if (_frame == null || _frameNumber == _frame.Number)
-                return;
-            _frameNumber = _frame.Number;
+            //////// the ealt code
+            //if (_frame == null || _frameNumber == _frame.Number)
+            //    return;
+            //_frameNumber = _frame.Number;
 
-            if (_frameBitmap == null)
-                _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
-            else
-                VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+            //if (_frameBitmap == null)
+            //    _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
+            //else
+            //    VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+            //////// the ealt code
+
 
             /// stub to get image instead of real bitmap
-            //_frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
+            _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
             /// stub to get image instead of real bitmap
 
 
@@ -729,17 +732,20 @@ namespace AR.Drone.WinApp
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
-            //if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
+            //if (allRaws.Count > count)
             //{
-            //    _paintingHelper.SnakePen = Pens.Red;
-            //    _isOutOfBoundry = true;
-            //}
-            //else
-            //{
-            //    if (_isOutOfBoundry)
+            //    if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
             //    {
-            //        _paintingHelper.SnakePen = Pens.Green;
-            //        _isOutOfBoundry = false;
+            //        _paintingHelper.SnakePen = Pens.Red;
+            //        _isOutOfBoundry = true;
+            //    }
+            //    else
+            //    {
+            //        if (_isOutOfBoundry)
+            //        {
+            //            _paintingHelper.SnakePen = Pens.Green;
+            //            _isOutOfBoundry = false;
+            //        }
             //    }
             //}
 
@@ -749,6 +755,10 @@ namespace AR.Drone.WinApp
             //    float y = float.Parse(allRaws[count][1]);
 
             //    _paintingHelper.DrawPoint(x, y);
+
+            //    // Changes the rectangle size acording to the quad location
+            //    _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]));
+
             //}
             //else
             //{
@@ -756,10 +766,7 @@ namespace AR.Drone.WinApp
             //}
 
             //count += 100;
-
-            //// Changes the rectangle size acording to the quad location
-            //_paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]));
-
+            
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
         }
 
@@ -788,7 +795,7 @@ namespace AR.Drone.WinApp
         /// </summary>
         //private void loadFakeDataFromFile()
         //{
-        //    CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out3.csv");
+        //    CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out4.csv");
         //    CsvRow csvRaw = new CsvRow();
         //    while (csvReader.ReadRow(csvRaw))
         //    {

@@ -11,12 +11,12 @@ namespace AR.Drone.WinApp
         bool _isGateSeeable;
         Graphics _graphics;
 
-        float gateFullSize = 500;
+        float gateFullSize = 360;
 
         int sumGates = 0;
         int currentGate = 0;
 
-        int gateDistanceToShow = 400;
+        int gateDistanceToShow = 300;
 
         List<Point> pointsLeft;
         List<Point> pointsRight;
@@ -115,8 +115,6 @@ namespace AR.Drone.WinApp
         {
             Graphics gr = Graphics.FromImage(_frameBitmap);
             gr.DrawRectangle(_gatePen, _rect);
-            // stub to get middle of image
-            gr.DrawRectangle(_gatePen, new Rectangle(300,300,5,5));
         }
 
         /// <summary>
@@ -138,7 +136,7 @@ namespace AR.Drone.WinApp
                 // checks if the gate is vertical or horizontal
                 if (gate.FirstCorner.X - gate.SecondCorner.X == 0)
                 {
-                    distance = Math.Abs(gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - _startingPointX - _mapConf.SnakeShiftingX);
+                    distance = gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - _startingPointX - _mapConf.SnakeShiftingX;
 
                     // distance too far to show rectangle
                     if (distance > gateDistanceToShow - 1)
@@ -153,9 +151,9 @@ namespace AR.Drone.WinApp
                     // need to paint the gate, calculating the size and location
                     else
                     {
-                        size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - distance)));
-                        squareXLocation = gate.FirstCorner.Y + (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - y_cord - _startingPointY - _mapConf.SnakeShiftingY;
-                        ChangeRectSizeAndLoc(size, squareXLocation);
+                        size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
+                        squareXLocation = (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - (y_cord * _mapConf.SnakeMuliplier);
+                        _rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 }
                 else
@@ -175,9 +173,9 @@ namespace AR.Drone.WinApp
                     // need to paint the gate, calculating the size and location
                     else
                     {
-                        size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - distance)));
-                        squareXLocation = gate.FirstCorner.X + (gate.FirstCorner.X - gate.SecondCorner.Y) / 2 - x_cord - _startingPointX - _mapConf.SnakeShiftingX;
-                        ChangeRectSizeAndLoc(size, squareXLocation);
+                        size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
+                        squareXLocation = (gate.FirstCorner.X - gate.SecondCorner.X) / 2 - (x_cord * _mapConf.SnakeMuliplier);
+                        _rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 } 
             }
@@ -185,18 +183,6 @@ namespace AR.Drone.WinApp
             else
             {
                 _isGateSeeable = false;
-            }
-        }
-
-        private void ChangeRectSizeAndLoc(int size, float squareXLocation)
-        {
-            if (squareXLocation > 0)
-            {
-                _rect = new Rectangle(30 + (int)squareXLocation, 30, size, size);
-            }
-            else
-            {
-                _rect = new Rectangle(30 - (int)Math.Abs(squareXLocation), 30, size, size);
             }
         }
     }

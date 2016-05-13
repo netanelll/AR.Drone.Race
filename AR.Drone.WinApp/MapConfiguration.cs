@@ -85,10 +85,10 @@ namespace AR.Drone.WinApp
                     // the gates for the quad to pass throw
                     gates = new List<Square>
                     {
-                        new Square(new Point(_startingPointX + 150, _startingPointY + 230),
-                                new Point(_startingPointX + 150, _startingPointY + 270)),
-                     new Square(new Point(_startingPointX + 230, _startingPointY + 150),
-                                new Point(_startingPointX + 270, _startingPointY + 150))
+                        new Square(new Point(_startingPointX + 150, _startingPointY + 220),
+                                new Point(_startingPointX + 150, _startingPointY + 280)),
+                     new Square(new Point(_startingPointX + 220, _startingPointY + 150),
+                                new Point(_startingPointX + 280, _startingPointY + 150))
                     };
 
                     break;
