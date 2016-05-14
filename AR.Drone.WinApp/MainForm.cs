@@ -159,7 +159,8 @@ namespace AR.Drone.WinApp
             if (_navigationData != null)
             {
                 // Updates the battery field
-                tbBattery.Text = _navigationData.Battery.Percentage.ToString();
+                //  tbBattery.Text = _navigationData.Battery.Percentage.ToString();
+                tbBattery.Text = _raceController._northDeg.ToString();
 
                 if (_navigationData.Battery.Low == true)
                 {

@@ -22,7 +22,7 @@ namespace AR.Drone.WinApp
         private bool _isRacing;
         float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
-        public double north;
+        public double _north,_northDeg;
         private float _startingYaw; // saving the first yaw response to get the quad direction
 
         #region properties
@@ -190,22 +190,27 @@ namespace AR.Drone.WinApp
                 //   Console.WriteLine(data.Yaw);
                 //  Console.WriteLine(_startingYaw.ToString());
                 //  Console.WriteLine(yaw.ToString());
-                if (data.Magneto.Rectified.Y >0)
+                Vector_3 magnetometer = new Vector_3(data.Magneto.Rectified.X, data.Magneto.Rectified.Y, data.Magneto.Rectified.Z);
+                DCM magnetoDCM = new DCM(_roll, _pitch, 0);
+                Vector_3 magnetometer_reltiveTo_earth = magnetoDCM.ToEarth(magnetometer);
+                if (magnetometer_reltiveTo_earth.y >0)
                 {
-                    north = (Math.PI / 2) - Math.Atan(data.Magneto.Rectified.X / data.Magneto.Rectified.Y);
+                    _north = (Math.PI / 2) - Math.Atan(magnetometer_reltiveTo_earth.x / magnetometer_reltiveTo_earth.y);
                 }
-                else if (data.Magneto.Rectified.Y < 0)
+                else if (magnetometer_reltiveTo_earth.y < 0)
                 {
-                    north = ((3 * Math.PI) / 2) - Math.Atan(data.Magneto.Rectified.X / data.Magneto.Rectified.Y);
+                    _north = ((3 * Math.PI) / 2) - Math.Atan(magnetometer_reltiveTo_earth.x / data.Magneto.Rectified.Y);
                 }
-                else if (data.Magneto.Rectified.X < 0)
+                else if (magnetometer_reltiveTo_earth.x < 0)
                 {
-                    north = Math.PI;
+                    _north = Math.PI;
                 }
                 else
                 {
-                    north = 0;
+                    _north = 0;
                 }
+
+                _northDeg = (180 / Math.PI) * _north;
                 DCM dcm = new DCM(_yaw);
                 Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                 Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
