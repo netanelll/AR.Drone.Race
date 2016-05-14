@@ -9,6 +9,10 @@ namespace AR.Drone.WinApp
     public class PaintingHelper
     {
         bool _isGateSeeable;
+        bool _isArrowSeeable;
+
+        int _multiplierX = 1;
+        int _multiplierY = -1;
         Graphics _graphics;
 
         float gateFullSize = 360;
@@ -122,7 +126,7 @@ namespace AR.Drone.WinApp
         /// </summary>
         /// <param name="x_cord"></param>
         /// <param name="y_cord"></param>
-        public void ChangeVideoRectangleSize(float x_cord, float y_cord)
+        public void ChangeVideoRectangleSize(float x_cord, float y_cord, double yawInDegrees)
         {
             if (sumGates > currentGate)
             {
@@ -133,10 +137,47 @@ namespace AR.Drone.WinApp
 
                 _isGateSeeable = true;
 
+                //Gets the degree between the quad location and the gate
+                double degree = Math.Atan2((gate.FirstCorner.Y + gate.SecondCorner.Y) / 2 - 
+                    (y_cord * _mapConf.SnakeMuliplier) - _mapConf.SnakeShiftingY - _startingPointY,
+                    (gate.FirstCorner.X + gate.SecondCorner.X) / 2 - (x_cord *
+                    _mapConf.SnakeMuliplier) - _mapConf.SnakeShiftingX - _startingPointX) * (180 / Math.PI);
+
+                // get the diff in degree relative to the quad yaw and the gate position
+                double degreeDiff = degree - gate.RealDegree + yawInDegrees - gate.TurnDegree;
+
+                //if (degreeDiff < 0)
+                //{
+                //    degreeDiff += 360;
+                //}
+
+                if (degreeDiff < 10 && degreeDiff > -10)
+                {
+                    degreeDiff = 0;
+                }
+
                 // checks if the gate is vertical or horizontal
                 if (gate.FirstCorner.X - gate.SecondCorner.X == 0)
                 {
-                    distance = gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - _startingPointX - _mapConf.SnakeShiftingX;
+                    distance = _multiplierX * 
+                        (gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - 
+                        _startingPointX - _mapConf.SnakeShiftingX);
+
+                    if (degreeDiff > 60 && distance > 50)
+                    {
+                        _isGateSeeable = false;
+                        _isArrowSeeable = true;
+                        // algorithem to create arrow
+                        return;
+                    }
+
+                    if (degreeDiff < -60 && distance > 50)
+                    {
+                        _isGateSeeable = false;
+                        _isArrowSeeable = true;
+                        // algorithem to create arrow
+                        return;
+                    }
 
                     // distance too far to show rectangle
                     if (distance > gateDistanceToShow - 1)
@@ -147,6 +188,7 @@ namespace AR.Drone.WinApp
                     else if (distance < 0)
                     {
                         currentGate++;
+                        _multiplierX *= -1;
                     }
                     // need to paint the gate, calculating the size and location
                     else
@@ -158,7 +200,25 @@ namespace AR.Drone.WinApp
                 }
                 else
                 {
-                    distance = Math.Abs(gate.FirstCorner.Y - (y_cord * _mapConf.SnakeMuliplier) - _startingPointY - _mapConf.SnakeShiftingY);
+                    distance = _multiplierY * 
+                        (gate.FirstCorner.Y - (y_cord * _mapConf.SnakeMuliplier) - 
+                        _startingPointY - _mapConf.SnakeShiftingY);
+
+                    if (degreeDiff > 60 && distance > 50)
+                    {
+                        _isGateSeeable = false;
+                        _isArrowSeeable = true;
+                        // algorithem to create arrow
+                        return;
+                    }
+
+                    if (degreeDiff < -60 && distance > 50)
+                    {
+                        _isGateSeeable = false;
+                        _isArrowSeeable = true;
+                        // algorithem to create arrow
+                        return;
+                    }
 
                     // distance too far to show rectangle
                     if (distance > gateDistanceToShow - 1)
@@ -169,6 +229,7 @@ namespace AR.Drone.WinApp
                     else if (distance < 0)
                     {
                         currentGate++;
+                        _multiplierY *= -1;
                     }
                     // need to paint the gate, calculating the size and location
                     else

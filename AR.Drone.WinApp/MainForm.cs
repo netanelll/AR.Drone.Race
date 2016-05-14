@@ -58,6 +58,7 @@ namespace AR.Drone.WinApp
 
         //List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
         //int count = 0; // stub to load fake nav data to be deleted TODO
+        //float startingYaw = 0; // stub to load fake nav data to be deleted TODO
 
         public MainForm()
         {
@@ -89,6 +90,7 @@ namespace AR.Drone.WinApp
             _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
 
             //loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
+            //startingYaw = float.Parse(allRaws[1][5]);
         }
 
         private void UnhandledException(object sender, Exception exception)
@@ -726,7 +728,7 @@ namespace AR.Drone.WinApp
             }
 
             // Changes the rectangle size acording to the quad location
-            _paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord);
+            _paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord, _raceController.GetYawInDegrees());
 
             // Draws the quad location on the minimap
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
@@ -757,7 +759,8 @@ namespace AR.Drone.WinApp
             //    _paintingHelper.DrawPoint(x, y);
 
             //    // Changes the rectangle size acording to the quad location
-            //    _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]));
+            //    _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]), 
+            //        (float.Parse(allRaws[count][5]) - startingYaw) * (180 / Math.PI));
 
             //}
             //else

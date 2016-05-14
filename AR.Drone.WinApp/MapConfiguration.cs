@@ -86,9 +86,14 @@ namespace AR.Drone.WinApp
                     gates = new List<Square>
                     {
                         new Square(new Point(_startingPointX + 150, _startingPointY + 220),
-                                new Point(_startingPointX + 150, _startingPointY + 280)),
+                                new Point(_startingPointX + 150, _startingPointY + 280),
+                                0, 0),
                      new Square(new Point(_startingPointX + 220, _startingPointY + 150),
-                                new Point(_startingPointX + 280, _startingPointY + 150))
+                                new Point(_startingPointX + 280, _startingPointY + 150),
+                                -90, -90),
+                     new Square(new Point(_startingPointX + 150, _startingPointY + 20),
+                                new Point(_startingPointX + 150, _startingPointY + 80),
+                                -180, 0)
                     };
 
                     break;
@@ -225,10 +230,21 @@ namespace AR.Drone.WinApp
         Point _firstCorner;
         Point _secondCorner;
 
+        int _turnDegree;
+        int _realDegree;
+
         public Square(Point firstCorner, Point secondCorner)
         {
             _firstCorner = firstCorner;
             _secondCorner = secondCorner;
+        }
+
+        public Square(Point firstCorner, Point secondCorner, int turnDegree, int realDegree)
+        {
+            _firstCorner = firstCorner;
+            _secondCorner = secondCorner;
+            _turnDegree = turnDegree;
+            _realDegree = realDegree;
         }
 
         public Point FirstCorner
@@ -254,6 +270,32 @@ namespace AR.Drone.WinApp
             set
             {
                 _secondCorner = value;
+            }
+        }
+
+        public int RealDegree
+        {
+            get
+            {
+                return _realDegree;
+            }
+
+            set
+            {
+                _realDegree = value;
+            }
+        }
+
+        public int TurnDegree
+        {
+            get
+            {
+                return _turnDegree;
+            }
+
+            set
+            {
+                _turnDegree = value;
             }
         }
     }

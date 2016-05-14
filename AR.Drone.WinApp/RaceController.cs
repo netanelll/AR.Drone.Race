@@ -216,5 +216,10 @@ namespace AR.Drone.WinApp
         {
 
         }
+
+        public double GetYawInDegrees()
+        {
+            return _yaw * (180 / Math.PI);
+        }
     }
 }
