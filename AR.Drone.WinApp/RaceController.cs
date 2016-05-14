@@ -191,7 +191,7 @@ namespace AR.Drone.WinApp
               //  Console.WriteLine(_startingYaw.ToString());
               //  Console.WriteLine(yaw.ToString());
                 
-                DCM dcm = new DCM(_roll, _pitch, _yaw);
+                DCM dcm = new DCM(_yaw);
                 Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                 Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
                 _x_cord = _x_cord + ((float)velociy_reltiveTo_earth.x * time_diff);
