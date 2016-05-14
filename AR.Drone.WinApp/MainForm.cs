@@ -168,20 +168,20 @@ namespace AR.Drone.WinApp
                 }
             }
 
-            //////// the ealt code
-            //if (_frame == null || _frameNumber == _frame.Number)
-            //    return;
-            //_frameNumber = _frame.Number;
+            ////// the ealt code
+            if (_frame == null || _frameNumber == _frame.Number)
+                return;
+            _frameNumber = _frame.Number;
 
-            //if (_frameBitmap == null)
-            //    _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
-            //else
-            //    VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
-            //////// the ealt code
+            if (_frameBitmap == null)
+                _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
+            else
+                VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+            ////// the ealt code
 
 
             /// stub to get image instead of real bitmap
-            _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
+        //    _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
             /// stub to get image instead of real bitmap
 
 
