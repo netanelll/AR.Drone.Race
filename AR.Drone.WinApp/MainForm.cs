@@ -170,7 +170,7 @@ namespace AR.Drone.WinApp
                 }
             }
 
-            ////// the ealt code
+            ////// the real code
             if (_frame == null || _frameNumber == _frame.Number)
                 return;
             _frameNumber = _frame.Number;
@@ -179,7 +179,7 @@ namespace AR.Drone.WinApp
                 _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
             else
                 VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
-            ////// the ealt code
+            ////// the real code
 
 
             /// stub to get image instead of real bitmap
