@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 
@@ -31,6 +32,10 @@ namespace AR.Drone.WinApp
         Pen _squarePen = new Pen(Color.Red, 8);
         Pen _snakePen = new Pen(Color.Green, _snakeSize);
         Pen _gatePen = new Pen(Color.Gold, 2);
+        Pen _arrowPen = new Pen(Color.Red, 3);
+
+        GraphicsPath _capPathRight;
+        GraphicsPath _capPathLeft;
 
         MapConfiguration _mapConf;
 
@@ -64,6 +69,19 @@ namespace AR.Drone.WinApp
             }
         }
 
+        public bool IsArrowSeeable
+        {
+            get
+            {
+                return _isArrowSeeable;
+            }
+
+            set
+            {
+                _isArrowSeeable = value;
+            }
+        }
+
         /// <summary>
         /// C'tor
         /// </summary>
@@ -87,6 +105,18 @@ namespace AR.Drone.WinApp
             _isGateSeeable = false;
 
             sumGates = _mapConf.Gates.Count;
+
+            _capPathLeft = new GraphicsPath();
+
+            _capPathLeft.AddLine(-20, 0, 0, 20);
+            _capPathLeft.AddLine(0, 20, 20, 0);
+            _capPathLeft.AddLine(20, 0, -20, 0);
+
+            _capPathRight = new GraphicsPath();
+
+            _capPathRight.AddLine(-20, 0, 20, 0);
+            _capPathRight.AddLine(-20, 0, 0, 20);
+            _capPathRight.AddLine(0, 20, 20, 0);
         }
 
         public void DrawRectangle()
@@ -121,6 +151,12 @@ namespace AR.Drone.WinApp
             gr.DrawRectangle(_gatePen, _rect);
         }
 
+        public void DrawArrowOnVideo(Bitmap _frameBitmap)
+        {
+            Graphics gr = Graphics.FromImage(_frameBitmap);
+            gr.DrawLine(_arrowPen, 100, 100, 200, 100);
+        }
+
         /// <summary>
         /// Checks if there is relevant rectangle to paint, and if so decides the size and location of the recatangle
         /// </summary>
@@ -136,6 +172,7 @@ namespace AR.Drone.WinApp
                 Square gate = _mapConf.Gates[currentGate];
 
                 _isGateSeeable = true;
+                _isArrowSeeable = false;
 
                 //Gets the degree between the quad location and the gate
                 double degree = Math.Atan2((gate.FirstCorner.Y + gate.SecondCorner.Y) / 2 - 
@@ -144,7 +181,7 @@ namespace AR.Drone.WinApp
                     _mapConf.SnakeMuliplier) - _mapConf.SnakeShiftingX - _startingPointX) * (180 / Math.PI);
 
                 // get the diff in degree relative to the quad yaw and the gate position
-                double degreeDiff = degree - gate.RealDegree + yawInDegrees - gate.TurnDegree;
+                double degreeDiff = degree - gate.RealDegree + Math.Abs(yawInDegrees - gate.TurnDegree);
 
                 //if (degreeDiff < 0)
                 //{
@@ -168,6 +205,9 @@ namespace AR.Drone.WinApp
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
                         // algorithem to create arrow
+                        _arrowPen = new Pen(Color.Red, 3);
+                        _arrowPen.CustomStartCap = new System.Drawing.Drawing2D.CustomLineCap(null, _capPathLeft);
+                        //_arrowPen.CustomEndCap = new System.Drawing.Drawing2D.CustomLineCap(null, new GraphicsPath());
                         return;
                     }
 
@@ -176,6 +216,9 @@ namespace AR.Drone.WinApp
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
                         // algorithem to create arrow
+                        _arrowPen = new Pen(Color.Red, 3);
+                        _arrowPen.CustomEndCap = new System.Drawing.Drawing2D.CustomLineCap(null, _capPathRight);
+                        //_arrowPen.CustomStartCap = new System.Drawing.Drawing2D.CustomLineCap(null, new GraphicsPath());
                         return;
                     }
 
@@ -195,7 +238,8 @@ namespace AR.Drone.WinApp
                     {
                         size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
                         squareXLocation = (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - (y_cord * _mapConf.SnakeMuliplier);
-                        _rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
+                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2, 180 - size / 2, size, size);
+                        //_rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 }
                 else
@@ -209,6 +253,9 @@ namespace AR.Drone.WinApp
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
                         // algorithem to create arrow
+                        _arrowPen = new Pen(Color.Red, 3);
+                        _arrowPen.CustomStartCap = new System.Drawing.Drawing2D.CustomLineCap(null, _capPathLeft);
+                        //_arrowPen.CustomStartCap = new System.Drawing.Drawing2D.CustomLineCap(null, new GraphicsPath());
                         return;
                     }
 
@@ -217,6 +264,9 @@ namespace AR.Drone.WinApp
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
                         // algorithem to create arrow
+                        _arrowPen = new Pen(Color.Red, 3);
+                        _arrowPen.CustomEndCap = new System.Drawing.Drawing2D.CustomLineCap(null, _capPathRight);
+                        //_arrowPen.CustomStartCap = new System.Drawing.Drawing2D.CustomLineCap(null, new GraphicsPath());
                         return;
                     }
 
@@ -236,7 +286,8 @@ namespace AR.Drone.WinApp
                     {
                         size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
                         squareXLocation = (gate.FirstCorner.X - gate.SecondCorner.X) / 2 - (x_cord * _mapConf.SnakeMuliplier);
-                        _rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
+                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2, 180 - size / 2, size, size);
+                        //_rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 } 
             }
