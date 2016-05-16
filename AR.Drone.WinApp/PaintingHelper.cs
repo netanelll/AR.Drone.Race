@@ -238,7 +238,7 @@ namespace AR.Drone.WinApp
                     {
                         size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
                         squareXLocation = (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - (y_cord * _mapConf.SnakeMuliplier);
-                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2, 180 - size / 2, size, size);
+                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2 * _multiplierX, 180 - size / 2, size, size);
                         //_rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 }
@@ -286,7 +286,7 @@ namespace AR.Drone.WinApp
                     {
                         size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
                         squareXLocation = (gate.FirstCorner.X - gate.SecondCorner.X) / 2 - (x_cord * _mapConf.SnakeMuliplier);
-                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2, 180 - size / 2, size, size);
+                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2 * _multiplierY, 180 - size / 2, size, size);
                         //_rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 } 

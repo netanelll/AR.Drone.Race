@@ -56,9 +56,9 @@ namespace AR.Drone.WinApp
         XboxHelper xBoxHelper;
         List<float> oldOrders;
 
-        List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
-        int count = 0; // stub to load fake nav data to be deleted TODO
-        float startingYaw = 0; // stub to load fake nav data to be deleted TODO
+        //List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
+        //int count = 0; // stub to load fake nav data to be deleted TODO
+        //float startingYaw = 0; // stub to load fake nav data to be deleted TODO
 
         public MainForm()
         {
@@ -89,8 +89,8 @@ namespace AR.Drone.WinApp
             _mapConf = new MapConfiguration(1, 680, 50);
             _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
 
-            loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
-            startingYaw = float.Parse(allRaws[1][5]);
+            //loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
+            //startingYaw = float.Parse(allRaws[1][5]);
         }
 
         private void UnhandledException(object sender, Exception exception)
@@ -717,62 +717,62 @@ namespace AR.Drone.WinApp
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
             // Checks if the quad is inside the allowed area
-            //if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
-            //{
-            //    _paintingHelper.SnakePen = Pens.Red;
-            //    _isOutOfBoundry = true;
-            //}
-            //else
-            //{
-            //    if (_isOutOfBoundry)
-            //    {
-            //        _paintingHelper.SnakePen = Pens.Green;
-            //        _isOutOfBoundry = false;
-            //    }
-            //}
-
-            // Changes the rectangle size acording to the quad location
-            //_paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord, _raceController.GetYawInDegrees());
-
-            // Draws the quad location on the minimap
-            //_paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
-
-            /////////////////////////////////// stub to load fake nav data to be deleted TODO
-            if (allRaws.Count > count)
+            if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
             {
-                if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
-                {
-                    _paintingHelper.SnakePen = Pens.Red;
-                    _isOutOfBoundry = true;
-                }
-                else
-                {
-                    if (_isOutOfBoundry)
-                    {
-                        _paintingHelper.SnakePen = Pens.Green;
-                        _isOutOfBoundry = false;
-                    }
-                }
-            }
-
-            if (allRaws.Count > count)
-            {
-                float x = float.Parse(allRaws[count][0]);
-                float y = float.Parse(allRaws[count][1]);
-
-                _paintingHelper.DrawPoint(x, y);
-
-                // Changes the rectangle size acording to the quad location
-                _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]),
-                    (float.Parse(allRaws[count][5]) - startingYaw) * (180 / Math.PI));
-
+                _paintingHelper.SnakePen = Pens.Red;
+                _isOutOfBoundry = true;
             }
             else
             {
-                tmrChangeQuadLocation.Enabled = false;
+                if (_isOutOfBoundry)
+                {
+                    _paintingHelper.SnakePen = Pens.Green;
+                    _isOutOfBoundry = false;
+                }
             }
 
-            count += 100;
+            // Changes the rectangle size acording to the quad location
+            _paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord, _raceController.GetYawInDegrees());
+
+            // Draws the quad location on the minimap
+            _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
+
+            /////////////////////////////////// stub to load fake nav data to be deleted TODO
+            //if (allRaws.Count > count)
+            //{
+            //    if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
+            //    {
+            //        _paintingHelper.SnakePen = Pens.Red;
+            //        _isOutOfBoundry = true;
+            //    }
+            //    else
+            //    {
+            //        if (_isOutOfBoundry)
+            //        {
+            //            _paintingHelper.SnakePen = Pens.Green;
+            //            _isOutOfBoundry = false;
+            //        }
+            //    }
+            //}
+
+            //if (allRaws.Count > count)
+            //{
+            //    float x = float.Parse(allRaws[count][0]);
+            //    float y = float.Parse(allRaws[count][1]);
+
+            //    _paintingHelper.DrawPoint(x, y);
+
+            //    // Changes the rectangle size acording to the quad location
+            //    _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]),
+            //        (float.Parse(allRaws[count][5]) - startingYaw) * (180 / Math.PI));
+
+            //}
+            //else
+            //{
+            //    tmrChangeQuadLocation.Enabled = false;
+            //}
+
+            //count += 100;
 
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
         }
@@ -800,20 +800,20 @@ namespace AR.Drone.WinApp
         /// <summary>
         /// Stub to be deleted TODO
         /// </summary>
-        private void loadFakeDataFromFile()
-        {
-            CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out4.csv");
-            CsvRow csvRaw = new CsvRow();
-            while (csvReader.ReadRow(csvRaw))
-            {
-                CsvRow csvRaw1 = new CsvRow();
-                foreach (string item in csvRaw)
-                {
-                    csvRaw1.Add(item);
-                }
+        //private void loadFakeDataFromFile()
+        //{
+        //    CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out5.csv");
+        //    CsvRow csvRaw = new CsvRow();
+        //    while (csvReader.ReadRow(csvRaw))
+        //    {
+        //        CsvRow csvRaw1 = new CsvRow();
+        //        foreach (string item in csvRaw)
+        //        {
+        //            csvRaw1.Add(item);
+        //        }
 
-                allRaws.Add(csvRaw1);
-            }
-        }
+        //        allRaws.Add(csvRaw1);
+        //    }
+        //}
     }
 }
