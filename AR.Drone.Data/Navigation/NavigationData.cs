@@ -1,3 +1,4 @@
+using AR.Drone.Data.Navigation.Native.Options;
 using System.Runtime.InteropServices;
 
 namespace AR.Drone.Data.Navigation
@@ -12,6 +13,7 @@ namespace AR.Drone.Data.Navigation
         public Vector3 Velocity; // meter/second
         public Battery Battery;
         public Magneto Magneto;
+        public navdata_vision_detect_t vision_detect;
         public float Time; // seconds
         public Video Video;
         public Wifi Wifi;
@@ -48,6 +50,7 @@ namespace AR.Drone.Data.Navigation
     {
         public Vector3 Rectified;
         public Vector3 Offset;
+        public Vector3 raw;
     }
 
     [StructLayout(LayoutKind.Sequential)]

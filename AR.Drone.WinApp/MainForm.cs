@@ -403,10 +403,13 @@ namespace AR.Drone.WinApp
 
                 settings.General.NavdataDemo = false;
                 settings.General.NavdataOptions = NavdataOptions.All;
-
+                settings.Detect.Type = 10;
+                settings.Detect.DetectionsSelectV = 1;
+                //settings.Detect.DetectionsSelectH = 1;
                 settings.Video.BitrateCtrlMode = VideoBitrateControlMode.Dynamic;
                 settings.Video.Bitrate = 1000;
                 settings.Video.MaxBitrate = 2000;
+                settings.Video.Channel = VideoChannelType.Vertical;
 
                 //settings.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 2);
                 //settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
