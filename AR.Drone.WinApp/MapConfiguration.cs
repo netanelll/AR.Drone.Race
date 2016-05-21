@@ -87,13 +87,16 @@ namespace AR.Drone.WinApp
                     {
                         new Square(new Point(_startingPointX + 150, _startingPointY + 220),
                                 new Point(_startingPointX + 150, _startingPointY + 280),
-                                0, 0),
+                                0, 0, 1),
                      new Square(new Point(_startingPointX + 220, _startingPointY + 150),
                                 new Point(_startingPointX + 280, _startingPointY + 150),
-                                -90, -90),
+                                270, 270, -1),
                      new Square(new Point(_startingPointX + 150, _startingPointY + 20),
                                 new Point(_startingPointX + 150, _startingPointY + 80),
-                                -180, 0)
+                                180, 180, -1),
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 150),
+                                new Point(_startingPointX + 80, _startingPointY + 150),
+                                90, 90, 1)
                     };
 
                     break;
@@ -233,18 +236,21 @@ namespace AR.Drone.WinApp
         int _turnDegree;
         int _realDegree;
 
+        int _multiplier;
+
         public Square(Point firstCorner, Point secondCorner)
         {
             _firstCorner = firstCorner;
             _secondCorner = secondCorner;
         }
 
-        public Square(Point firstCorner, Point secondCorner, int turnDegree, int realDegree)
+        public Square(Point firstCorner, Point secondCorner, int turnDegree, int realDegree, int multiplier)
         {
             _firstCorner = firstCorner;
             _secondCorner = secondCorner;
             _turnDegree = turnDegree;
             _realDegree = realDegree;
+            _multiplier = multiplier;
         }
 
         public Point FirstCorner
@@ -296,6 +302,19 @@ namespace AR.Drone.WinApp
             set
             {
                 _turnDegree = value;
+            }
+        }
+
+        public int Multiplier
+        {
+            get
+            {
+                return _multiplier;
+            }
+
+            set
+            {
+                _multiplier = value;
             }
         }
     }

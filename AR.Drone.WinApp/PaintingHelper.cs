@@ -12,8 +12,8 @@ namespace AR.Drone.WinApp
         bool _isGateSeeable;
         bool _isArrowSeeable;
 
-        int _multiplierX = 1;
-        int _multiplierY = -1;
+        //int _multiplierX = 1;
+        //int _multiplierY = -1;
         Graphics _graphics;
 
         float gateFullSize = 360;
@@ -180,27 +180,41 @@ namespace AR.Drone.WinApp
                     (gate.FirstCorner.X + gate.SecondCorner.X) / 2 - (x_cord *
                     _mapConf.SnakeMuliplier) - _mapConf.SnakeShiftingX - _startingPointX) * (180 / Math.PI);
 
-                // get the diff in degree relative to the quad yaw and the gate position
-                double degreeDiff = degree - gate.RealDegree + Math.Abs(yawInDegrees - gate.TurnDegree);
+                if (yawInDegrees < 0)
+                {
+                    yawInDegrees += 360;
+                }
 
-                //if (degreeDiff < 0)
-                //{
-                //    degreeDiff += 360;
-                //}
+                if (degree < 0)
+                {
+                    degree += 360;
+                }
+                // get the diff in degree relative to the quad yaw and the gate position
+                double degreeDiff = gate.RealDegree - degree + yawInDegrees - gate.TurnDegree;
 
                 if (degreeDiff < 10 && degreeDiff > -10)
                 {
                     degreeDiff = 0;
                 }
 
+                if (degreeDiff < 0)
+                {
+                    degreeDiff += 360;
+                }
+
+                if (degreeDiff > 360)
+                {
+                    degreeDiff -= 360;
+                }
+
                 // checks if the gate is vertical or horizontal
                 if (gate.FirstCorner.X - gate.SecondCorner.X == 0)
                 {
-                    distance = _multiplierX * 
+                    distance = gate.Multiplier * 
                         (gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - 
                         _startingPointX - _mapConf.SnakeShiftingX);
 
-                    if (degreeDiff > 60 && distance > 50)
+                    if (degreeDiff > 50 && degreeDiff < 180 && distance > 50)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -211,7 +225,7 @@ namespace AR.Drone.WinApp
                         return;
                     }
 
-                    if (degreeDiff < -60 && distance > 50)
+                    if (degreeDiff < 310 && degreeDiff >= 180 && distance > 50)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -220,6 +234,12 @@ namespace AR.Drone.WinApp
                         _arrowPen.CustomEndCap = new System.Drawing.Drawing2D.CustomLineCap(null, _capPathRight);
                         //_arrowPen.CustomStartCap = new System.Drawing.Drawing2D.CustomLineCap(null, new GraphicsPath());
                         return;
+                    }
+
+                    // changes back the degree for calculating the location
+                    if (degreeDiff >= 310)
+                    {
+                        degreeDiff = degreeDiff - 360;
                     }
 
                     // distance too far to show rectangle
@@ -231,24 +251,24 @@ namespace AR.Drone.WinApp
                     else if (distance < 0)
                     {
                         currentGate++;
-                        _multiplierX *= -1;
+                        //gate.Multiplier *= -1;
                     }
                     // need to paint the gate, calculating the size and location
                     else
                     {
                         size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
                         squareXLocation = (gate.FirstCorner.Y - gate.SecondCorner.Y) / 2 - (y_cord * _mapConf.SnakeMuliplier);
-                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2 * _multiplierX, 180 - size / 2, size, size);
+                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2 * -1, 180 - size / 2, size, size);
                         //_rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 }
                 else
                 {
-                    distance = _multiplierY * 
+                    distance = gate.Multiplier * 
                         (gate.FirstCorner.Y - (y_cord * _mapConf.SnakeMuliplier) - 
                         _startingPointY - _mapConf.SnakeShiftingY);
 
-                    if (degreeDiff > 60 && distance > 50)
+                    if (degreeDiff > 50 && degreeDiff < 180 && distance > 50)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -259,7 +279,7 @@ namespace AR.Drone.WinApp
                         return;
                     }
 
-                    if (degreeDiff < -60 && distance > 50)
+                    if (degreeDiff < 310 && degreeDiff >= 180 && distance > 50)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -279,14 +299,21 @@ namespace AR.Drone.WinApp
                     else if (distance < 0)
                     {
                         currentGate++;
-                        _multiplierY *= -1;
+                        //gate.Multiplier *= -1;
                     }
+
+                    // changes back the degree for calculating the location
+                    if (degreeDiff >= 310)
+                    {
+                        degreeDiff = degreeDiff - 360;
+                    }
+
                     // need to paint the gate, calculating the size and location
                     else
                     {
                         size = (int)(gateFullSize / (gateDistanceToShow / (gateDistanceToShow - Math.Abs(distance))));
                         squareXLocation = (gate.FirstCorner.X - gate.SecondCorner.X) / 2 - (x_cord * _mapConf.SnakeMuliplier);
-                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2 * _multiplierY, 180 - size / 2, size, size);
+                        _rect = new Rectangle(320 - size / 2 + (int)degreeDiff * 2 * -1, 180 - size / 2, size, size);
                         //_rect = new Rectangle(320 - size / 2 + (int)squareXLocation, 180 - size / 2, size, size);
                     }
                 } 
