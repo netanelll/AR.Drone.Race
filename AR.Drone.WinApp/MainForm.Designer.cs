@@ -63,6 +63,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.tbBattery = new System.Windows.Forms.TextBox();
+            this.tbMin = new System.Windows.Forms.Label();
+            this.tbSec = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -403,11 +405,31 @@
             this.tbBattery.Size = new System.Drawing.Size(100, 20);
             this.tbBattery.TabIndex = 31;
             // 
+            // tbMin
+            // 
+            this.tbMin.AutoSize = true;
+            this.tbMin.Location = new System.Drawing.Point(679, 388);
+            this.tbMin.Name = "tbMin";
+            this.tbMin.Size = new System.Drawing.Size(13, 13);
+            this.tbMin.TabIndex = 32;
+            this.tbMin.Text = "0";
+            // 
+            // tbSec
+            // 
+            this.tbSec.AutoSize = true;
+            this.tbSec.Location = new System.Drawing.Point(724, 388);
+            this.tbSec.Name = "tbSec";
+            this.tbSec.Size = new System.Drawing.Size(13, 13);
+            this.tbSec.TabIndex = 33;
+            this.tbSec.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1241, 676);
+            this.Controls.Add(this.tbSec);
+            this.Controls.Add(this.tbMin);
             this.Controls.Add(this.tbBattery);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button1);
@@ -485,6 +507,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox tbBattery;
+        private System.Windows.Forms.Label tbMin;
+        private System.Windows.Forms.Label tbSec;
     }
 }
 

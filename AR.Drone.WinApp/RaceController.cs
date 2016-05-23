@@ -67,7 +67,20 @@ namespace AR.Drone.WinApp
                 _z_cord = value;
             }
         }
-#endregion
+
+        public bool IsRacing
+        {
+            get
+            {
+                return _isRacing;
+            }
+
+            set
+            {
+                _isRacing = value;
+            }
+        }
+        #endregion
 
         public RaceController()
         {

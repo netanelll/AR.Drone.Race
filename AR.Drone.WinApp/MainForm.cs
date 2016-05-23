@@ -46,6 +46,8 @@ namespace AR.Drone.WinApp
         bool drowMiniMap = false;
         bool _isOutOfBoundry = false;
 
+        private DateTime _startingTimeForFlight;
+
         int counter = 2;
         int ledAnimation = 0;
 
@@ -167,6 +169,13 @@ namespace AR.Drone.WinApp
                     tbBattery.ForeColor = Color.Red;
 
                 }
+            }
+
+            if (_raceController.IsRacing)
+            {
+                TimeSpan tsInterval = DateTime.Now - _startingTimeForFlight;
+                tbMin.Text = tsInterval.Minutes.ToString();
+                tbSec.Text = tsInterval.Seconds.ToString();
             }
 
             ////// the ealt code
@@ -403,8 +412,8 @@ namespace AR.Drone.WinApp
 
                 settings.General.NavdataDemo = false;
                 settings.General.NavdataOptions = NavdataOptions.All;
-                settings.Detect.Type = 10;
-                settings.Detect.DetectionsSelectV = 1;
+                settings.Detect.Type = 12;
+                settings.Detect.DetectionsSelectV = 8;
                 //settings.Detect.DetectionsSelectH = 1;
                 settings.Video.BitrateCtrlMode = VideoBitrateControlMode.Dynamic;
                 settings.Video.Bitrate = 1000;
@@ -646,6 +655,7 @@ namespace AR.Drone.WinApp
         private void StartRace()
         {
             _raceController.startRace();
+            _startingTimeForFlight = DateTime.Now;
             //   tmrChangeQuadLocation.Enabled = true;
             drowMiniMap = true;
         }
@@ -689,7 +699,8 @@ namespace AR.Drone.WinApp
             else
             {
                 // on the thumbs: left right is x, up down is y
-                List<float> navOrdersr = xBoxHelper.getNavOrders(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y, state.ThumbSticks.Right.X,
+                //state.DPad.Up, state.DPad.Right, state.DPad.Down, state.DPad.Left
+                List<float> navOrdersr = xBoxHelper.getNavOrders(state.DPad.Left, state.DPad.Right, state.DPad.Up, state.DPad.Down, state.ThumbSticks.Right.X,
                     state.ThumbSticks.Right.Y);
 
                 if (oldOrders[0] != navOrdersr[0] || oldOrders[1] != navOrdersr[1] ||
