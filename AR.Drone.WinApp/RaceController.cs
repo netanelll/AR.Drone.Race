@@ -23,7 +23,11 @@ namespace AR.Drone.WinApp
         float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
         private float _startingYaw; // saving the first yaw response to get the quad direction
-
+        private const int NUMBER_OF_TAGS = 1;
+        private const double TO_X_PICXELS = 640 / 1000, TO_Y_PICXELS = 320 / 1000; // number of picxels in axis divided by max x and y value (1000)
+        private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.3;
+        private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 0, 0 } };
+        private int _currentTag = 0;
         #region properties
 
         public float X_cord
@@ -193,23 +197,46 @@ namespace AR.Drone.WinApp
 #endif
             }
         }
-        public void OnNavigationDataAcquired(NavigationData data)
+        unsafe public void OnNavigationDataAcquired(NavigationData data)
         {
             float time_diff = 0;
+            double tag1_x, tag1_y;
             if (_isRacing)
             {
-                time_diff = (DateTime.Now.Ticks - _prev_tick)* TICKS_TO_SEC;
-                _prev_tick = DateTime.Now.Ticks;
-                _roll = data.Roll;
-                _pitch = data.Pitch;
-                _yaw = data.Yaw - _startingYaw;
-
-                DCM dcm = new DCM(_yaw);
-                Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
-                Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
-                _x_cord = _x_cord + ((float)velociy_reltiveTo_earth.x * time_diff);
-                _y_cord = _y_cord + ((float)velociy_reltiveTo_earth.y * time_diff);
                 _z_cord = data.Altitude;
+                if (data.vision_detect.nb_detected == 1)
+                {
+                    fixed (uint* tmp = data.vision_detect.xc) {
+                         tag1_x = tmp[0] * TO_X_PICXELS;
+                    }
+                    fixed (uint* tmp = data.vision_detect.yc)
+                    {
+                        tag1_y = tmp[0] * TO_Y_PICXELS;
+                    }
+                    fixed (float* tmp = data.vision_detect.orientation_angle)
+                    {
+                        _y_cord = tmp[0];
+                    }
+                    _x_cord = _tagLocations[_currentTag, 0] + (float)((tag1_x - 320f) * _z_cord * PICXELS_TO_METERS_FACTOR);
+                    _y_cord = _tagLocations[_currentTag, 1] + (float)((180f - tag1_y) * _z_cord * PICXELS_TO_METERS_FACTOR);
+
+
+                }
+                else
+                {
+                    time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
+                    _prev_tick = DateTime.Now.Ticks;
+                    _roll = data.Roll;
+                    _pitch = data.Pitch;
+                    _yaw = data.Yaw - _startingYaw;
+
+                    DCM dcm = new DCM(_yaw);
+                    Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
+                    Vector_3 velociy_reltiveTo_earth = dcm.ToEarth(velociy);
+                    _x_cord = _x_cord + ((float)velociy_reltiveTo_earth.x * time_diff);
+                    _y_cord = _y_cord + ((float)velociy_reltiveTo_earth.y * time_diff);
+
+                }
 #if RECORD
                 navDataOverTime.Add(data);
                 timeOverTime.Add(time_diff);
