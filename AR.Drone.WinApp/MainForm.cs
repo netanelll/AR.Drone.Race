@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define USE_STUB
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -58,9 +60,11 @@ namespace AR.Drone.WinApp
         XboxHelper xBoxHelper;
         List<float> oldOrders;
 
-        //List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
-        //int count = 0; // stub to load fake nav data to be deleted TODO
-        //float startingYaw = 0; // stub to load fake nav data to be deleted TODO
+#if USE_STUB
+        List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
+        int count = 0; // stub to load fake nav data to be deleted TODO
+        float startingYaw = 0; // stub to load fake nav data to be deleted TODO  
+#endif
 
         public MainForm()
         {
@@ -91,8 +95,10 @@ namespace AR.Drone.WinApp
             _mapConf = new MapConfiguration(1, 680, 50);
             _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
 
-            //loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
-            //startingYaw = float.Parse(allRaws[1][5]); // stub to load fake nav data to be deleted TODO
+#if USE_STUB
+            loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
+            startingYaw = float.Parse(allRaws[1][5]); // stub to load fake nav data to be deleted TODO  
+#endif
         }
 
         private void UnhandledException(object sender, Exception exception)
@@ -179,21 +185,35 @@ namespace AR.Drone.WinApp
                 tbSec.Text = tsInterval.Seconds.ToString();
             }
 
-            ////// the ealt code
+
+
+            ////// the real code
+
+
+
+
+#if USE_STUB
+            /// stub to get image instead of real bitmap
+            try
+            {
+                _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
+            }
+            catch (Exception)
+            {
+
+                _frameBitmap = new Bitmap(@"D:\Dev\quad\Desert.jpg");
+            }
+#else
             if (_frame == null || _frameNumber == _frame.Number)
                 return;
             _frameNumber = _frame.Number;
 
-            //if (_frameBitmap == null)
-            //    _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
-            //else
-            //    VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
-            ////// the real code
+            if (_frameBitmap == null)
+               _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
+            else
+               VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+#endif
 
-
-            /// stub to get image instead of real bitmap
-        //    _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
-            /// stub to get image instead of real bitmap
 
 
             //test to paint square on the video image
@@ -751,44 +771,46 @@ namespace AR.Drone.WinApp
             // Draws the quad location on the minimap
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
 
+#if USE_STUB
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
-            //if (allRaws.Count > count)
-            //{
-            //    if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
-            //    {
-            //        _paintingHelper.SnakePen = Pens.Red;
-            //        _isOutOfBoundry = true;
-            //    }
-            //    else
-            //    {
-            //        if (_isOutOfBoundry)
-            //        {
-            //            _paintingHelper.SnakePen = Pens.Green;
-            //            _isOutOfBoundry = false;
-            //        }
-            //    }
-            //}
+            if (allRaws.Count > count)
+            {
+                if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
+                {
+                    _paintingHelper.SnakePen = Pens.Red;
+                    _isOutOfBoundry = true;
+                }
+                else
+                {
+                    if (_isOutOfBoundry)
+                    {
+                        _paintingHelper.SnakePen = Pens.Green;
+                        _isOutOfBoundry = false;
+                    }
+                }
+            }
 
-            //if (allRaws.Count > count)
-            //{
-            //    float x = float.Parse(allRaws[count][0]);
-            //    float y = float.Parse(allRaws[count][1]);
+            if (allRaws.Count > count)
+            {
+                float x = float.Parse(allRaws[count][0]);
+                float y = float.Parse(allRaws[count][1]);
 
-            //    _paintingHelper.DrawPoint(x, y);
+                _paintingHelper.DrawPoint(x, y);
 
-            //    // Changes the rectangle size acording to the quad location
-            //    _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]),
-            //        (float.Parse(allRaws[count][5]) - startingYaw) * (180 / Math.PI));
+                // Changes the rectangle size acording to the quad location
+                _paintingHelper.ChangeVideoRectangleSize(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]),
+                    (float.Parse(allRaws[count][5]) - startingYaw) * (180 / Math.PI));
 
-            //}
-            //else
-            //{
-            //    tmrChangeQuadLocation.Enabled = false;
-            //}
+            }
+            else
+            {
+                tmrChangeQuadLocation.Enabled = false;
+            }
 
-            //count += 100;
+            count += 100;
 
-            /////////////////////////////////// stub to load fake nav data to be deleted TODO
+            /////////////////////////////////// stub to load fake nav data to be deleted TODO  
+#endif
         }
 
         /// <summary>
@@ -811,23 +833,34 @@ namespace AR.Drone.WinApp
             _paintingHelper.DrawTrack();
         }
 
+#if USE_STUB
         /// <summary>
         /// Stub to be deleted TODO
         /// </summary>
-        //private void loadFakeDataFromFile()
-        //{
-        //    CsvFileReader csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out.csv");
-        //    CsvRow csvRaw = new CsvRow();
-        //    while (csvReader.ReadRow(csvRaw))
-        //    {
-        //        CsvRow csvRaw1 = new CsvRow();
-        //        foreach (string item in csvRaw)
-        //        {
-        //            csvRaw1.Add(item);
-        //        }
+        private void loadFakeDataFromFile()
+        {
+            CsvFileReader csvReader;
+            try
+            {
+                csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out.csv");
+            }
+            catch (Exception)
+            {
 
-        //        allRaws.Add(csvRaw1);
-        //    }
-        //}
+                csvReader = new CsvFileReader(@"D:\Dev\quad\out.csv");
+            }
+            CsvRow csvRaw = new CsvRow();
+            while (csvReader.ReadRow(csvRaw))
+            {
+                CsvRow csvRaw1 = new CsvRow();
+                foreach (string item in csvRaw)
+                {
+                    csvRaw1.Add(item);
+                }
+
+                allRaws.Add(csvRaw1);
+            }
+        }
+#endif
     }
 }

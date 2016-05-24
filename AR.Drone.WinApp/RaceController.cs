@@ -1,5 +1,5 @@
 ﻿
-#define RECORD
+//#define RECORD
 
 
 using AR.Drone.Data.Navigation;
