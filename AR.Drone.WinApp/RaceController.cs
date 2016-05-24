@@ -25,7 +25,7 @@ namespace AR.Drone.WinApp
         private float _startingYaw; // saving the first yaw response to get the quad direction
         private const int NUMBER_OF_TAGS = 1;
         private const double TO_X_PICXELS = 640 / 1000, TO_Y_PICXELS = 320 / 1000; // number of picxels in axis divided by max x and y value (1000)
-        private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.3;
+        private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.30239;
         private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 0, 0 } };
         private int _currentTag = 0;
         #region properties
@@ -215,7 +215,7 @@ namespace AR.Drone.WinApp
                     }
                     fixed (float* tmp = data.vision_detect.orientation_angle)
                     {
-                        _y_cord = tmp[0];
+                       _yaw = tmp[0];
                     }
                     _x_cord = _tagLocations[_currentTag, 0] + (float)((tag1_x - 320f) * _z_cord * PICXELS_TO_METERS_FACTOR);
                     _y_cord = _tagLocations[_currentTag, 1] + (float)((180f - tag1_y) * _z_cord * PICXELS_TO_METERS_FACTOR);
