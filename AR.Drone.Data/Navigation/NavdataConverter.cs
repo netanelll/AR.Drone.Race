@@ -44,7 +44,13 @@ namespace AR.Drone.Data.Navigation
             navigationData.Video.FrameNumber = navdataBag.video_stream.frame_number;
 
             navigationData.Wifi.LinkQuality = 1.0f - ConversionHelper.ToSingle(navdataBag.wifi.link_quality);
+            //add by netanel
+            navigationData.vision_detect = navdataBag.vision_detect;
+            navigationData.Magneto.raw.X = navdataBag.magneto.magneto_raw.x;
+            navigationData.Magneto.raw.Y = navdataBag.magneto.magneto_raw.y;
+            navigationData.Magneto.raw.Z = navdataBag.magneto.magneto_raw.z;
 
+            /////////////////////////////
             return navigationData;
         }
 

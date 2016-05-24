@@ -46,6 +46,8 @@ namespace AR.Drone.WinApp
         bool drowMiniMap = false;
         bool _isOutOfBoundry = false;
 
+        private DateTime _startingTimeForFlight;
+
         int counter = 2;
         int ledAnimation = 0;
 
@@ -170,10 +172,17 @@ namespace AR.Drone.WinApp
                 }
             }
 
-            ////// the real code
-            //if (_frame == null || _frameNumber == _frame.Number)
-            //    return;
-            //_frameNumber = _frame.Number;
+            if (_raceController.IsRacing)
+            {
+                TimeSpan tsInterval = DateTime.Now - _startingTimeForFlight;
+                tbMin.Text = tsInterval.Minutes.ToString();
+                tbSec.Text = tsInterval.Seconds.ToString();
+            }
+
+            ////// the ealt code
+            if (_frame == null || _frameNumber == _frame.Number)
+                return;
+            _frameNumber = _frame.Number;
 
             //if (_frameBitmap == null)
             //    _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
@@ -183,7 +192,7 @@ namespace AR.Drone.WinApp
 
 
             /// stub to get image instead of real bitmap
-            _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
+        //    _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
             /// stub to get image instead of real bitmap
 
 
@@ -408,10 +417,13 @@ namespace AR.Drone.WinApp
 
                 settings.General.NavdataDemo = false;
                 settings.General.NavdataOptions = NavdataOptions.All;
-
+                settings.Detect.Type = 12;
+                settings.Detect.DetectionsSelectV = 8;
+                //settings.Detect.DetectionsSelectH = 1;
                 settings.Video.BitrateCtrlMode = VideoBitrateControlMode.Dynamic;
                 settings.Video.Bitrate = 1000;
                 settings.Video.MaxBitrate = 2000;
+                settings.Video.Channel = VideoChannelType.Vertical;
 
                 //settings.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 2);
                 //settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
@@ -648,6 +660,7 @@ namespace AR.Drone.WinApp
         private void StartRace()
         {
             _raceController.startRace();
+            _startingTimeForFlight = DateTime.Now;
             //   tmrChangeQuadLocation.Enabled = true;
             drowMiniMap = true;
         }
@@ -691,7 +704,8 @@ namespace AR.Drone.WinApp
             else
             {
                 // on the thumbs: left right is x, up down is y
-                List<float> navOrdersr = xBoxHelper.getNavOrders(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y, state.ThumbSticks.Right.X,
+                //state.DPad.Up, state.DPad.Right, state.DPad.Down, state.DPad.Left
+                List<float> navOrdersr = xBoxHelper.getNavOrders(state.DPad.Left, state.DPad.Right, state.DPad.Up, state.DPad.Down, state.ThumbSticks.Right.X,
                     state.ThumbSticks.Right.Y);
 
                 if (oldOrders[0] != navOrdersr[0] || oldOrders[1] != navOrdersr[1] ||
