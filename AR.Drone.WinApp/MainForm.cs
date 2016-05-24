@@ -1,4 +1,4 @@
-﻿//#define USE_STUB
+﻿#define USE_STUB
 
 using System;
 using System.Collections.Generic;
@@ -750,8 +750,9 @@ namespace AR.Drone.WinApp
         /// <param name="e"></param>
         private void ChangeQuadLocation_Tick(object sender, EventArgs e)
         {
+#if !USE_STUB
             // Checks if the quad is inside the allowed area
-            if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord))
+            if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord, _raceController.Z_cord))
             {
                 _paintingHelper.SnakePen = Pens.Red;
                 _isOutOfBoundry = true;
@@ -770,21 +771,23 @@ namespace AR.Drone.WinApp
 
             // Draws the quad location on the minimap
             _paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
+#endif
 
 #if USE_STUB
             /////////////////////////////////// stub to load fake nav data to be deleted TODO
             if (allRaws.Count > count)
             {
-                if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1])))
+                if (!_mapConf.CheckQuadInSquares(float.Parse(allRaws[count][0]), float.Parse(allRaws[count][1]),
+                    float.Parse(allRaws[count][2])))
                 {
-                    _paintingHelper.SnakePen = Pens.Red;
+                    _paintingHelper.SnakePen = new Pen(Color.Red, _paintingHelper.SnakeSize);
                     _isOutOfBoundry = true;
                 }
                 else
                 {
                     if (_isOutOfBoundry)
                     {
-                        _paintingHelper.SnakePen = Pens.Green;
+                        _paintingHelper.SnakePen = new Pen(Color.Green, _paintingHelper.SnakeSize);
                         _isOutOfBoundry = false;
                     }
                 }
@@ -842,7 +845,7 @@ namespace AR.Drone.WinApp
             CsvFileReader csvReader;
             try
             {
-                csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out.csv");
+                csvReader = new CsvFileReader(@"C:\Users\Pariente\Desktop\mahanet 2016\out9.csv");
             }
             catch (Exception)
             {

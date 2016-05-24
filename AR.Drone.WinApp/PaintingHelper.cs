@@ -21,7 +21,7 @@ namespace AR.Drone.WinApp
         int sumGates = 0;
         int currentGate = 0;
 
-        int gateDistanceToShow = 300;
+        int gateDistanceToShow = 100;
 
         List<Point> pointsLeft;
         List<Point> pointsRight;
@@ -82,6 +82,14 @@ namespace AR.Drone.WinApp
             }
         }
 
+        public int SnakeSize
+        {
+            get
+            {
+                return _snakeSize;
+            }
+        }
+
         /// <summary>
         /// C'tor
         /// </summary>
@@ -131,6 +139,10 @@ namespace AR.Drone.WinApp
         {
             _graphics.DrawLines(_coursePen, pointsLeft.ToArray());
             _graphics.DrawLines(_coursePen, pointsRight.ToArray());
+            foreach (Square gate in _mapConf.Gates)
+            {
+                _graphics.DrawLine(_gatePen, gate.FirstCorner, gate.SecondCorner);
+            }
         }
 
         public void DrawPoint(float x, float y)
@@ -214,7 +226,7 @@ namespace AR.Drone.WinApp
                         (gate.FirstCorner.X - (x_cord * _mapConf.SnakeMuliplier) - 
                         _startingPointX - _mapConf.SnakeShiftingX);
 
-                    if (degreeDiff > 50 && degreeDiff < 180 && distance > 50)
+                    if (degreeDiff > 50 && degreeDiff < 180 && distance > 40)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -225,7 +237,7 @@ namespace AR.Drone.WinApp
                         return;
                     }
 
-                    if (degreeDiff < 310 && degreeDiff >= 180 && distance > 50)
+                    if (degreeDiff < 310 && degreeDiff >= 180 && distance > 40)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -248,7 +260,7 @@ namespace AR.Drone.WinApp
                         _isGateSeeable = false;
                     }
                     // the quad passed the gate, moving to next gate
-                    else if (distance < 0)
+                    else if (distance <= 0)
                     {
                         currentGate++;
                         //gate.Multiplier *= -1;
@@ -268,7 +280,7 @@ namespace AR.Drone.WinApp
                         (gate.FirstCorner.Y - (y_cord * _mapConf.SnakeMuliplier) - 
                         _startingPointY - _mapConf.SnakeShiftingY);
 
-                    if (degreeDiff > 50 && degreeDiff < 180 && distance > 50)
+                    if (degreeDiff > 50 && degreeDiff < 180 && distance > 40)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -279,7 +291,7 @@ namespace AR.Drone.WinApp
                         return;
                     }
 
-                    if (degreeDiff < 310 && degreeDiff >= 180 && distance > 50)
+                    if (degreeDiff < 310 && degreeDiff >= 180 && distance > 40)
                     {
                         _isGateSeeable = false;
                         _isArrowSeeable = true;
@@ -290,24 +302,23 @@ namespace AR.Drone.WinApp
                         return;
                     }
 
-                    // distance too far to show rectangle
-                    if (distance > gateDistanceToShow - 1)
-                    {
-                        _isGateSeeable = false;
-                    }
-                    // the quad passed the gate, moving to next gate
-                    else if (distance < 0)
-                    {
-                        currentGate++;
-                        //gate.Multiplier *= -1;
-                    }
-
                     // changes back the degree for calculating the location
                     if (degreeDiff >= 310)
                     {
                         degreeDiff = degreeDiff - 360;
                     }
 
+                    // distance too far to show rectangle
+                    if (distance > gateDistanceToShow - 1)
+                    {
+                        _isGateSeeable = false;
+                    }
+                    // the quad passed the gate, moving to next gate
+                    else if (distance <= 0)
+                    {
+                        currentGate++;
+                        //gate.Multiplier *= -1;
+                    }
                     // need to paint the gate, calculating the size and location
                     else
                     {

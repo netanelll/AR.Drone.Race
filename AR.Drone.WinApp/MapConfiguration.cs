@@ -85,17 +85,29 @@ namespace AR.Drone.WinApp
                     // the gates for the quad to pass throw
                     gates = new List<Square>
                     {
-                        new Square(new Point(_startingPointX + 150, _startingPointY + 220),
-                                new Point(_startingPointX + 150, _startingPointY + 280),
+                        new Square(new Point(_startingPointX + 100, _startingPointY + 220),
+                                new Point(_startingPointX + 100, _startingPointY + 280),
                                 0, 0, 1),
-                     new Square(new Point(_startingPointX + 220, _startingPointY + 150),
-                                new Point(_startingPointX + 280, _startingPointY + 150),
+                        new Square(new Point(_startingPointX + 200, _startingPointY + 220),
+                                new Point(_startingPointX + 200, _startingPointY + 280),
+                                0, 0, 1),
+                     new Square(new Point(_startingPointX + 220, _startingPointY + 200),
+                                new Point(_startingPointX + 280, _startingPointY + 200),
                                 270, 270, -1),
-                     new Square(new Point(_startingPointX + 150, _startingPointY + 20),
-                                new Point(_startingPointX + 150, _startingPointY + 80),
+                     new Square(new Point(_startingPointX + 220, _startingPointY + 100),
+                                new Point(_startingPointX + 280, _startingPointY + 100),
+                                270, 270, -1),
+                     new Square(new Point(_startingPointX + 200, _startingPointY + 20),
+                                new Point(_startingPointX + 200, _startingPointY + 80),
                                 180, 180, -1),
-                     new Square(new Point(_startingPointX + 20, _startingPointY + 150),
-                                new Point(_startingPointX + 80, _startingPointY + 150),
+                     new Square(new Point(_startingPointX + 100, _startingPointY + 20),
+                                new Point(_startingPointX + 100, _startingPointY + 80),
+                                180, 180, -1),
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 100),
+                                new Point(_startingPointX + 80, _startingPointY + 100),
+                                90, 90, 1),
+                     new Square(new Point(_startingPointX + 20, _startingPointY + 200),
+                                new Point(_startingPointX + 80, _startingPointY + 200),
                                 90, 90, 1)
                     };
 
@@ -107,8 +119,13 @@ namespace AR.Drone.WinApp
             }
         }
 
-        public bool CheckQuadInSquares(float x, float y)
+        public bool CheckQuadInSquares(float x, float y, float z)
         {
+            // Checks if the quad is in the allowed hight
+            if (z < 0.4 || z > 1.8)
+                return false;
+
+            // Checks if the quad is inside the track
             x = _startingPointX + SnakeShiftingX + x * SnakeMuliplier;
             y = _startingPointY + SnakeShiftingY + y * SnakeMuliplier;
 
