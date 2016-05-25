@@ -48,6 +48,9 @@ namespace AR.Drone.WinApp
         bool drowMiniMap = false;
         bool _isOutOfBoundry = false;
 
+        System.Timers.Timer startingTimer = new System.Timers.Timer(1000);
+        int _startingCountdown = 3;
+
         private DateTime _startingTimeForFlight;
 
         int counter = 2;
@@ -185,7 +188,7 @@ namespace AR.Drone.WinApp
                 tbSec.Text = tsInterval.Seconds.ToString();
             }
 
-
+            lbCountDown.Text = _startingCountdown.ToString();
 
             ////// the real code
 
@@ -460,6 +463,7 @@ namespace AR.Drone.WinApp
 
                 //send all changes in one pice
                 _droneClient.Send(settings);
+                _settings = settings;
             });
             sendConfigTask.Start();
         }
@@ -679,10 +683,15 @@ namespace AR.Drone.WinApp
 
         private void StartRace()
         {
-            _raceController.startRace();
-            _startingTimeForFlight = DateTime.Now;
-            //   tmrChangeQuadLocation.Enabled = true;
-            drowMiniMap = true;
+            if (!_raceController.IsRacing)
+            {
+                startingTimer.Elapsed += getStarted;
+                startingTimer.Enabled = true;
+                _raceController.startRace();
+                _startingTimeForFlight = DateTime.Now;
+                //   tmrChangeQuadLocation.Enabled = true;
+                drowMiniMap = true;
+            }
         }
 
         private void LedsShow_Click(object sender, EventArgs e)
@@ -713,13 +722,34 @@ namespace AR.Drone.WinApp
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             if (state.Buttons.A == XInputDotNetPure.ButtonState.Pressed)
             {
+                //if (_raceController.IsRacing)
+                //{
+                //    if (_settings == null) _settings = new Settings();
+                //    Settings settings = _settings;
+
+                //    settings.Control.FlyingMode = 0;
+                //    _droneClient.Send(settings);
+                //    return;
+                //}
                 StartRace();
                 _droneClient.Takeoff();
+                HoverAboveRoundel();
             }
             else if (state.Buttons.B == XInputDotNetPure.ButtonState.Pressed)
             {
                 _droneClient.Land();
                 EndRace();
+            }
+            else if (state.Buttons.X == XInputDotNetPure.ButtonState.Pressed)
+            {
+                if (_raceController.IsRacing)
+                {
+                    if (_settings == null) _settings = new Settings();
+                    Settings settings = _settings;
+
+                    settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
+                    _droneClient.Send(settings);
+                }
             }
             else
             {
@@ -732,7 +762,15 @@ namespace AR.Drone.WinApp
                     oldOrders[2] != navOrdersr[2] || oldOrders[3] != navOrdersr[3])
                 {
                     // _droneClient.Progress(FlightMode.Progressive, roll, pitch, yaw, gaz);
-                    _droneClient.Progress(FlightMode.Progressive, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
+                    if (navOrdersr[0] == 0.0f && navOrdersr[1] == 0.0f &&
+                        navOrdersr[2] == 0.0f && navOrdersr[3] == 0.0f)
+                    {
+                        _droneClient.Progress(FlightMode.Hover, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
+                    }
+                    else
+                    {
+                        _droneClient.Progress(FlightMode.Progressive, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
+                    }
 
                     // Saves all the orders that are being sent to the drone
                     xBoxHelper.allNavOrders.Add(new navOrder()
@@ -740,6 +778,32 @@ namespace AR.Drone.WinApp
 
                     oldOrders = navOrdersr;
                 }
+            }
+        }
+
+        private void HoverAboveRoundel()
+        {
+            if (_raceController.IsRacing)
+            {
+                if (_settings == null) _settings = new Settings();
+                Settings settings = _settings;
+
+                settings.Control.FlyingMode = 2;
+                _droneClient.Send(settings);
+            }
+        }
+
+        private void getStarted(object sender, ElapsedEventArgs e)
+        {
+            _startingCountdown--;
+            if (_startingCountdown == 0)
+            {
+                startingTimer.Enabled = false;
+                if (_settings == null) _settings = new Settings();
+                Settings settings = _settings;
+
+                settings.Control.FlyingMode = 0;
+                _droneClient.Send(settings);
             }
         }
 
