@@ -335,5 +335,13 @@ namespace AR.Drone.WinApp
                 _isGateSeeable = false;
             }
         }
+
+        internal bool IsQuadPassedInAllGates()
+        {
+            if (sumGates == currentGate)
+                return true;
+            else
+                return false;
+        }
     }
 }

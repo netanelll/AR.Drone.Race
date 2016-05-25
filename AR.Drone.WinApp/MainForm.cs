@@ -315,6 +315,7 @@ namespace AR.Drone.WinApp
         private void button3_Click(object sender, EventArgs e)
         {
             _droneClient.Land();
+            EndRace();
         }
 
         private void btnEmergency_Click(object sender, EventArgs e)
@@ -686,6 +687,16 @@ namespace AR.Drone.WinApp
             _raceController.endRace();
             //   tmrChangeQuadLocation.Enabled = false;
             drowMiniMap = false;
+            if (_paintingHelper.IsQuadPassedInAllGates())
+            {
+                tbMin.ForeColor = Color.Green;
+                tbSec.ForeColor = Color.Green;
+            }
+            else
+            {
+                tbMin.ForeColor = Color.Red;
+                tbSec.ForeColor = Color.Red;
+            }
         }
 
         private void StartRace()
