@@ -204,10 +204,11 @@ namespace AR.Drone.WinApp
         {
             float time_diff = 0;
             double tag1_x, tag1_y;
+
             if (_isRacing)
             {
                 //  _z_cord = data.Altitude;
-                _z_cord = 2;
+                _z_cord = 2; // delete TODO
                 time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
                 _prev_tick = DateTime.Now.Ticks;
 
@@ -246,9 +247,13 @@ namespace AR.Drone.WinApp
 
                     }
                 }
-                 if (data.vision_detect.nb_detected >= 1)
+                if (data.vision_detect.nb_detected == 1)
                 {
                     _oneTagInSight = true;
+                }
+                 if (data.vision_detect.nb_detected > 0)
+                {
+                    
                     fixed (uint* tmp = data.vision_detect.xc) {
                          tag1_y = tmp[0] * TO_X_PICXELS;
                     }
@@ -272,7 +277,7 @@ namespace AR.Drone.WinApp
                     _oneTagInSight = false;
                     _roll = data.Roll;
                     _pitch = data.Pitch;
-                    _yaw = data.Yaw - _startingYaw;
+                   // _yaw = data.Yaw - _startingYaw;
                     DCM dcm = new DCM(_yaw);
                     Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                     Vector_3 velociy_reltiveTo_map = dcm.ToEarth(velociy);
