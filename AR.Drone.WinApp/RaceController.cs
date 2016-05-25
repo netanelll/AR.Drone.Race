@@ -23,11 +23,12 @@ namespace AR.Drone.WinApp
         float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
         private float _startingYaw; // saving the first yaw response to get the quad direction
-        private const int NUMBER_OF_TAGS = 1;
+        private const int NUMBER_OF_TAGS = 3;
         private const double TO_X_PICXELS = 640f / 1000f, TO_Y_PICXELS = 320f / 1000f; // number of picxels in axis divided by max x and y value (1000)
         private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.30239;
-        private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } }; // x,y coordinates of tags
+        private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } , {1.5f,0 } , {5,0 } }; // x,y coordinates of tags
         private int _currentTag = 0;
+        bool _oneTagInSight = false;
         #region properties
 
         public float X_cord
@@ -108,6 +109,8 @@ namespace AR.Drone.WinApp
             _end_ticks = 0;
             _isRacing = true;
             _start_ticks = DateTime.Now.Ticks;
+            _currentTag = 0;
+            _oneTagInSight = false;
 #if RECORD
             navDataOverTime = new List<NavigationData>();
             timeOverTime = new List<float>();
@@ -208,29 +211,65 @@ namespace AR.Drone.WinApp
                 time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
                 _prev_tick = DateTime.Now.Ticks;
 
-                if (data.vision_detect.nb_detected == 1)
+                if (data.vision_detect.nb_detected == 2)
                 {
+                    if (_oneTagInSight)
+                    {
+                        float dictanceToNextTag, dictanceToPreviousTag;
+                        int nextTagIndex, previousTagIndex;
+                        _oneTagInSight = false;
+                        if (_currentTag == 0 )  {
+                            nextTagIndex = 1;
+                            previousTagIndex = NUMBER_OF_TAGS - 1;
+                        }
+                        else if (_currentTag == (NUMBER_OF_TAGS - 1))
+                        {
+                            nextTagIndex = 0;
+                            if (NUMBER_OF_TAGS > 1)
+                                previousTagIndex = NUMBER_OF_TAGS - 2;
+                            else 
+                                previousTagIndex = 0;
+                        }
+                        else
+                        {
+                            nextTagIndex = _currentTag + 1;
+                            previousTagIndex = _currentTag - 1;
+
+                        }
+                        dictanceToNextTag = DictenceBtween2Pionts(_x_cord, _y_cord, _tagLocations[nextTagIndex, 0], _tagLocations[nextTagIndex, 1]);
+                        dictanceToPreviousTag = DictenceBtween2Pionts(_x_cord, _y_cord, _tagLocations[previousTagIndex, 0], _tagLocations[previousTagIndex, 1]);
+                        if (dictanceToNextTag < dictanceToPreviousTag)
+                            _currentTag = nextTagIndex;
+                        else
+                            _currentTag = previousTagIndex;
+
+
+                    }
+                }
+                 if (data.vision_detect.nb_detected >= 1)
+                {
+                    _oneTagInSight = true;
                     fixed (uint* tmp = data.vision_detect.xc) {
-                         tag1_x = tmp[0] * TO_X_PICXELS;
+                         tag1_y = tmp[0] * TO_X_PICXELS;
                     }
                     fixed (uint* tmp = data.vision_detect.yc)
                     {
-                        tag1_y = tmp[0] * TO_Y_PICXELS;
+                        tag1_x = tmp[0] * TO_Y_PICXELS;
                     }
                     fixed (float* tmp = data.vision_detect.orientation_angle)
                     {
                        _yaw = tmp[0] * (float) (Math.PI / 180.0f);
                     }
-                    Vector_3 tagInMeters = new Vector_3(((320f - tag1_x) * _z_cord * PICXELS_TO_METERS_FACTOR), ((tag1_y - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR), 0);
-                    DCM dcm = new DCM(_yaw);
-                    Vector_3 tagInMeters_reltiveTo_map = dcm.ToEarth(tagInMeters);
-                    _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.x;
-                    _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.y;
+                    Vector_3 tagInMeters = new Vector_3(((tag1_x - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR), ((320f - tag1_y) * _z_cord * PICXELS_TO_METERS_FACTOR), 0);
+                    Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
+                    _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
+                    _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
 
 
                 }
                 else
                 {
+                    _oneTagInSight = false;
                     _roll = data.Roll;
                     _pitch = data.Pitch;
                     _yaw = data.Yaw - _startingYaw;
@@ -264,6 +303,17 @@ namespace AR.Drone.WinApp
         public double GetYawInDegrees()
         {
             return _yaw * (180 / Math.PI);
+        }
+
+        private Vector_3 Rotate2DAroundPoint(Vector_3 p,Vector_3 cp, float angleOfRotation)
+        {
+            return new Vector_3(Math.Cos(angleOfRotation) *(p.x - cp.x) - Math.Sin(angleOfRotation) * (p.y - cp.y) + cp.x,
+                Math.Sin(angleOfRotation) * (p.x - cp.x) + Math.Cos(angleOfRotation) * (p.y - cp.y) + cp.y, 0);
+        }
+
+        private float DictenceBtween2Pionts(float x1, float y1, float x2, float y2)
+        {
+            return ((float)(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
     }
 }
