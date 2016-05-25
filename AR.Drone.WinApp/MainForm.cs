@@ -157,6 +157,8 @@ namespace AR.Drone.WinApp
             _droneClient.Start();
 
             _paintingHelper.DrawTrack();
+
+            SendSettings();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -410,6 +412,11 @@ namespace AR.Drone.WinApp
         }
 
         private void btnSendConfig_Click(object sender, EventArgs e)
+        {
+            SendSettings();
+        }
+
+        private void SendSettings()
         {
             var sendConfigTask = new Task(() =>
             {
