@@ -7,6 +7,7 @@ using AR.Drone.Video;
 using DCMAPI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace AR.Drone.WinApp
 {
@@ -23,10 +24,10 @@ namespace AR.Drone.WinApp
         float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
         private float _startingYaw; // saving the first yaw response to get the quad direction
-        private const int NUMBER_OF_TAGS = 3;
+        private const int NUMBER_OF_TAGS = 10;
         private const double TO_X_PICXELS = 640f / 1000f, TO_Y_PICXELS = 320f / 1000f; // number of picxels in axis divided by max x and y value (1000)
         private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.30239;
-        private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } , {1.5f,0 } , {5,0 } }; // x,y coordinates of tags
+        private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } , {1.5f,0 } , {5,0 }, {0,0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }; // x,y coordinates of tags
         private int _currentTag = 0;
         bool _oneTagInSight = false;
         #region properties
@@ -99,6 +100,7 @@ namespace AR.Drone.WinApp
 
         public void startRace()
         {
+            Debug.WriteLine("race started","raceDebug");
             _x_cord = 0;
             _y_cord = 0;
             _z_cord = 0;
@@ -243,7 +245,7 @@ namespace AR.Drone.WinApp
                             _currentTag = nextTagIndex;
                         else
                             _currentTag = previousTagIndex;
-
+                        Debug.WriteLine("new teg {0}", _currentTag);
 
                     }
                 }
@@ -269,7 +271,7 @@ namespace AR.Drone.WinApp
                     Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
                     _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
                     _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
-
+                    //Debug.WriteLine("tag number: {0}/{1}",_currentTag, data.vision_detect.nb_detected);
 
                 }
                 else
