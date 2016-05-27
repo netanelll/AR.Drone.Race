@@ -8,6 +8,7 @@ using DCMAPI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace AR.Drone.WinApp
 {
@@ -23,13 +24,15 @@ namespace AR.Drone.WinApp
         private bool _isRacing;
         float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
-        private float _startingYaw; // saving the first yaw response to get the quad direction
-        private const int NUMBER_OF_TAGS = 10;
+        private float _previousYaw; // saving the first yaw response to get the quad direction
+        //private const int NUMBER_OF_TAGS = 10;
         private const double TO_X_PICXELS = 640f / 1000f, TO_Y_PICXELS = 320f / 1000f; // number of picxels in axis divided by max x and y value (1000)
         private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.30239;
-        private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } , {1.5f,0 } , {5,0 }, {0,0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }; // x,y coordinates of tags
+        //private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } , {1.5f,0 } , {5,0 }, {0,0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }; // x,y coordinates of tags
         private int _currentTag = 0;
         bool _oneTagInSight = false;
+        private MapConfiguration _mapConf;
+        private bool _isSupposeToTurn = false;
         #region properties
 
         public float X_cord
@@ -83,10 +86,25 @@ namespace AR.Drone.WinApp
                 _isRacing = value;
             }
         }
+
+        public bool IsSupposeToTurn
+        {
+            get
+            {
+                return _isSupposeToTurn;
+            }
+
+            set
+            {
+                _isSupposeToTurn = value;
+            }
+        }
         #endregion
 
-        public RaceController()
+        public RaceController(MapConfiguration _mapConf)
         {
+            this._mapConf = _mapConf;
+
             _x_cord = 0;
             _y_cord = 0;
             _z_cord = 0;
@@ -214,64 +232,43 @@ namespace AR.Drone.WinApp
                 time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
                 _prev_tick = DateTime.Now.Ticks;
 
-                if (data.vision_detect.nb_detected == 2)
-                {
-                    if (_oneTagInSight)
-                    {
-                        float dictanceToNextTag, dictanceToPreviousTag;
-                        int nextTagIndex, previousTagIndex;
-                        _oneTagInSight = false;
-                        if (_currentTag == 0 )  {
-                            nextTagIndex = 1;
-                            previousTagIndex = NUMBER_OF_TAGS - 1;
-                        }
-                        else if (_currentTag == (NUMBER_OF_TAGS - 1))
-                        {
-                            nextTagIndex = 0;
-                            if (NUMBER_OF_TAGS > 1)
-                                previousTagIndex = NUMBER_OF_TAGS - 2;
-                            else 
-                                previousTagIndex = 0;
-                        }
-                        else
-                        {
-                            nextTagIndex = _currentTag + 1;
-                            previousTagIndex = _currentTag - 1;
+                uint numberOfDetectedTags = data.vision_detect.nb_detected;
 
-                        }
-                        dictanceToNextTag = DictenceBtween2Pionts(_x_cord, _y_cord, _tagLocations[nextTagIndex, 0], _tagLocations[nextTagIndex, 1]);
-                        dictanceToPreviousTag = DictenceBtween2Pionts(_x_cord, _y_cord, _tagLocations[previousTagIndex, 0], _tagLocations[previousTagIndex, 1]);
-                        if (dictanceToNextTag < dictanceToPreviousTag)
-                            _currentTag = nextTagIndex;
-                        else
-                            _currentTag = previousTagIndex;
-                        Debug.WriteLine("new teg {0}", _currentTag);
+                if (data.vision_detect.nb_detected > 0)
+                {
+                    for (int i = 0; i < numberOfDetectedTags; i++)
+                    {
+                        TagData tagData = new TagData();
 
+                        double xPix, yPix;
+
+                        fixed (uint* tmp = data.vision_detect.xc)
+                        {
+                            yPix = tmp[i] * TO_X_PICXELS;
+                        }
+                        fixed (uint* tmp = data.vision_detect.yc)
+                        {
+                            xPix = tmp[i] * TO_Y_PICXELS;
+                        }
+                        fixed (float* tmp = data.vision_detect.orientation_angle)
+                        {
+                            tagData.Yaw = tmp[i] * (float)(Math.PI / 180.0f);
+                        }
+
+                        tagData.X = (float)((xPix - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR);
+                        tagData.Y = (float)((320f - yPix) * _z_cord * PICXELS_TO_METERS_FACTOR);
+
+                        PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X, tagData.Y), new PointF(X_cord, Y_cord), _yaw);
+
+                        CalculateLocationByTags(tagInMeters_reltiveTo_map);
+
+                        //Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
+                        // _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
+                        // _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
+                        //Debug.WriteLine("tag number: {0}/{1}",_currentTag, data.vision_detect.nb_detected);
                     }
-                }
-                if (data.vision_detect.nb_detected == 1)
-                {
-                    _oneTagInSight = true;
-                }
-                 if (data.vision_detect.nb_detected > 0)
-                {
-                    
-                    fixed (uint* tmp = data.vision_detect.xc) {
-                         tag1_y = tmp[0] * TO_X_PICXELS;
-                    }
-                    fixed (uint* tmp = data.vision_detect.yc)
-                    {
-                        tag1_x = tmp[0] * TO_Y_PICXELS;
-                    }
-                    fixed (float* tmp = data.vision_detect.orientation_angle)
-                    {
-                       _yaw = tmp[0] * (float) (Math.PI / 180.0f);
-                    }
-                    Vector_3 tagInMeters = new Vector_3(((tag1_x - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR), ((320f - tag1_y) * _z_cord * PICXELS_TO_METERS_FACTOR), 0);
-                    Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
-                    _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
-                    _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
-                    //Debug.WriteLine("tag number: {0}/{1}",_currentTag, data.vision_detect.nb_detected);
+
+
 
                 }
                 else
@@ -279,7 +276,12 @@ namespace AR.Drone.WinApp
                     _oneTagInSight = false;
                     _roll = data.Roll;
                     _pitch = data.Pitch;
-                   // _yaw = data.Yaw - _startingYaw;
+                    // removes unknow jums in the yaw param
+                    if (_previousYaw - data.Time < 0.2 || _isSupposeToTurn)
+                    {
+                        _yaw += _previousYaw - data.Yaw;
+                    }
+                    _previousYaw = data.Yaw;
                     DCM dcm = new DCM(_yaw);
                     Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                     Vector_3 velociy_reltiveTo_map = dcm.ToEarth(velociy);
@@ -297,9 +299,34 @@ namespace AR.Drone.WinApp
             else
             {
                 _prev_tick = DateTime.Now.Ticks;
-                _startingYaw = data.Yaw;
+                _previousYaw = data.Yaw;
             }
 
+        }
+
+        private void CalculateLocationByTags(PointF tagInMeters_reltiveTo_map)
+        {
+            foreach (PointF tag in _mapConf.TagLocations)
+            {
+                if (DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y) < 0.2)
+                {
+                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(X_cord, Y_cord), new PointF(tag.X, tag.Y), _yaw);
+                    _x_cord = tag.X + (float)realTagInMeters_reltiveTo_map.X;
+                    _y_cord = tag.Y + (float)realTagInMeters_reltiveTo_map.Y;
+                    return;
+                }
+            }
+
+            foreach (PointF tag in _mapConf.TagLocations)
+            {
+                if (DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y) < 1)
+                {
+                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(X_cord, Y_cord), new PointF(tag.X, tag.Y), _yaw);
+                    _x_cord = tag.X + (float)realTagInMeters_reltiveTo_map.X;
+                    _y_cord = tag.Y + (float)realTagInMeters_reltiveTo_map.Y;
+                    return;
+                }
+            }
         }
 
         public void OnVideoPacketDecoded(VideoFrame frame)
@@ -312,15 +339,61 @@ namespace AR.Drone.WinApp
             return _yaw * (180 / Math.PI);
         }
 
-        private Vector_3 Rotate2DAroundPoint(Vector_3 p,Vector_3 cp, float angleOfRotation)
+        private PointF Rotate2DAroundPoint(PointF p, PointF cp, float angleOfRotation)
         {
-            return new Vector_3(Math.Cos(angleOfRotation) *(p.x - cp.x) - Math.Sin(angleOfRotation) * (p.y - cp.y) + cp.x,
-                Math.Sin(angleOfRotation) * (p.x - cp.x) + Math.Cos(angleOfRotation) * (p.y - cp.y) + cp.y, 0);
+            return new PointF((float)(Math.Cos(angleOfRotation) *(p.X - cp.X) - Math.Sin(angleOfRotation) * (p.Y - cp.Y) + cp.X),
+                (float)(Math.Sin(angleOfRotation) * (p.X - cp.X) + Math.Cos(angleOfRotation) * (p.Y - cp.Y) + cp.Y));
         }
 
-        private float DictenceBtween2Pionts(float x1, float y1, float x2, float y2)
+        private float DistanceBetween2Pionts(float x1, float y1, float x2, float y2)
         {
             return ((float)(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
+        }
+    }
+
+    public class TagData
+    {
+        float _x; // in Meters
+        float _y; // in Meters
+        float _yaw;
+
+        public float X
+        {
+            get
+            {
+                return _x;
+            }
+
+            set
+            {
+                _x = value;
+            }
+        }
+
+        public float Y
+        {
+            get
+            {
+                return _y;
+            }
+
+            set
+            {
+                _y = value;
+            }
+        }
+
+        public float Yaw
+        {
+            get
+            {
+                return _yaw;
+            }
+
+            set
+            {
+                _yaw = value;
+            }
         }
     }
 }
