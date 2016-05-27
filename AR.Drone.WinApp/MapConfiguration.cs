@@ -104,9 +104,11 @@ namespace AR.Drone.WinApp
                     // the locations of the tags
                     _tagLocations = new List<PointF>
                     {
-                     new PointF(1,0),
-                     new PointF(1.5f,0),
-                     new PointF(2f,0)
+                     new PointF(0,0),
+                     new PointF(0.4f,0),
+                     new PointF(0.8f,0),
+                     new PointF(1.2f,0),
+                     new PointF(1.6f,0)
                     };
 
                     break;

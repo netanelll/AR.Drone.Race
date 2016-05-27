@@ -228,7 +228,7 @@ namespace AR.Drone.WinApp
             if (_isRacing)
             {
                 //  _z_cord = data.Altitude;
-                _z_cord = 2; // delete TODO
+                _z_cord = 1.5f; // delete TODO
                 time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
                 _prev_tick = DateTime.Now.Ticks;
 
@@ -260,12 +260,12 @@ namespace AR.Drone.WinApp
 
                         PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X, tagData.Y), new PointF(X_cord, Y_cord), _yaw);
 
-                        CalculateLocationByTags(tagInMeters_reltiveTo_map);
+                        CalculateLocationByTags(tagInMeters_reltiveTo_map, new PointF(tagData.X, tagData.Y));
 
                         //Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
                         // _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
                         // _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
-                        //Debug.WriteLine("tag number: {0}/{1}",_currentTag, data.vision_detect.nb_detected);
+                        
                     }
 
 
@@ -304,29 +304,33 @@ namespace AR.Drone.WinApp
 
         }
 
-        private void CalculateLocationByTags(PointF tagInMeters_reltiveTo_map)
+        private void CalculateLocationByTags(PointF tagInMeters_reltiveTo_map, PointF tagInMeters)
         {
             foreach (PointF tag in _mapConf.TagLocations)
             {
-                if (DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y) < 0.2)
+                float dist = DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y);
+                if (dist < 0.2)
                 {
-                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(X_cord, Y_cord), new PointF(tag.X, tag.Y), _yaw);
+                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new PointF(tag.X, tag.Y), _yaw);
                     _x_cord = tag.X + (float)realTagInMeters_reltiveTo_map.X;
                     _y_cord = tag.Y + (float)realTagInMeters_reltiveTo_map.Y;
+                    Debug.WriteLine("x,y: {0}/{1}/{2}/{3}/{4}", X_cord, Y_cord, tag.X, tag.Y, dist); 
                     return;
                 }
             }
 
-            foreach (PointF tag in _mapConf.TagLocations)
-            {
-                if (DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y) < 1)
-                {
-                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(X_cord, Y_cord), new PointF(tag.X, tag.Y), _yaw);
-                    _x_cord = tag.X + (float)realTagInMeters_reltiveTo_map.X;
-                    _y_cord = tag.Y + (float)realTagInMeters_reltiveTo_map.Y;
-                    return;
-                }
-            }
+            //foreach (PointF tag in _mapConf.TagLocations)
+            //{
+            //    float dist = DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y);
+            //    if (dist < 0.4)
+            //    {
+            //        PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(X_cord, Y_cord), new PointF(tag.X, tag.Y), _yaw);
+            //        _x_cord = tag.X + (float)realTagInMeters_reltiveTo_map.X;
+            //        _y_cord = tag.Y + (float)realTagInMeters_reltiveTo_map.Y;
+            //        Debug.WriteLine("x,y: {0}/{1}/{2}/{3}/{4}", X_cord, Y_cord, tag.X, tag.Y, dist);
+            //        return;
+            //    }
+            //}
         }
 
         public void OnVideoPacketDecoded(VideoFrame frame)
@@ -347,7 +351,7 @@ namespace AR.Drone.WinApp
 
         private float DistanceBetween2Pionts(float x1, float y1, float x2, float y2)
         {
-            return ((float)(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
+            return ((float)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
     }
 
