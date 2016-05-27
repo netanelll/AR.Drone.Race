@@ -1,4 +1,4 @@
-﻿#define USE_STUB
+﻿//#define USE_STUB
 
 using System;
 using System.Collections.Generic;
@@ -158,7 +158,7 @@ namespace AR.Drone.WinApp
 
             _paintingHelper.DrawTrack();
 
-            SendSettings();
+            //SendSettings();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -471,7 +471,7 @@ namespace AR.Drone.WinApp
 
                 //send all changes in one pice
                 _droneClient.Send(settings);
-                _settings = settings;
+                //_settings = settings;
             });
             sendConfigTask.Start();
         }
