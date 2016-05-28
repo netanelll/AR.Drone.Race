@@ -25,12 +25,8 @@ namespace AR.Drone.WinApp
         float _x_cord, _y_cord, _z_cord, _roll, _pitch, _yaw;
         const float TICKS_TO_SEC = 0.0000001f; // cov from 100 nano sec to sec
         private float _previousYaw; // saving the first yaw response to get the quad direction
-        //private const int NUMBER_OF_TAGS = 10;
         private const double TO_X_PICXELS = 640f / 1000f, TO_Y_PICXELS = 320f / 1000f; // number of picxels in axis divided by max x and y value (1000)
         private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.30239;
-        //private static readonly float[,] _tagLocations = new float[NUMBER_OF_TAGS, 2] { { 1, 0 } , {1.5f,0 } , {5,0 }, {0,0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }; // x,y coordinates of tags
-        private int _currentTag = 0;
-        bool _oneTagInSight = false;
         private MapConfiguration _mapConf;
         private bool _isSupposeToTurn = false;
         #region properties
@@ -129,8 +125,6 @@ namespace AR.Drone.WinApp
             _end_ticks = 0;
             _isRacing = true;
             _start_ticks = DateTime.Now.Ticks;
-            _currentTag = 0;
-            _oneTagInSight = false;
 #if RECORD
             navDataOverTime = new List<NavigationData>();
             timeOverTime = new List<float>();
@@ -234,7 +228,7 @@ namespace AR.Drone.WinApp
 
                 uint numberOfDetectedTags = data.vision_detect.nb_detected;
 
-                if (data.vision_detect.nb_detected > 0)
+                if (numberOfDetectedTags > 0)
                 {
                     for (int i = 0; i < numberOfDetectedTags; i++)
                     {
@@ -258,10 +252,10 @@ namespace AR.Drone.WinApp
                         tagData.X = (float)((xPix - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR);
                         tagData.Y = (float)((320f - yPix) * _z_cord * PICXELS_TO_METERS_FACTOR);
 
-                        PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X, tagData.Y), new PointF(X_cord, Y_cord), _yaw);
-
+                        PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X, tagData.Y), new PointF(X_cord, Y_cord), (float)(tagData.Yaw + Math.PI) );
+                        _yaw = tagData.Yaw;
                         CalculateLocationByTags(tagInMeters_reltiveTo_map, new PointF(tagData.X, tagData.Y));
-
+                        
                         //Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
                         // _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
                         // _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
@@ -273,7 +267,6 @@ namespace AR.Drone.WinApp
                 }
                 else
                 {
-                    _oneTagInSight = false;
                     _roll = data.Roll;
                     _pitch = data.Pitch;
                     // removes unknow jums in the yaw param
