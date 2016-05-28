@@ -251,14 +251,10 @@ namespace AR.Drone.WinApp
                         tagData.X = (float)((xPix - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR);
                         tagData.Y = (float)((320f - yPix) * _z_cord * PICXELS_TO_METERS_FACTOR);
 
-                        PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X, tagData.Y), new PointF(X_cord, Y_cord), (float)(tagData.Yaw + Math.PI) );
+                        PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X + _x_cord, tagData.Y + _y_cord), new PointF(_x_cord, _y_cord), (float)(tagData.Yaw + Math.PI) );
                         _yaw = tagData.Yaw;
                         CalculateLocationByTags(tagInMeters_reltiveTo_map, new PointF(tagData.X, tagData.Y));
-                        
-                        //Vector_3 tagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new Vector_3(_tagLocations[_currentTag, 0], _tagLocations[_currentTag, 1], 0), _yaw);
-                        // _x_cord = _tagLocations[_currentTag, 0] + (float)tagInMeters_reltiveTo_map.x;
-                        // _y_cord = _tagLocations[_currentTag, 1] + (float)tagInMeters_reltiveTo_map.y;
-                        
+                                               
                     }
 
 
@@ -273,7 +269,6 @@ namespace AR.Drone.WinApp
                     {
                         _yaw += _previousYaw - data.Yaw;
                     }
-                    _previousYaw = data.Yaw;
                     DCM dcm = new DCM(_yaw);
                     Vector_3 velociy = new Vector_3(data.Velocity.X, data.Velocity.Y, data.Velocity.Z);
                     Vector_3 velociy_reltiveTo_map = dcm.ToEarth(velociy);
@@ -281,6 +276,7 @@ namespace AR.Drone.WinApp
                     _y_cord = _y_cord + ((float)velociy_reltiveTo_map.y * time_diff);
 
                 }
+                _previousYaw = data.Yaw;
 #if RECORD
                 navDataOverTime.Add(data);
                 timeOverTime.Add(time_diff);
@@ -296,17 +292,17 @@ namespace AR.Drone.WinApp
 
         }
 
-        private void CalculateLocationByTags(PointF tagInMeters_reltiveTo_map, PointF tagInMeters)
+        private void CalculateLocationByTags(PointF tagInMeters_basedOnDroneLastKnownLocation, PointF tagInMeters_reltiveTo_drone)
         {
-            foreach (PointF tag in _mapConf.TagLocations)
+            foreach (PointF tagKnownLocation in _mapConf.TagLocations)
             {
-                float dist = DistanceBetween2Pionts(tagInMeters_reltiveTo_map.X, tagInMeters_reltiveTo_map.Y, tag.X, tag.Y);
+                float dist = DistanceBetween2Pionts(tagInMeters_basedOnDroneLastKnownLocation.X, tagInMeters_basedOnDroneLastKnownLocation.Y, tagKnownLocation.X, tagKnownLocation.Y);
                 if (dist < 0.2)
                 {
-                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters, new PointF(tag.X, tag.Y), _yaw);
-                    _x_cord = tag.X + (float)realTagInMeters_reltiveTo_map.X;
-                    _y_cord = tag.Y + (float)realTagInMeters_reltiveTo_map.Y;
-                    Debug.WriteLine("x,y: {0}/{1}/{2}/{3}/{4}", X_cord, Y_cord, tag.X, tag.Y, dist); 
+                    PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters_reltiveTo_drone, new PointF(tagKnownLocation.X, tagKnownLocation.Y), _yaw);
+                    _x_cord = tagKnownLocation.X + (float)realTagInMeters_reltiveTo_map.X;
+                    _y_cord = tagKnownLocation.Y + (float)realTagInMeters_reltiveTo_map.Y;
+                    Debug.WriteLine("x,y: {0}/{1}/{2}/{3}/{4}", X_cord, Y_cord, tagKnownLocation.X, tagKnownLocation.Y, dist); 
                     return;
                 }
             }
