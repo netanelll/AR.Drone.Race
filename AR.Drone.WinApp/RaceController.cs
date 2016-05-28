@@ -217,7 +217,6 @@ namespace AR.Drone.WinApp
         unsafe public void OnNavigationDataAcquired(NavigationData data)
         {
             float time_diff = 0;
-            double tag1_x, tag1_y;
 
             if (_isRacing)
             {
