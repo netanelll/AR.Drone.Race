@@ -29,6 +29,9 @@ namespace AR.Drone.WinApp
         private static readonly double PICXELS_TO_METERS_FACTOR = (2 * Math.Tan(Math.PI / 4)) / 734.30239;
         private MapConfiguration _mapConf;
         private bool _isSupposeToTurn = false, _firstTagDetacted = false;
+        private int _currentZFilterLocation = 0;
+        private const int Z_FILTER_LENGTH = 30;
+        private float[] _ZFilterArr;
         #region properties
 
         public float X_cord
@@ -125,6 +128,8 @@ namespace AR.Drone.WinApp
             _end_ticks = 0;
             _firstTagDetacted = false;
             _isRacing = true;
+            _currentZFilterLocation = 0;
+            _ZFilterArr = new float[Z_FILTER_LENGTH];
             _start_ticks = DateTime.Now.Ticks;
 #if RECORD
             navDataOverTime = new List<NavigationData>();
@@ -222,7 +227,15 @@ namespace AR.Drone.WinApp
             if (_isRacing)
             {
                 //  _z_cord = data.Altitude;
-                _z_cord = 1f; // delete TODO
+               // _z_cord = 1f; // delete TODO
+                _ZFilterArr[_currentZFilterLocation] = (data.Altitude / Z_FILTER_LENGTH);
+                _currentZFilterLocation = (_currentZFilterLocation + 1) % Z_FILTER_LENGTH;
+                float sum = 0;
+                for (int i = 0; i < Z_FILTER_LENGTH; i++)
+                {
+                    sum += _ZFilterArr[i];
+                }
+                _z_cord = sum;
                 time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
                 _prev_tick = DateTime.Now.Ticks;
                 _roll = data.Roll;
