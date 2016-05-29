@@ -13,6 +13,8 @@ namespace AR.Drone.WinApp
 
         List<Square> gates;
 
+        List<PointF> _tagLocations;
+
         List<Square> mapSquares;
         //List<Point> middleLine;
 
@@ -109,6 +111,16 @@ namespace AR.Drone.WinApp
                      new Square(new Point(_startingPointX + 20, _startingPointY + 200),
                                 new Point(_startingPointX + 80, _startingPointY + 200),
                                 90, 90, 1)
+                    };
+
+                    // the locations of the tags
+                    _tagLocations = new List<PointF>
+                    {
+                     new PointF(0,0),
+                     new PointF(0.4f,0),
+                     new PointF(0.8f,0),
+                     new PointF(1.2f,0),
+                     new PointF(1.6f,0)
                     };
 
                     break;
@@ -243,6 +255,19 @@ namespace AR.Drone.WinApp
                 gates = value;
             }
         }
+
+        public List<PointF> TagLocations
+        {
+            get
+            {
+                return _tagLocations;
+            }
+
+            set
+            {
+                _tagLocations = value;
+            }
+        }
     }
 
     public class Square
@@ -335,4 +360,41 @@ namespace AR.Drone.WinApp
             }
         }
     }
+
+    public class PointsF
+    {
+        float _x, _y;
+        public PointsF(float x, float y)
+        {
+            _x = x;
+            _y = y;
+        }
+
+        public float X
+        {
+            get
+            {
+                return _x;
+            }
+
+            set
+            {
+                _x = value;
+            }
+        }
+
+        public float Y
+        {
+            get
+            {
+                return _y;
+            }
+
+            set
+            {
+                _y = value;
+            }
+        }
+    }
+
 }

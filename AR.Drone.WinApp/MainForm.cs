@@ -76,7 +76,9 @@ namespace AR.Drone.WinApp
             _videoPacketDecoderWorker = new VideoPacketDecoderWorker(PixelFormat.BGR24, true, OnVideoPacketDecoded);
             _videoPacketDecoderWorker.Start();
 
-            _raceController = new RaceController();
+            _mapConf = new MapConfiguration(1, 680, 50);
+            _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
+            _raceController = new RaceController(_mapConf); // Generates controler for the race
 
             _droneClient = new DroneClient("192.168.1.1");
             _droneClient.NavigationPacketAcquired += OnNavigationPacketAcquired;
@@ -95,8 +97,6 @@ namespace AR.Drone.WinApp
 
             RemoteListener(); // Activates the Xbox Remote controller
 
-            _mapConf = new MapConfiguration(1, 680, 50);
-            _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
 
 #if USE_STUB
             loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
@@ -779,6 +779,16 @@ namespace AR.Drone.WinApp
                 if (oldOrders[0] != navOrdersr[0] || oldOrders[1] != navOrdersr[1] ||
                     oldOrders[2] != navOrdersr[2] || oldOrders[3] != navOrdersr[3])
                 {
+                    // lets the race controller know if there is suppose to be a turn
+                    if (oldOrders[2] != 0 || navOrdersr[2] != 0)
+                    {
+                        _raceController.IsSupposeToTurn = true;
+                    }
+                    else
+                    {
+                        _raceController.IsSupposeToTurn = false;
+                    }
+
                     // _droneClient.Progress(FlightMode.Progressive, roll, pitch, yaw, gaz);
                     if (navOrdersr[0] == 0.0f && navOrdersr[1] == 0.0f &&
                         navOrdersr[2] == 0.0f && navOrdersr[3] == 0.0f)
