@@ -225,7 +225,8 @@ namespace AR.Drone.WinApp
                 _z_cord = 1f; // delete TODO
                 time_diff = (DateTime.Now.Ticks - _prev_tick) * TICKS_TO_SEC;
                 _prev_tick = DateTime.Now.Ticks;
-
+                _roll = data.Roll;
+                _pitch = data.Pitch;
                 uint numberOfDetectedTags = data.vision_detect.nb_detected;
 
                 if (numberOfDetectedTags > 0)
@@ -249,8 +250,8 @@ namespace AR.Drone.WinApp
                             tagData.Yaw = tmp[i] * (float)(Math.PI / 180.0f);
                         }
 
-                        tagData.X = (float)((xPix - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR);
-                        tagData.Y = (float)((320f - yPix) * _z_cord * PICXELS_TO_METERS_FACTOR);
+                        tagData.X = (float)((xPix - 180f) * _z_cord * PICXELS_TO_METERS_FACTOR) - (float)(_z_cord * Math.Tan(_pitch));
+                        tagData.Y = (float)((320f - yPix) * _z_cord * PICXELS_TO_METERS_FACTOR) - (float)(_z_cord * Math.Tan(_roll));
                         if (_firstTagDetacted)
                         {
                             PointF tagInMeters_reltiveTo_map = Rotate2DAroundPoint(new PointF(tagData.X + _x_cord, tagData.Y + _y_cord), new PointF(_x_cord, _y_cord), (float)(tagData.Yaw + Math.PI));
@@ -261,12 +262,12 @@ namespace AR.Drone.WinApp
                         {
                             _firstTagDetacted = true;
                             PointF tagInMeters_reltiveTo_drone = new PointF(tagData.X, tagData.Y);
-                            PointF tagKnownLocation = _mapConf.TagLocations[0]; 
-                           PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters_reltiveTo_drone, new PointF(tagKnownLocation.X, tagKnownLocation.Y), tagData.Yaw);
+                            PointF tagKnownLocation = _mapConf.TagLocations[0];
+                            PointF realTagInMeters_reltiveTo_map = Rotate2DAroundPoint(tagInMeters_reltiveTo_drone, new PointF(tagKnownLocation.X, tagKnownLocation.Y), tagData.Yaw);
                             _x_cord = tagKnownLocation.X + (float)realTagInMeters_reltiveTo_map.X;
                             _y_cord = tagKnownLocation.Y + (float)realTagInMeters_reltiveTo_map.Y;
                         }
-                                               
+
                     }
 
 
@@ -274,8 +275,7 @@ namespace AR.Drone.WinApp
                 }
                 else
                 {
-                    _roll = data.Roll;
-                    _pitch = data.Pitch;
+
                     // removes unknow jums in the yaw param
                     if (_previousYaw - data.Time < 0.2 || _isSupposeToTurn)
                     {
