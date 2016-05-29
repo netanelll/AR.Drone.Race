@@ -28,6 +28,9 @@ namespace AR.Drone.WinApp
 
         const int _snakeSize = 2;
 
+        System.Drawing.Font drawFont = new System.Drawing.Font("Arial", 200);
+        System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+
         Pen _coursePen = new Pen(Color.Black, 4);
         Pen _squarePen = new Pen(Color.Red, 8);
         Pen _snakePen = new Pen(Color.Green, _snakeSize);
@@ -150,7 +153,7 @@ namespace AR.Drone.WinApp
             _graphics.DrawEllipse(_snakePen, _startingPointX + _mapConf.SnakeShiftingX + x * _mapConf.SnakeMuliplier,
                 _startingPointY + _mapConf.SnakeShiftingY + y * _mapConf.SnakeMuliplier,
                 _snakeSize, _snakeSize);
-        }//
+        }
 
         public void CleanMap(MainForm mainForm)
         {
@@ -336,12 +339,23 @@ namespace AR.Drone.WinApp
             }
         }
 
+        internal void DrawNumber(int _startingCountdown, Bitmap _frameBitmap)
+        {
+            Graphics gr = Graphics.FromImage(_frameBitmap);
+            gr.DrawString(_startingCountdown.ToString(), drawFont, drawBrush, 200, 50);
+        }
+
         internal bool IsQuadPassedInAllGates()
         {
             if (sumGates == currentGate)
                 return true;
             else
                 return false;
+        }
+
+        internal void ResetSquares()
+        {
+            currentGate = 0;
         }
     }
 }

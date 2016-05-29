@@ -30,6 +30,8 @@ namespace AR.Drone.WinApp
         private const string ARDroneTrackFileExt = ".ardrone";
         private const string ARDroneTrackFilesFilter = "AR.Drone track files (*.ardrone)|*.ardrone";
 
+        private static int numberOfErrorsToDeath = 5;
+
         private readonly DroneClient _droneClient;
         private readonly List<PlayerForm> _playerForms;
         private readonly VideoPacketDecoderWorker _videoPacketDecoderWorker;
@@ -47,6 +49,8 @@ namespace AR.Drone.WinApp
         private MapConfiguration _mapConf;
         bool drowMiniMap = false;
         bool _isOutOfBoundry = false;
+
+        int counterToDeath = 0;
 
         System.Timers.Timer startingTimer = new System.Timers.Timer(1000);
         int _startingCountdown = 3;
@@ -190,8 +194,6 @@ namespace AR.Drone.WinApp
                 tbSec.Text = tsInterval.Seconds.ToString();
             }
 
-            lbCountDown.Text = _startingCountdown.ToString();
-
             ////// the real code
 
 
@@ -229,6 +231,11 @@ namespace AR.Drone.WinApp
             else if (_paintingHelper.IsArrowSeeable)
             {
                 _paintingHelper.DrawArrowOnVideo(_frameBitmap);
+            }
+
+            if (_startingCountdown != 0 && _raceController.IsRacing == false)
+            {
+                _paintingHelper.DrawNumber(_startingCountdown, _frameBitmap);
             }
 
             pbVideo.Image = _frameBitmap;
@@ -636,7 +643,7 @@ namespace AR.Drone.WinApp
             {
                 case 32:
                     //           _droneClient.Takeoff();
-                    StartRace();
+                    GetStarted();
                     break;
                 case 67:
                     _droneClient.Hover();
@@ -703,8 +710,8 @@ namespace AR.Drone.WinApp
         {
             if (!_raceController.IsRacing)
             {
-                startingTimer.Elapsed += getStarted;
-                startingTimer.Enabled = true;
+                _paintingHelper.ResetSquares();
+                counterToDeath = 0;
                 _raceController.startRace();
                 _startingTimeForFlight = DateTime.Now;
                 //   tmrChangeQuadLocation.Enabled = true;
@@ -749,27 +756,36 @@ namespace AR.Drone.WinApp
                 //    _droneClient.Send(settings);
                 //    return;
                 //}
-                StartRace();
-                _droneClient.Takeoff();
-                HoverAboveRoundel();
+
+
+                //StartRace();
+                GetStarted();
             }
             else if (state.Buttons.B == XInputDotNetPure.ButtonState.Pressed)
             {
-                _droneClient.Land();
-                EndRace();
+                if (_paintingHelper.IsQuadPassedInAllGates())
+                {
+                    EndRace();
+                    while(_raceController.Z_cord < 0.8)
+                    {
+                        _droneClient.Progress(FlightMode.Progressive,0f, 0f, 0f, 0.5f);
+                    }
+                    CreateFlightAnimation(FlightAnimationType.Wave);
+                }
+                else
+                {
+                    _droneClient.Land();
+                    EndRace();
+                }
             }
             else if (state.Buttons.X == XInputDotNetPure.ButtonState.Pressed)
             {
                 if (_raceController.IsRacing)
                 {
-                    if (_settings == null) _settings = new Settings();
-                    Settings settings = _settings;
-
-                    settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
-                    _droneClient.Send(settings);
+                    CreateFlightAnimation(FlightAnimationType.Wave);
                 }
             }
-            else
+            else if (_raceController.IsRacing)
             {
                 // on the thumbs: left right is x, up down is y
                 //state.DPad.Up, state.DPad.Right, state.DPad.Down, state.DPad.Left
@@ -790,15 +806,7 @@ namespace AR.Drone.WinApp
                     }
 
                     // _droneClient.Progress(FlightMode.Progressive, roll, pitch, yaw, gaz);
-                    if (navOrdersr[0] == 0.0f && navOrdersr[1] == 0.0f &&
-                        navOrdersr[2] == 0.0f && navOrdersr[3] == 0.0f)
-                    {
-                        _droneClient.Progress(FlightMode.Hover, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
-                    }
-                    else
-                    {
-                        _droneClient.Progress(FlightMode.Progressive, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
-                    }
+                    _droneClient.Progress(FlightMode.Progressive, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
 
                     // Saves all the orders that are being sent to the drone
                     xBoxHelper.allNavOrders.Add(new navOrder()
@@ -806,7 +814,30 @@ namespace AR.Drone.WinApp
 
                     oldOrders = navOrdersr;
                 }
+                else if (navOrdersr[0] == 0.0f && navOrdersr[1] == 0.0f &&
+                        navOrdersr[2] == 0.0f && navOrdersr[3] == 0.0f)
+                {
+                    _droneClient.Progress(FlightMode.Hover, navOrdersr[0], navOrdersr[1], navOrdersr[2], navOrdersr[3]);
+                }
             }
+        }
+
+        private void CreateFlightAnimation(FlightAnimationType animation)
+        {
+            if (_settings == null) _settings = new Settings();
+            Settings settings = _settings;
+
+            settings.Control.FlightAnimation = new FlightAnimation(animation);
+            _droneClient.Send(settings);
+        }
+
+        private void GetStarted()
+        {
+            _startingCountdown = 3;
+            _droneClient.Takeoff();
+            startingTimer.Elapsed += getStarted;
+            startingTimer.Enabled = true;
+            HoverAboveRoundel();
         }
 
         private void HoverAboveRoundel()
@@ -832,6 +863,8 @@ namespace AR.Drone.WinApp
 
                 settings.Control.FlyingMode = 0;
                 _droneClient.Send(settings);
+
+                StartRace();
             }
         }
 
@@ -848,6 +881,13 @@ namespace AR.Drone.WinApp
             {
                 _paintingHelper.SnakePen = Pens.Red;
                 _isOutOfBoundry = true;
+
+                counterToDeath++;
+                if (counterToDeath >= numberOfErrorsToDeath)
+                {
+                    _droneClient.Land();
+                    EndRace();
+                }
             }
             else
             {
@@ -874,6 +914,13 @@ namespace AR.Drone.WinApp
                 {
                     _paintingHelper.SnakePen = new Pen(Color.Red, _paintingHelper.SnakeSize);
                     _isOutOfBoundry = true;
+
+                    counterToDeath++;
+                    if (counterToDeath >= numberOfErrorsToDeath)
+                    {
+                        _droneClient.Land();
+                        EndRace();
+                    }
                 }
                 else
                 {

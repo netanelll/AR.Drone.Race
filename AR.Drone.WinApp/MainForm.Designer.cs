@@ -65,7 +65,6 @@
             this.tbBattery = new System.Windows.Forms.TextBox();
             this.tbMin = new System.Windows.Forms.Label();
             this.tbSec = new System.Windows.Forms.Label();
-            this.lbCountDown = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -424,20 +423,11 @@
             this.tbSec.TabIndex = 33;
             this.tbSec.Text = "0";
             // 
-            // lbCountDown
-            // 
-            this.lbCountDown.AutoSize = true;
-            this.lbCountDown.Location = new System.Drawing.Point(418, 20);
-            this.lbCountDown.Name = "lbCountDown";
-            this.lbCountDown.Size = new System.Drawing.Size(0, 13);
-            this.lbCountDown.TabIndex = 34;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1241, 676);
-            this.Controls.Add(this.lbCountDown);
             this.Controls.Add(this.tbSec);
             this.Controls.Add(this.tbMin);
             this.Controls.Add(this.tbBattery);
@@ -519,7 +509,6 @@
         private System.Windows.Forms.TextBox tbBattery;
         private System.Windows.Forms.Label tbMin;
         private System.Windows.Forms.Label tbSec;
-        private System.Windows.Forms.Label lbCountDown;
     }
 }
 
