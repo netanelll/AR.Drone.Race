@@ -1,4 +1,4 @@
-﻿//#define USE_STUB
+﻿#define USE_STUB
 
 using System;
 using System.Collections.Generic;
