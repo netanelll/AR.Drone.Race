@@ -47,8 +47,10 @@ namespace AR.Drone.WinApp
         private RaceController _raceController;
         private PaintingHelper _paintingHelper;
         private MapConfiguration _mapConf;
+        private HighScore _highScore;
         bool drowMiniMap = false;
         bool _isOutOfBoundry = false;
+        int _currentScore = 1000;
 
         int counterToDeath = 0;
 
@@ -84,6 +86,12 @@ namespace AR.Drone.WinApp
             _paintingHelper = new PaintingHelper(_mapConf, this.CreateGraphics()); // Generates class to control all the painting
             _raceController = new RaceController(_mapConf); // Generates controler for the race
 
+            _highScore = new HighScore();
+            _highScore.LoadHighScore();
+
+            btnNewScore.Enabled = false;
+            UpdateScoresTables();
+
             _droneClient = new DroneClient("192.168.1.1");
             _droneClient.NavigationPacketAcquired += OnNavigationPacketAcquired;
             _droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
@@ -106,6 +114,15 @@ namespace AR.Drone.WinApp
             loadFakeDataFromFile(); // stub to load fake nav data to be deleted TODO
             startingYaw = float.Parse(allRaws[1][5]); // stub to load fake nav data to be deleted TODO  
 #endif
+        }
+
+        private void UpdateScoresTables()
+        {
+            tblScores.Items.Clear();
+            foreach (HighScoreRecord recored in _highScore.HighScores)
+            {
+                tblScores.Items.Add(new ListViewItem(new[] { recored.Name, recored.Score.ToString() }));
+            }
         }
 
         private void UnhandledException(object sender, Exception exception)
@@ -271,8 +288,8 @@ namespace AR.Drone.WinApp
             }
             tvInfo.EndUpdate();
 
-            if (_autopilot != null && !_autopilot.Active && btnAutopilot.ForeColor != Color.Black)
-                btnAutopilot.ForeColor = Color.Black;
+            //if (_autopilot != null && !_autopilot.Active && btnAutopilot.ForeColor != Color.Black)
+            //    btnAutopilot.ForeColor = Color.Black;
         }
 
         private void DumpBranch(TreeNodeCollection nodes, object o)
@@ -587,19 +604,19 @@ namespace AR.Drone.WinApp
         }
 
         // Activate/deactive autopilot
-        private void btnAutopilot_Click(object sender, EventArgs e)
-        {
-            if (!_droneClient.IsActive) return;
+        //private void btnAutopilot_Click(object sender, EventArgs e)
+        //{
+        //    if (!_droneClient.IsActive) return;
 
-            CreateAutopilot();
-            if (_autopilot.Active) _autopilot.Active = false;
-            else
-            {
-                CreateAutopilotMission();
-                _autopilot.Active = true;
-                btnAutopilot.ForeColor = Color.Red;
-            }
-        }
+        //    CreateAutopilot();
+        //    if (_autopilot.Active) _autopilot.Active = false;
+        //    else
+        //    {
+        //        CreateAutopilotMission();
+        //        _autopilot.Active = true;
+        //        btnAutopilot.ForeColor = Color.Red;
+        //    }
+        //}
 
         // Starts recording the navigation data
         private void RecordData_Click(object sender, EventArgs e)
@@ -710,7 +727,7 @@ namespace AR.Drone.WinApp
         {
             if (!_raceController.IsRacing)
             {
-                _paintingHelper.ResetSquares();
+                _paintingHelper.ResetGates();
                 counterToDeath = 0;
                 _raceController.startRace();
                 _startingTimeForFlight = DateTime.Now;
@@ -766,11 +783,24 @@ namespace AR.Drone.WinApp
                 if (_paintingHelper.IsQuadPassedInAllGates())
                 {
                     EndRace();
-                    while(_raceController.Z_cord < 0.8)
+
+                    TimeSpan tsInterval = DateTime.Now - _startingTimeForFlight;
+                    _currentScore = (int)tsInterval.TotalSeconds;
+
+                    if (_currentScore < _highScore.HighScores[0].Score)
                     {
-                        _droneClient.Progress(FlightMode.Progressive,0f, 0f, 0f, 0.5f);
+                        while (_raceController.Z_cord < 0.8)
+                        {
+                            _droneClient.Progress(FlightMode.Progressive, 0f, 0f, 0f, 0.5f);
+                        }
+
+                        CreateFlightAnimation(FlightAnimationType.Wave);
+
+                        Thread.Sleep(5000);
                     }
-                    CreateFlightAnimation(FlightAnimationType.Wave);
+
+                    _droneClient.Land();
+                    btnNewScore.Enabled = true;
                 }
                 else
                 {
@@ -1001,6 +1031,22 @@ namespace AR.Drone.WinApp
                 }
 
                 allRaws.Add(csvRaw1);
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _highScore.SaveHighScore();
+        }
+
+        private void btnNewScore_Click(object sender, EventArgs e)
+        {
+            if (tbNewScore.Text != null && tbNewScore.Text != "")
+            {
+                _highScore.AddToHighScore(tbNewScore.Text, _currentScore);
+                UpdateScoresTables();
+                _currentScore = 1000;
+                btnNewScore.Enabled = false;
             }
         }
 #endif

@@ -353,7 +353,7 @@ namespace AR.Drone.WinApp
                 return false;
         }
 
-        internal void ResetSquares()
+        internal void ResetGates()
         {
             currentGate = 0;
         }

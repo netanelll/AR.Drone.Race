@@ -33,20 +33,9 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.pbVideo = new System.Windows.Forms.PictureBox();
             this.btnFlatTrim = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.btnEmergency = new System.Windows.Forms.Button();
             this.tmrStateUpdate = new System.Windows.Forms.Timer(this.components);
             this.btnSwitchCam = new System.Windows.Forms.Button();
-            this.btnUp = new System.Windows.Forms.Button();
-            this.btnDown = new System.Windows.Forms.Button();
-            this.btnLeft = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.Button();
-            this.btnRight = new System.Windows.Forms.Button();
-            this.btnForward = new System.Windows.Forms.Button();
-            this.btnTurnLeft = new System.Windows.Forms.Button();
-            this.btnTurnRight = new System.Windows.Forms.Button();
-            this.btnHover = new System.Windows.Forms.Button();
             this.tvInfo = new System.Windows.Forms.TreeView();
             this.tmrVideoUpdate = new System.Windows.Forms.Timer(this.components);
             this.btnReset = new System.Windows.Forms.Button();
@@ -55,9 +44,6 @@
             this.btnStartRecording = new System.Windows.Forms.Button();
             this.btnStopRecording = new System.Windows.Forms.Button();
             this.btnReplay = new System.Windows.Forms.Button();
-            this.btnAutopilot = new System.Windows.Forms.Button();
-            this.RecordData = new System.Windows.Forms.Button();
-            this.StopRecordData = new System.Windows.Forms.Button();
             this.LedsShow = new System.Windows.Forms.Button();
             this.tmrChangeQuadLocation = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
@@ -65,6 +51,12 @@
             this.tbBattery = new System.Windows.Forms.TextBox();
             this.tbMin = new System.Windows.Forms.Label();
             this.tbSec = new System.Windows.Forms.Label();
+            this.tblScores = new System.Windows.Forms.ListView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbNewScore = new System.Windows.Forms.TextBox();
+            this.btnNewScore = new System.Windows.Forms.Button();
+            this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.score = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,35 +92,13 @@
             // btnFlatTrim
             // 
             this.btnFlatTrim.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnFlatTrim.Location = new System.Drawing.Point(12, 416);
+            this.btnFlatTrim.Location = new System.Drawing.Point(563, 510);
             this.btnFlatTrim.Name = "btnFlatTrim";
             this.btnFlatTrim.Size = new System.Drawing.Size(75, 23);
             this.btnFlatTrim.TabIndex = 3;
             this.btnFlatTrim.Text = "Flat Trim";
             this.btnFlatTrim.UseVisualStyleBackColor = true;
             this.btnFlatTrim.Click += new System.EventHandler(this.btnFlatTrim_Click);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.Location = new System.Drawing.Point(174, 416);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Takeoff";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(256, 416);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Land";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // btnEmergency
             // 
@@ -155,105 +125,6 @@
             this.btnSwitchCam.Text = "Video Channel";
             this.btnSwitchCam.UseVisualStyleBackColor = true;
             this.btnSwitchCam.Click += new System.EventHandler(this.btnSwitchCam_Click);
-            // 
-            // btnUp
-            // 
-            this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnUp.Location = new System.Drawing.Point(174, 450);
-            this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(75, 23);
-            this.btnUp.TabIndex = 9;
-            this.btnUp.Text = "Up";
-            this.btnUp.UseVisualStyleBackColor = true;
-            this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
-            // 
-            // btnDown
-            // 
-            this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDown.Location = new System.Drawing.Point(174, 480);
-            this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(75, 23);
-            this.btnDown.TabIndex = 10;
-            this.btnDown.Text = "Down";
-            this.btnDown.UseVisualStyleBackColor = true;
-            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
-            // 
-            // btnLeft
-            // 
-            this.btnLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLeft.Location = new System.Drawing.Point(256, 480);
-            this.btnLeft.Name = "btnLeft";
-            this.btnLeft.Size = new System.Drawing.Size(75, 23);
-            this.btnLeft.TabIndex = 11;
-            this.btnLeft.Text = "Left";
-            this.btnLeft.UseVisualStyleBackColor = true;
-            this.btnLeft.Click += new System.EventHandler(this.btnLeft_Click);
-            // 
-            // btnBack
-            // 
-            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnBack.Location = new System.Drawing.Point(338, 479);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(75, 23);
-            this.btnBack.TabIndex = 12;
-            this.btnBack.Text = "Back";
-            this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-            // 
-            // btnRight
-            // 
-            this.btnRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRight.Location = new System.Drawing.Point(420, 479);
-            this.btnRight.Name = "btnRight";
-            this.btnRight.Size = new System.Drawing.Size(75, 23);
-            this.btnRight.TabIndex = 13;
-            this.btnRight.Text = "Right";
-            this.btnRight.UseVisualStyleBackColor = true;
-            this.btnRight.Click += new System.EventHandler(this.btnRight_Click);
-            // 
-            // btnForward
-            // 
-            this.btnForward.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnForward.Location = new System.Drawing.Point(338, 450);
-            this.btnForward.Name = "btnForward";
-            this.btnForward.Size = new System.Drawing.Size(75, 23);
-            this.btnForward.TabIndex = 14;
-            this.btnForward.Text = "Forward";
-            this.btnForward.UseVisualStyleBackColor = true;
-            this.btnForward.Click += new System.EventHandler(this.btnForward_Click);
-            // 
-            // btnTurnLeft
-            // 
-            this.btnTurnLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTurnLeft.Location = new System.Drawing.Point(257, 451);
-            this.btnTurnLeft.Name = "btnTurnLeft";
-            this.btnTurnLeft.Size = new System.Drawing.Size(75, 23);
-            this.btnTurnLeft.TabIndex = 15;
-            this.btnTurnLeft.Text = "Turn Left";
-            this.btnTurnLeft.UseVisualStyleBackColor = true;
-            this.btnTurnLeft.Click += new System.EventHandler(this.btnTurnLeft_Click);
-            // 
-            // btnTurnRight
-            // 
-            this.btnTurnRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTurnRight.Location = new System.Drawing.Point(419, 451);
-            this.btnTurnRight.Name = "btnTurnRight";
-            this.btnTurnRight.Size = new System.Drawing.Size(75, 23);
-            this.btnTurnRight.TabIndex = 16;
-            this.btnTurnRight.Text = "Turn Right";
-            this.btnTurnRight.UseVisualStyleBackColor = true;
-            this.btnTurnRight.Click += new System.EventHandler(this.btnTurnRight_Click);
-            // 
-            // btnHover
-            // 
-            this.btnHover.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnHover.Location = new System.Drawing.Point(338, 416);
-            this.btnHover.Name = "btnHover";
-            this.btnHover.Size = new System.Drawing.Size(75, 23);
-            this.btnHover.TabIndex = 17;
-            this.btnHover.Text = "Hover";
-            this.btnHover.UseVisualStyleBackColor = true;
-            this.btnHover.Click += new System.EventHandler(this.btnHover_Click);
             // 
             // tvInfo
             // 
@@ -329,43 +200,10 @@
             this.btnReplay.UseVisualStyleBackColor = true;
             this.btnReplay.Click += new System.EventHandler(this.btnReplay_Click);
             // 
-            // btnAutopilot
-            // 
-            this.btnAutopilot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAutopilot.Location = new System.Drawing.Point(12, 480);
-            this.btnAutopilot.Name = "btnAutopilot";
-            this.btnAutopilot.Size = new System.Drawing.Size(75, 23);
-            this.btnAutopilot.TabIndex = 25;
-            this.btnAutopilot.Text = "Auto&pilot";
-            this.btnAutopilot.UseVisualStyleBackColor = true;
-            this.btnAutopilot.Click += new System.EventHandler(this.btnAutopilot_Click);
-            // 
-            // RecordData
-            // 
-            this.RecordData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.RecordData.Location = new System.Drawing.Point(13, 510);
-            this.RecordData.Name = "RecordData";
-            this.RecordData.Size = new System.Drawing.Size(75, 23);
-            this.RecordData.TabIndex = 26;
-            this.RecordData.Text = "Record data";
-            this.RecordData.UseVisualStyleBackColor = true;
-            this.RecordData.Click += new System.EventHandler(this.RecordData_Click);
-            // 
-            // StopRecordData
-            // 
-            this.StopRecordData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.StopRecordData.Location = new System.Drawing.Point(94, 510);
-            this.StopRecordData.Name = "StopRecordData";
-            this.StopRecordData.Size = new System.Drawing.Size(75, 23);
-            this.StopRecordData.TabIndex = 27;
-            this.StopRecordData.Text = "StopRecord";
-            this.StopRecordData.UseVisualStyleBackColor = true;
-            this.StopRecordData.Click += new System.EventHandler(this.StopRecordData_Click);
-            // 
             // LedsShow
             // 
             this.LedsShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LedsShow.Location = new System.Drawing.Point(176, 509);
+            this.LedsShow.Location = new System.Drawing.Point(563, 539);
             this.LedsShow.Name = "LedsShow";
             this.LedsShow.Size = new System.Drawing.Size(75, 23);
             this.LedsShow.TabIndex = 28;
@@ -423,20 +261,71 @@
             this.tbSec.TabIndex = 33;
             this.tbSec.Text = "0";
             // 
+            // tblScores
+            // 
+            this.tblScores.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.name,
+            this.score});
+            this.tblScores.GridLines = true;
+            this.tblScores.Location = new System.Drawing.Point(255, 480);
+            this.tblScores.Name = "tblScores";
+            this.tblScores.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.tblScores.RightToLeftLayout = true;
+            this.tblScores.Size = new System.Drawing.Size(156, 97);
+            this.tblScores.TabIndex = 34;
+            this.tblScores.UseCompatibleStateImageBehavior = false;
+            this.tblScores.View = System.Windows.Forms.View.Details;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(333, 456);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 13);
+            this.label1.TabIndex = 35;
+            this.label1.Text = "טבלת שיאים";
+            // 
+            // tbNewScore
+            // 
+            this.tbNewScore.Location = new System.Drawing.Point(137, 480);
+            this.tbNewScore.Name = "tbNewScore";
+            this.tbNewScore.Size = new System.Drawing.Size(112, 20);
+            this.tbNewScore.TabIndex = 36;
+            // 
+            // btnNewScore
+            // 
+            this.btnNewScore.Location = new System.Drawing.Point(162, 510);
+            this.btnNewScore.Name = "btnNewScore";
+            this.btnNewScore.Size = new System.Drawing.Size(87, 23);
+            this.btnNewScore.TabIndex = 37;
+            this.btnNewScore.Text = "הכנס לטבלה";
+            this.btnNewScore.UseVisualStyleBackColor = true;
+            this.btnNewScore.Click += new System.EventHandler(this.btnNewScore_Click);
+            // 
+            // name
+            // 
+            this.name.Text = "שם";
+            // 
+            // score
+            // 
+            this.score.Text = "תוצאה";
+            this.score.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1241, 676);
+            this.Controls.Add(this.btnNewScore);
+            this.Controls.Add(this.tbNewScore);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.tblScores);
             this.Controls.Add(this.tbSec);
             this.Controls.Add(this.tbMin);
             this.Controls.Add(this.tbBattery);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.LedsShow);
-            this.Controls.Add(this.StopRecordData);
-            this.Controls.Add(this.RecordData);
-            this.Controls.Add(this.btnAutopilot);
             this.Controls.Add(this.btnReplay);
             this.Controls.Add(this.btnStopRecording);
             this.Controls.Add(this.btnStartRecording);
@@ -444,19 +333,8 @@
             this.Controls.Add(this.btnReadConfig);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.tvInfo);
-            this.Controls.Add(this.btnHover);
-            this.Controls.Add(this.btnTurnRight);
-            this.Controls.Add(this.btnTurnLeft);
-            this.Controls.Add(this.btnForward);
-            this.Controls.Add(this.btnRight);
-            this.Controls.Add(this.btnBack);
-            this.Controls.Add(this.btnLeft);
-            this.Controls.Add(this.btnDown);
-            this.Controls.Add(this.btnUp);
             this.Controls.Add(this.btnSwitchCam);
             this.Controls.Add(this.btnEmergency);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.btnFlatTrim);
             this.Controls.Add(this.pbVideo);
             this.Controls.Add(this.btnStop);
@@ -464,6 +342,7 @@
             this.KeyPreview = true;
             this.Name = "MainForm";
             this.Text = "AR.Drone Control";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).EndInit();
             this.ResumeLayout(false);
@@ -477,20 +356,9 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.PictureBox pbVideo;
         private System.Windows.Forms.Button btnFlatTrim;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnEmergency;
         private System.Windows.Forms.Timer tmrStateUpdate;
         private System.Windows.Forms.Button btnSwitchCam;
-        private System.Windows.Forms.Button btnUp;
-        private System.Windows.Forms.Button btnDown;
-        private System.Windows.Forms.Button btnLeft;
-        private System.Windows.Forms.Button btnBack;
-        private System.Windows.Forms.Button btnRight;
-        private System.Windows.Forms.Button btnForward;
-        private System.Windows.Forms.Button btnTurnLeft;
-        private System.Windows.Forms.Button btnTurnRight;
-        private System.Windows.Forms.Button btnHover;
         private System.Windows.Forms.TreeView tvInfo;
         private System.Windows.Forms.Timer tmrVideoUpdate;
         private System.Windows.Forms.Button btnReset;
@@ -499,9 +367,6 @@
         private System.Windows.Forms.Button btnStartRecording;
         private System.Windows.Forms.Button btnStopRecording;
         private System.Windows.Forms.Button btnReplay;
-        private System.Windows.Forms.Button btnAutopilot;
-        private System.Windows.Forms.Button RecordData;
-        private System.Windows.Forms.Button StopRecordData;
         private System.Windows.Forms.Button LedsShow;
         private System.Windows.Forms.Timer tmrChangeQuadLocation;
         private System.Windows.Forms.Button button1;
@@ -509,6 +374,12 @@
         private System.Windows.Forms.TextBox tbBattery;
         private System.Windows.Forms.Label tbMin;
         private System.Windows.Forms.Label tbSec;
+        private System.Windows.Forms.ListView tblScores;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbNewScore;
+        private System.Windows.Forms.Button btnNewScore;
+        private System.Windows.Forms.ColumnHeader name;
+        private System.Windows.Forms.ColumnHeader score;
     }
 }
 
