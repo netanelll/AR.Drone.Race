@@ -20,7 +20,7 @@ namespace AR.Drone.WinApp
 
         int _snakeShiftingX = 50;
         int _snakeShiftingY = 250;
-        int _snakeMuliplier = 50;
+        int _snakeMuliplier = 40;
 
         //float dx;
         //float dy;
@@ -120,7 +120,51 @@ namespace AR.Drone.WinApp
                      new PointF(0.4f,0),
                      new PointF(0.8f,0),
                      new PointF(1.2f,0),
-                     new PointF(1.6f,0)
+                     new PointF(1.6f,0),
+                     new PointF(2f,0),
+                     new PointF(2.4f,0),
+                     new PointF(2.8f,0),
+                     new PointF(3.2f,0),
+                     new PointF(3.6f,0),
+                     new PointF(4f,0),
+                     new PointF(4.4f,0),
+                     new PointF(5f,0),
+                     new PointF(5f,-0.4f),
+                     new PointF(5f,-0.8f),
+                     new PointF(5f,-1.2f),
+                     new PointF(5f,-1.6f),
+                     new PointF(5f,-2f),
+                     new PointF(5f,-2.4f),
+                     new PointF(5f,-2.8f),
+                     new PointF(5f,-3.2f),
+                     new PointF(5f,-3.6f),
+                     new PointF(5f,-4f),
+                     new PointF(5f,-4.4f),
+                     new PointF(5f,-5f),
+                     new PointF(4.6f,-5f),
+                     new PointF(4.2f,-5f),
+                     new PointF(3.8f,-5f),
+                     new PointF(3.4f,-5f),
+                     new PointF(3f,-5f),
+                     new PointF(2.6f,-5f),
+                     new PointF(2.2f,-5f),
+                     new PointF(1.8f,-5f),
+                     new PointF(1.4f,-5f),
+                     new PointF(1f,-5f),
+                     new PointF(0.6f,-5f),
+                     new PointF(0f,-5f),
+                     new PointF(0f,-4.6f),
+                     new PointF(0f,-4.2f),
+                     new PointF(0f,-3.8f),
+                     new PointF(0f,-3.4f),
+                     new PointF(0f,-3f),
+                     new PointF(0f,-2.6f),
+                     new PointF(0f,-2.2f),
+                     new PointF(0f,-1.8f),
+                     new PointF(0f,-1.4f),
+                     new PointF(0f,-1f),
+                     new PointF(0f,-0.6f),
+                     new PointF(0f,0f)
                     };
 
                     break;

@@ -1,4 +1,4 @@
-﻿#define USE_STUB
+﻿//#define USE_STUB
 
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ using AR.Drone.Avionics.Objectives;
 using AR.Drone.Avionics.Objectives.IntentObtainers;
 using System.Timers;
 using XInputDotNetPure;
-
+ 
 namespace AR.Drone.WinApp
 {
     public partial class MainForm : Form
@@ -51,10 +51,11 @@ namespace AR.Drone.WinApp
         bool drowMiniMap = false;
         bool _isOutOfBoundry = false;
         int _currentScore = 1000;
+        DateTime countDownTime = DateTime.Now;
 
         int counterToDeath = 0;
 
-        System.Timers.Timer startingTimer = new System.Timers.Timer(1000);
+        //System.Timers.Timer startingTimer = new System.Timers.Timer(1000);
         int _startingCountdown = 3;
 
         private DateTime _startingTimeForFlight;
@@ -68,6 +69,7 @@ namespace AR.Drone.WinApp
         System.Timers.Timer XboxTimer = new System.Timers.Timer();
         XboxHelper xBoxHelper;
         List<float> oldOrders;
+        private bool _isGetStarted;
 
 #if USE_STUB
         List<CsvRow> allRaws = new List<CsvRow>(); // stub to load fake nav data to be deleted TODO
@@ -211,22 +213,49 @@ namespace AR.Drone.WinApp
                 tbSec.Text = tsInterval.Seconds.ToString();
             }
 
+            //if (!_mapConf.CheckQuadInSquares(_raceController.X_cord, _raceController.Y_cord, _raceController.Z_cord))
+            //{
+            //    _paintingHelper.SnakePen = Pens.Red;
+            //    _isOutOfBoundry = true;
+
+            //    counterToDeath++;
+            //    if (counterToDeath >= numberOfErrorsToDeath)
+            //    {
+            //        _droneClient.Land();
+            //        EndRace();
+            //    }
+            //}
+            //else
+            //{
+            //    if (_isOutOfBoundry)
+            //    {
+            //        _paintingHelper.SnakePen = Pens.Green;
+            //        _isOutOfBoundry = false;
+            //    }
+            //}
+
+            //// Changes the rectangle size acording to the quad location
+            //_paintingHelper.ChangeVideoRectangleSize(_raceController.X_cord, _raceController.Y_cord, _raceController.GetYawInDegrees());
+
+            //// Draws the quad location on the minimap
+            //_paintingHelper.DrawPoint(_raceController.X_cord, _raceController.Y_cord);
+
             ////// the real code
 
 
 
 
 #if USE_STUB
-            /// stub to get image instead of real bitmap
-            try
-            {
-                _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
-            }
-            catch (Exception)
-            {
+                        /// stub to get image instead of real bitmap
+                        try
+                        {
+                            _frameBitmap = new Bitmap(@"C:\Users\Pariente\Pictures\IMG_3640.JPG");
+                        }
+                        catch (Exception)
+                        {
 
-                _frameBitmap = new Bitmap(@"D:\Dev\quad\Desert.jpg");
-            }
+                            _frameBitmap = new Bitmap(@"D:\Dev\quad\Desert.jpg");
+                        }
 #else
             if (_frame == null || _frameNumber == _frame.Number)
                 return;
@@ -239,6 +268,27 @@ namespace AR.Drone.WinApp
 #endif
 
 
+            if (_isGetStarted)
+            {
+                _droneClient.Takeoff();
+                HoverAboveRoundel();
+                int sec = (DateTime.Now - countDownTime).Seconds;
+                if (sec <= 6)
+                {
+                    _paintingHelper.DrawNumber(6 - sec, _frameBitmap);
+                }
+                else
+                {
+                    _isGetStarted = false;
+                    if (_settings == null) _settings = new Settings();
+                    Settings settings = _settings;
+
+                    settings.Control.FlyingMode = 0;
+                    _droneClient.Send(settings);
+
+                    StartRace();
+                }
+            }
 
             //test to paint square on the video image
             if (_paintingHelper.IsGateSeeable)
@@ -248,11 +298,6 @@ namespace AR.Drone.WinApp
             else if (_paintingHelper.IsArrowSeeable)
             {
                 _paintingHelper.DrawArrowOnVideo(_frameBitmap);
-            }
-
-            if (_startingCountdown != 0 && _raceController.IsRacing == false)
-            {
-                _paintingHelper.DrawNumber(_startingCountdown, _frameBitmap);
             }
 
             pbVideo.Image = _frameBitmap;
@@ -478,7 +523,7 @@ namespace AR.Drone.WinApp
                 settings.Video.BitrateCtrlMode = VideoBitrateControlMode.Dynamic;
                 settings.Video.Bitrate = 1000;
                 settings.Video.MaxBitrate = 2000;
-                settings.Video.Channel = VideoChannelType.Vertical;
+                //settings.Video.Channel = VideoChannelType.Vertical;
 
                 //settings.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 2);
                 //settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
@@ -776,7 +821,8 @@ namespace AR.Drone.WinApp
 
 
                 //StartRace();
-                GetStarted();
+                _isGetStarted = true;
+                countDownTime = DateTime.Now;
             }
             else if (state.Buttons.B == XInputDotNetPure.ButtonState.Pressed)
             {
@@ -800,7 +846,7 @@ namespace AR.Drone.WinApp
                     }
 
                     _droneClient.Land();
-                    btnNewScore.Enabled = true;
+                   // btnNewScore.Enabled = true;
                 }
                 else
                 {
@@ -812,7 +858,7 @@ namespace AR.Drone.WinApp
             {
                 if (_raceController.IsRacing)
                 {
-                    CreateFlightAnimation(FlightAnimationType.Wave);
+                    CreateFlightAnimation(FlightAnimationType.FlipRight);
                 }
             }
             else if (_raceController.IsRacing)
@@ -863,11 +909,11 @@ namespace AR.Drone.WinApp
 
         private void GetStarted()
         {
-            _startingCountdown = 3;
-            _droneClient.Takeoff();
-            startingTimer.Elapsed += getStarted;
-            startingTimer.Enabled = true;
-            HoverAboveRoundel();
+            //_startingCountdown = 3;
+
+            //startingTimer.Elapsed += countDown;
+            //startingTimer.Enabled = true;
+            
         }
 
         private void HoverAboveRoundel()
@@ -882,21 +928,22 @@ namespace AR.Drone.WinApp
             }
         }
 
-        private void getStarted(object sender, ElapsedEventArgs e)
-        {
-            _startingCountdown--;
-            if (_startingCountdown == 0)
-            {
-                startingTimer.Enabled = false;
-                if (_settings == null) _settings = new Settings();
-                Settings settings = _settings;
+        //private void countDown(object sender, ElapsedEventArgs e)
+        //{
+        //    _startingCountdown--;
+            
+        //    if (_startingCountdown <= 0)
+        //    {
+        //        startingTimer.Enabled = false;
+        //        if (_settings == null) _settings = new Settings();
+        //        Settings settings = _settings;
 
-                settings.Control.FlyingMode = 0;
-                _droneClient.Send(settings);
+        //        settings.Control.FlyingMode = 0;
+        //        _droneClient.Send(settings);
 
-                StartRace();
-            }
-        }
+        //        StartRace();
+        //    }
+        //}
 
         /// <summary>
         /// Runs every x milliseconds to paint to current location of the quad
@@ -1005,6 +1052,22 @@ namespace AR.Drone.WinApp
             _paintingHelper.DrawTrack();
         }
 
+        private void btnNewScore_Click(object sender, EventArgs e)
+        {
+            if (tbNewScore.Text != null && tbNewScore.Text != "")
+            {
+                _highScore.AddToHighScore(tbNewScore.Text, _currentScore);
+                UpdateScoresTables();
+                _currentScore = 1000;
+                btnNewScore.Enabled = false;
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _highScore.SaveHighScore();
+        }
+
 #if USE_STUB
         /// <summary>
         /// Stub to be deleted TODO
@@ -1034,21 +1097,6 @@ namespace AR.Drone.WinApp
             }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _highScore.SaveHighScore();
-        }
-
-        private void btnNewScore_Click(object sender, EventArgs e)
-        {
-            if (tbNewScore.Text != null && tbNewScore.Text != "")
-            {
-                _highScore.AddToHighScore(tbNewScore.Text, _currentScore);
-                UpdateScoresTables();
-                _currentScore = 1000;
-                btnNewScore.Enabled = false;
-            }
-        }
 #endif
     }
 }
